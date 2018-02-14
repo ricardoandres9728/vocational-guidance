@@ -15,7 +15,8 @@ login = LoginManager()
 
 
 def registrar_blueprints(app):
-    pass
+    from foro.views import foro_app
+    app.register_blueprint(foro_app)
 
 
 def create_app(**config_overrides):
