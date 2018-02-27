@@ -19,6 +19,8 @@ def registrar_blueprints(app):
     from aspirante.view import aspirante_app
     from colegio.view import colegio_app
     from usuario.view import usuario_app
+    from login.view import login_app
+    app.register_blueprint(login_app)
     app.register_blueprint(foro_app)
     app.register_blueprint(colegio_app)
     app.register_blueprint(aspirante_app)
