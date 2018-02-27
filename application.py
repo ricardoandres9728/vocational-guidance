@@ -16,7 +16,13 @@ login = LoginManager()
 
 def registrar_blueprints(app):
     from foro.views import foro_app
+    from aspirante.view import aspirante_app
+    from colegio.view import colegio_app
+    from usuario.view import usuario_app
     app.register_blueprint(foro_app)
+    app.register_blueprint(colegio_app)
+    app.register_blueprint(aspirante_app)
+    app.register_blueprint(usuario_app)
 
 
 def create_app(**config_overrides):
