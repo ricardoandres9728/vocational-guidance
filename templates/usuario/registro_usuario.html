@@ -16,7 +16,7 @@ License: You must have a valid license purchased only from themeforest(the above
 
 <head>
     <meta charset="utf-8" />
-    <title>Login</title>
+    <title>Registro</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta content="width=device-width, initial-scale=1" name="viewport" />
     <meta content="Preview page of Metronic Admin Theme #2 for " name="description" />
@@ -51,45 +51,11 @@ License: You must have a valid license purchased only from themeforest(the above
     <!-- BEGIN LOGIN FORM -->
     <form class="login-form" id="login" action="" method="post">
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-        <h3 class="form-title">Inicia sesion con tu cuenta</h3>
-        <div class="alert alert-danger display-hide">
-            <button class="close" data-close="alert"></button>
-            <span> Ingresa usuario y contraseña. </span>
-        </div>
-        <div class="form-group">
-            <!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
-            <label class="control-label visible-ie8 visible-ie9">Usuario</label>
-            <div class="input-icon">
-                <i class="fa fa-user"></i>
-                <input class="form-control placeholder-no-fix" type="text" autocomplete="off" placeholder="Usuario" name="username" /> </div>
-        </div>
-        <div class="form-group">
-            <label class="control-label visible-ie8 visible-ie9">Contraseña</label>
-            <div class="input-icon">
-                <i class="fa fa-lock"></i>
-                <input class="form-control placeholder-no-fix" type="password" autocomplete="off" placeholder="Contraseña" name="password" /> </div>
-        </div>
-        <div class="forget-password">
-            <h4>Olvidaste tu contraseña ?</h4>
-            <p> No te preocupes, da click
-                <a href="javascript:;" id="forget-password"> aquí </a> y recupera tu cuenta. </p>
-        </div>
+        <h3 class="form-title" style="text-align:center">Regístrate</h3>
+
     </form>
     <!-- END LOGIN FORM -->
     <!-- BEGIN FORGOT PASSWORD FORM -->
-    <form class="forget-form" action="#" method="post">
-        <h3>Olvidaste tu contraseña ?</h3>
-        <p> Inserta tu correo para cambiar tu contraseña. </p>
-        <div class="form-group">
-            <div class="input-icon">
-                <i class="fa fa-envelope"></i>
-                <input class="form-control placeholder-no-fix" type="text" autocomplete="off" placeholder="Correo" name="email" /> </div>
-        </div>
-        <div class="form-actions">
-            <button type="button" id="back-btn" class="btn red btn-outline">Atras </button>
-            <button type="submit" class="btn green pull-right"> Cambiar </button>
-        </div>
-    </form>
     <!-- END FORGOT PASSWORD FORM -->
 </div>
 <!-- END LOGIN -->
