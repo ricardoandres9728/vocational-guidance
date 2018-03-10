@@ -49,11 +49,109 @@ License: You must have a valid license purchased only from themeforest(the above
 <!-- BEGIN LOGIN -->
 <div class="content">
     <!-- BEGIN LOGIN FORM -->
-    <form class="login-form" id="login" action="" method="post">
-        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-        <h3 class="form-title" style="text-align:center">Regístrate</h3>
+    <main>
+        <form class="login-form" id="login" action="" method="post">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+            <h3 class="form-title" style="text-align:center">Regístrate</h3>
+            {% if message %}
+            <div class="alert alert-success">
+                <strong>Bien!</strong> {{message}}.
+            </div>
+            {% endif %}
+            {% if error %}
+            <div class="alert alert-danger">
+                <strong>Oops!</strong> {{error}}.
+            </div>
+            {% endif %}
+            <div class="form-group">
+                <!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
+                <label class="control-label visible-ie8 visible-ie9">Correo</label>
+                <div class="input-icon">
+                    <i class="fa fa-at"></i>
+                    <input class="form-control placeholder-no-fix" maxlength="80" type="email" autocomplete="off" placeholder="Correo" name="correo" required="required" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label visible-ie8 visible-ie9">Contraseña</label>
+                <div class="input-icon">
+                    <i class="fa fa-lock"></i>
+                    <input class="form-control placeholder-no-fix" maxlength="80" type="password" autocomplete="off" placeholder="Contraseña" name="password" required="required" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label visible-ie8 visible-ie9">Confirmar contraseña</label>
+                <div class="input-icon">
+                    <i class="fa fa-lock"></i>
+                    <input class="form-control placeholder-no-fix" maxlength="80" type="password" autocomplete="off" placeholder="Repetir contraseña" name="confirmar" required="required" />
+                </div>
+            </div>
+            <div class="form-group">
+                <!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
+                <div class="input-icon">
+                    <i class="fa fa-user"></i>
+                    <select class="form-control placeholder-no-fix" required="required" v-model="tipo_usuarios" name="tipo_usuario">
+                        <option disabled value="" class="form-control " selected="selected">Tipo de usuario</option>
+                        {% for tipo in tipos %}
+                        <option value={{tipo.id}} class="form-control">{{tipo.nombre}}</option>
+                        {%endfor%}
+                    </select>
+                </div>
+            </div>
+            <div v-show="tipo_usuarios == '1'">
+                <div class="form-group">
+                    <!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
+                    <label class="control-label visible-ie8 visible-ie9">Nombre completo</label>
+                    <div class="input-icon">
+                        <i class="fa fa-font"></i>
+                        <input class="form-control placeholder-no-fix" maxlength="80" type="text" autocomplete="off" placeholder="Nombres y apellidos" name="nombre" required="required" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
+                    <label class="control-label visible-ie8 visible-ie9">Documento</label>
+                    <div class="input-icon">
+                        <i class="fa fa-list-alt"></i>
+                        <input class="form-control placeholder-no-fix" min="1" max="999999999999999999999999999999" type="number" autocomplete="off" placeholder="Documento de identidad" name="documento" required="required" />
+                    </div>
+                </div>
+                <div class="form-group">
+                <!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
+                <div class="input-icon">
+                    <i class="fa fa-bank"></i>
+                    <select class="form-control placeholder-no-fix" required="required" name="colegio">
+                        <option disabled value="" class="form-control " selected="selected">Colegios</option>
+                        <option value="0" class="form-control " selected="selected">No se encuentra</option>
+                        {% for colegio in colegios %}
+                        <option value={{colegio.id}} class="form-control">{{colegio.nombre}}</option>
+                        {%endfor%}
+                    </select>
+                </div>
+            </div>
+            </div>
+             <div v-show="tipo_usuarios == '2'">
+                <div class="form-group">
+                    <!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
+                    <label class="control-label visible-ie8 visible-ie9">Nombre</label>
+                    <div class="input-icon">
+                        <i class="fa fa-bank"></i>
+                        <input class="form-control placeholder-no-fix" maxlength="80" type="text" autocomplete="off" placeholder="Nombre del colegio" name="nombre_colegio" required="required" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
+                    <label class="control-label visible-ie8 visible-ie9">Nit</label>
+                    <div class="input-icon">
+                        <i class="fa fa-list-alt"></i>
+                        <input class="form-control placeholder-no-fix" min="1" max="999999999999999999999999999999" type="number" autocomplete="off" placeholder="Número de nit" name="nit" required="required" />
+                    </div>
+                </div>
+            </div>
+            <div class="form-actions">
+                <button type="submit" class="btn green pull-right"> Registro </button>
+            </div>
 
-    </form>
+        </form>
+    </main>
     <!-- END LOGIN FORM -->
     <!-- BEGIN FORGOT PASSWORD FORM -->
     <!-- END FORGOT PASSWORD FORM -->
@@ -65,6 +163,9 @@ License: You must have a valid license purchased only from themeforest(the above
 <script src="{{ url_for('static', filename='assets/global/plugins/ie8.fix.min.js')}}"></script>
 <![endif]-->
 <!-- BEGIN CORE PLUGINS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.16.2/axios.min.js"></script>
+<script src="https://unpkg.com/vue@2.4.2"></script>
+<script src="{{ url_for('static', filename='archivos_vue/main_registro.js') }}"></script>
 <script src="{{ url_for('static', filename='assets/global/plugins/jquery.min.js')}}" type="text/javascript"></script>
 <script src="{{ url_for('static', filename='assets/global/plugins/bootstrap/js/bootstrap.min.js')}}" type="text/javascript"></script>
 <script src="{{ url_for('static', filename='assets/global/plugins/js.cookie.min.js')}}" type="text/javascript"></script>
