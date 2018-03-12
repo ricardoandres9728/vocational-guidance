@@ -1,7 +1,8 @@
 var Login = function () {
 
-    var handleLogin = function() {
+    var handleLogin = function () {
         $('.login-form').validate({
+            lang: "es",
             errorElement: 'span', //default input error message container
             errorClass: 'help-block', // default input error message class
             focusInvalid: false, // do not focus the last invalid input
@@ -19,10 +20,10 @@ var Login = function () {
 
             messages: {
                 username: {
-                    required: "Usuario requerido"
+                    required: "Usuario requerdio."
                 },
                 password: {
-                    required: "Contraseña requerida"
+                    required: "Contraseña requerida."
                 }
             },
 
@@ -61,6 +62,7 @@ var Login = function () {
 
     var handleForgetPassword = function () {
         $('.forget-form').validate({
+            lang: "es",
             errorElement: 'span', //default input error message container
             errorClass: 'help-block', // default input error message class
             focusInvalid: false, // do not focus the last invalid input
@@ -125,7 +127,9 @@ var Login = function () {
     var handleRegister = function () {
 
         function format(state) {
-            if (!state.id) { return state.text; }
+            if (!state.id) {
+                return state.text;
+            }
             var $state = $(
                 '<span><img src="/static/assets/global/img/flags/' + state.element.value.toLowerCase() + '.png" class="img-flag" /> ' + state.text + '</span>'
             );
@@ -133,25 +137,8 @@ var Login = function () {
             return $state;
         }
 
-        if (jQuery().select2 && $('#country_list').size() > 0) {
-            $("#country_list").select2({
-                placeholder: '<i class="fa fa-map-marker"></i>&nbsp;Select a Country',
-                templateResult: format,
-                templateSelection: format,
-                width: 'auto',
-                escapeMarkup: function(m) {
-                    return m;
-                }
-            });
-
-
-            $('#country_list').change(function() {
-                $('.register-form').validate().element($(this)); //revalidate the chosen dropdown value and show error or success message for the input
-            });
-        }
-
-
         $('.register-form').validate({
+            lang: "es",
             errorElement: 'span', //default input error message container
             errorClass: 'help-block', // default input error message class
             focusInvalid: false, // do not focus the last invalid input
@@ -190,12 +177,6 @@ var Login = function () {
                 }
             },
 
-            messages: { // custom messages for radio buttons and checkboxes
-                tnc: {
-                    required: "Please accept TNC first."
-                }
-            },
-
             invalidHandler: function (event, validator) { //display error alert on form submit
 
             },
@@ -224,7 +205,26 @@ var Login = function () {
                 form.submit();
             }
         });
-    }
+
+        $('.register-form input').keypress(function (e) {
+            if (e.which == 13) {
+                if ($('.register-form').validate().form()) {
+                    $('.register-form').submit();
+                }
+                return false;
+            }
+        });
+
+        jQuery('#register-btn').click(function () {
+            jQuery('.login-form').hide();
+            jQuery('.register-form').show();
+        });
+
+        jQuery('#register-back-btn').click(function () {
+            jQuery('.login-form').show();
+            jQuery('.register-form').hide();
+        });
+    };
 
     return {
         //main function to initiate the module
@@ -250,6 +250,6 @@ var Login = function () {
 
 }();
 
-jQuery(document).ready(function() {
+jQuery(document).ready(function () {
     Login.init();
 });

@@ -5,6 +5,7 @@ from flask_wtf.csrf import CSRFProtect
 from flask_uploads import UploadSet, configure_uploads, IMAGES
 from flask_mail import Mail
 from flask_login import LoginManager
+from utilities.json_encoder import AlchemyEncoder
 
 uploaded_images = UploadSet('images', IMAGES)
 db = SQLAlchemy()
@@ -15,13 +16,11 @@ login = LoginManager()
 
 
 def registrar_blueprints(app):
-    from foro.views import foro_app
     from aspirante.view import aspirante_app
     from colegio.view import colegio_app
     from usuario.view import usuario_app
     from login.view import login_app
     app.register_blueprint(login_app)
-    app.register_blueprint(foro_app)
     app.register_blueprint(colegio_app)
     app.register_blueprint(aspirante_app)
     app.register_blueprint(usuario_app)
@@ -29,6 +28,7 @@ def registrar_blueprints(app):
 
 def create_app(**config_overrides):
     app = Flask(__name__)
+    app.json_encoder = AlchemyEncoder
     app.config.from_pyfile('settings.py')
 
     app.config.update(config_overrides)
