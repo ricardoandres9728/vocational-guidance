@@ -46,14 +46,14 @@ var Login = function () {
             },
 
             submitHandler: function (form) {
-                form.submit();
+                form.preventDefault();
             }
         });
 
         $('.login-form input').keypress(function (e) {
             if (e.which == 13) {
                 if ($('.login-form').validate().form()) {
-                    $('.login-form').submit();
+                    $('.login-form').preventDefault();
                 }
                 return false;
             }
@@ -99,14 +99,14 @@ var Login = function () {
             },
 
             submitHandler: function (form) {
-                form.submit();
+                form.preventDefault();
             }
         });
 
         $('.forget-form input').keypress(function (e) {
             if (e.which == 13) {
                 if ($('.forget-form').validate().form()) {
-                    $('.forget-form').submit();
+                    $('.forget-form').preventDefault();
                 }
                 return false;
             }
@@ -152,18 +152,10 @@ var Login = function () {
                     required: true,
                     email: true
                 },
-                address: {
-                    required: true
-                },
-                city: {
-                    required: true
-                },
-                country: {
-                    required: true
-                },
-
-                username: {
-                    required: true
+                document: {
+                    required: true,
+                    number: true,
+                    maxlength: 10
                 },
                 password: {
                     required: true
@@ -171,10 +163,6 @@ var Login = function () {
                 rpassword: {
                     equalTo: "#register_password"
                 },
-
-                tnc: {
-                    required: true
-                }
             },
 
             invalidHandler: function (event, validator) { //display error alert on form submit
@@ -202,7 +190,28 @@ var Login = function () {
             },
 
             submitHandler: function (form) {
-                form.submit();
+                swal({
+                    title: 'Procesando Cambios',
+                    onOpen: () => {
+                        swal.showLoading();
+                    },
+                    allowOutsideClick: () => !swal.isLoading()
+                });
+                axios.post('aspirante/registro', $('.register-form').serialize())
+                    .then(function () {
+                        swal({
+                            type: 'success',
+                            title: 'Operacion Exitosa',
+                            text: 'Usuario registrado!',
+                        })
+                    })
+                    .catch(function () {
+                        swal({
+                            type: 'error',
+                            title: 'Oops...',
+                            text: 'Algo salio mal!',
+                        })
+                    });
             }
         });
 

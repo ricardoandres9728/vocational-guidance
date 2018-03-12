@@ -48,6 +48,7 @@ License: You must have a valid license purchased only from themeforest(the above
 <!-- END LOGO -->
 <!-- BEGIN LOGIN -->
 <!-- BEGIN LOGIN -->
+
 <div class="content">
     <!-- BEGIN LOGIN FORM -->
     <form class="login-form" action="{{ url_for("login.login") }}" method="post">
@@ -85,7 +86,7 @@ License: You must have a valid license purchased only from themeforest(the above
     </form>
     <!-- END LOGIN FORM -->
     <!-- BEGIN FORGOT PASSWORD FORM -->
-    <form class="forget-form" action="index.html" method="post">
+    <form class="forget-form" action="" method="post">
         <h3>Olvidaste tu contraseña ?</h3>
         <p> Introduce tu correo para modificar tu contraseña </p>
         <div class="form-group">
@@ -100,39 +101,26 @@ License: You must have a valid license purchased only from themeforest(the above
     </form>
     <!-- END FORGOT PASSWORD FORM -->
     <!-- BEGIN REGISTRATION FORM -->
-    <form class="register-form" id="registro" action="index.html" method="post">
+    <form class="register-form" action="{{ url_for("aspirante.registro_aspirante") }}" method="post">
         <h3>Registro</h3>
-        <p> Enter your personal details below: </p>
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
         <div class="form-group">
-            <label class="control-label visible-ie8 visible-ie9">Full Name</label>
+            <label class="control-label visible-ie8 visible-ie9">Nombre Completo</label>
             <div class="input-icon">
                 <i class="fa fa-font"></i>
-                <input class="form-control placeholder-no-fix" type="text" placeholder="Full Name" name="fullname" /> </div>
+                <input class="form-control placeholder-no-fix" type="text" placeholder="Nombre Completo" name="fullname" /> </div>
         </div>
         <div class="form-group">
-            <!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
-            <label class="control-label visible-ie8 visible-ie9">Email</label>
+            <label class="control-label visible-ie8 visible-ie9">Correo</label>
             <div class="input-icon">
                 <i class="fa fa-envelope"></i>
-                <input class="form-control placeholder-no-fix" type="text" placeholder="Email" name="email" /> </div>
+                <input class="form-control placeholder-no-fix" type="text" placeholder="Correo" name="email" /> </div>
         </div>
         <div class="form-group">
-            <label class="control-label visible-ie8 visible-ie9">Address</label>
+            <label class="control-label visible-ie8 visible-ie9">Documento</label>
             <div class="input-icon">
-                <i class="fa fa-check"></i>
-                <input class="form-control placeholder-no-fix" type="text" placeholder="Address" name="address" /> </div>
-        </div>
-        <div class="form-group">
-            <label class="control-label visible-ie8 visible-ie9">City/Town</label>
-            <div class="input-icon">
-                <i class="fa fa-location-arrow"></i>
-                <input class="form-control placeholder-no-fix" type="text" placeholder="City/Town" name="city" /> </div>
-        </div>
-        <div class="form-group">
-            <label class="control-label visible-ie8 visible-ie9">Usuario</label>
-            <div class="input-icon">
-                <i class="fa fa-user"></i>
-                <input class="form-control placeholder-no-fix" type="text" autocomplete="off" placeholder="Usuario" name="username" /> </div>
+                <i class="fa fa-bars"></i>
+                <input class="form-control placeholder-no-fix" type="text" placeholder="Documento" name="document" /> </div>
         </div>
         <div class="form-group">
             <label class="control-label visible-ie8 visible-ie9">Contraseña</label>
@@ -145,7 +133,7 @@ License: You must have a valid license purchased only from themeforest(the above
             <div class="controls">
                 <div class="input-icon">
                     <i class="fa fa-check"></i>
-                    <input class="form-control placeholder-no-fix" type="password" autocomplete="off" placeholder="Reescriba su contraseña" name="password" /> </div>
+                    <input class="form-control placeholder-no-fix" type="password" autocomplete="off" placeholder="Reescriba su contraseña" name="rpassword" /> </div>
             </div>
         </div>
         <div class="form-actions">
@@ -155,6 +143,7 @@ License: You must have a valid license purchased only from themeforest(the above
     </form>
     <!-- END REGISTRATION FORM -->
 </div>
+
 <!-- END LOGIN -->
 <!-- END LOGIN -->
 <!--[if lt IE 9]>
@@ -167,8 +156,10 @@ License: You must have a valid license purchased only from themeforest(the above
 <script src="{{ url_for('static', filename='assets/global/plugins/bootstrap/js/bootstrap.min.js')}}" type="text/javascript"></script>
 <script src="{{ url_for('static', filename='assets/global/plugins/js.cookie.min.js')}}" type="text/javascript"></script>
 <script src="{{ url_for('static', filename='assets/global/plugins/jquery-slimscroll/jquery.slimscroll.min.js')}}" type="text/javascript"></script>
-<script src="{{ url_for('static', filename='assets/global/plugins/jquery.blockui.min.js')}}" type="text/javascript"></script>
+<script src="{{ url_for('static', filename='assets/global/plugins/jquery.blockui.min.js')}}" type="text/javascript"></script>}
+<script src="{{ url_for('static', filename='assets/global/plugins/bootstrap-sweetalert/sweetalert.min.js')}}" type="text/javascript"></script>
 <script src="{{ url_for('static', filename='assets/global/plugins/bootstrap-switch/js/bootstrap-switch.min.js')}}" type="text/javascript"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <!-- END CORE PLUGINS -->
 <!-- BEGIN PAGE LEVEL PLUGINS -->
 <script src="{{ url_for('static', filename='assets/global/plugins/jquery-validation/js/jquery.validate.min.js')}}" type="text/javascript"></script>
@@ -180,7 +171,7 @@ License: You must have a valid license purchased only from themeforest(the above
 <script src="{{ url_for('static', filename='assets/global/scripts/app.min.js')}}" type="text/javascript"></script>
 <!-- END THEME GLOBAL SCRIPTS -->
 <!-- BEGIN PAGE LEVEL SCRIPTS -->
-<script src="{{ url_for('static', filename='assets/pages/scripts/login-4.min.js')}}" type="text/javascript"></script>
+<script src="{{ url_for('static', filename='assets/pages/scripts/login-4.js')}}" type="text/javascript"></script>
 <!-- END PAGE LEVEL SCRIPTS -->
 </body>
 </html>
