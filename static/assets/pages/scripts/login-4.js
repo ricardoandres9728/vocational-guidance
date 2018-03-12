@@ -1,5 +1,15 @@
 var Login = function () {
 
+    let handleColegios = function () {
+        axios.post('colegio/lista', {})
+            .then(function (response) {
+                $.each(response.data, function (i, colegio) {
+                    console.log(colegio);
+                    $("#colegio_list").append(new Option(colegio.nombre.toString(), colegio.id))
+                })
+            })
+    };
+
     var handleLogin = function () {
         $('.login-form').validate({
             lang: "es",
@@ -198,18 +208,27 @@ var Login = function () {
                     allowOutsideClick: () => !swal.isLoading()
                 });
                 axios.post('aspirante/registro', $('.register-form').serialize())
-                    .then(function () {
-                        swal({
-                            type: 'success',
-                            title: 'Operacion Exitosa',
-                            text: 'Usuario registrado!',
-                        })
+                    .then(function (response) {
+                        if (response.status === 202){
+                            swal({
+                                type: 'error',
+                                title: 'Oops...',
+                                text: 'Correo existente!',
+                            })
+                        }else{
+                            swal({
+                                type: 'success',
+                                title: 'Operacion Exitosa',
+                                text: response.data,
+                            });
+                            $('.register-form')[0].reset();
+                        }
                     })
                     .catch(function () {
                         swal({
                             type: 'error',
                             title: 'Oops...',
-                            text: 'Algo salio mal!',
+                            text: 'Error!',
                         })
                     });
             }
@@ -242,6 +261,7 @@ var Login = function () {
             handleLogin();
             handleForgetPassword();
             handleRegister();
+            handleColegios();
 
             // init background slide images
             $.backstretch([
@@ -251,7 +271,7 @@ var Login = function () {
                     "/static/assets/pages/media/bg/4.jpg"
                 ], {
                     fade: 1000,
-                    duration: 8000
+                    duration: 10000
                 }
             );
         }
