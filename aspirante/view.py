@@ -1,4 +1,4 @@
-from flask import Blueprint, request
+from flask import Blueprint, request, render_template
 from .model import Aspirante
 from usuario.model import Usuario
 from colegio.model import Colegio, AspiranteColegio
@@ -8,9 +8,13 @@ from werkzeug.security import generate_password_hash
 aspirante_app = Blueprint("aspirante", __name__, url_prefix="/aspirante")
 
 
+@aspirante_app.route('/')
+def home():
+    return render_template('aspirante/home.html')
+
+
 @aspirante_app.route("/registro", methods=["POST"])
 def registro_aspirante():
-    import pdb; pdb.set_trace()
     form = request.form
     if not Usuario.query.filter_by(correo=form["email"]).first():
         hashed_pass = generate_password_hash(form["password"])
@@ -20,6 +24,7 @@ def registro_aspirante():
             id_tipo_usuario=1
         )
         db.session.add(usuario)
+        db.session.flush()
         aspirante = Aspirante(
             nombre=form["fullname"],
             documento=form["document"],
@@ -27,7 +32,8 @@ def registro_aspirante():
         )
         db.session.add(aspirante)
         if form["colegio"] != "0":
-            colegio = Colegio.query.filter_by(id=form["colegio"]).first_or_404()
+            colegio = Colegio.query.join(Usuario).filter(Colegio.id == form["colegio"],
+                                                         Usuario.live == True).first_or_404()
             aspirante_colegio = AspiranteColegio(
                 id_colegio=colegio.id,
                 id_aspirante=aspirante.id
