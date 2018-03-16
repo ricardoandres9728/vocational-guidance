@@ -4,7 +4,6 @@ var Login = function () {
         axios.post('colegio/lista', {})
             .then(function (response) {
                 $.each(response.data, function (i, colegio) {
-                    console.log(colegio);
                     $("#colegio_list").append(new Option(colegio.nombre.toString(), colegio.id))
                 })
             })
@@ -56,14 +55,14 @@ var Login = function () {
             },
 
             submitHandler: function (form) {
-                form.preventDefault();
+                form.submit();
             }
         });
 
         $('.login-form input').keypress(function (e) {
             if (e.which == 13) {
                 if ($('.login-form').validate().form()) {
-                    $('.login-form').preventDefault();
+                    $('.login-form').submit();
                 }
                 return false;
             }
@@ -109,14 +108,14 @@ var Login = function () {
             },
 
             submitHandler: function (form) {
-                form.preventDefault();
+                form.submit();
             }
         });
 
         $('.forget-form input').keypress(function (e) {
             if (e.which == 13) {
                 if ($('.forget-form').validate().form()) {
-                    $('.forget-form').preventDefault();
+                    $('.forget-form').submit();
                 }
                 return false;
             }

@@ -15,3 +15,8 @@ def cargar_tipos_usuario():
     tipos = TipoUsuario.query.all()
     print(tipos)
     return jsonify(tipos)
+
+
+@usuario_app.route('/registro/colegios')
+def registro_usuario():
+    return render_template('usuario/registro_colegio.html')
