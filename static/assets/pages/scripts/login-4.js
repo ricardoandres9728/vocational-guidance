@@ -3,8 +3,8 @@ var Login = function () {
     let handleColegios = function () {
         axios.post('colegio/lista', {})
             .then(function (response) {
-                $.each(response.data, function (i, colegio) {
-                    $("#colegio_list").append(new Option(colegio.nombre.toString(), colegio.id))
+                $.each(response.data, function (i ,colegio) {
+                    $("#colegio_list").append(new Option(colegio.nombre, colegio.id))
                 })
             })
     };

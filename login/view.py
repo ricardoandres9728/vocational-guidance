@@ -16,6 +16,9 @@ def login():
                 if usuario.id_tipo_usuario == 1:
                     session["usuario"] = usuario.id
                     return redirect(url_for('aspirante.home'))
+                if usuario.id_tipo_usuario == 2:
+                    session["usuario"] = usuario.id
+                    return redirect(url_for('aspirante.home'))
             else:
                 error = "Correo y/o contraseña incorrectos"
         else:

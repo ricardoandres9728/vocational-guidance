@@ -28,9 +28,8 @@ def registrar_blueprints(app):
 
 def create_app(**config_overrides):
     app = Flask(__name__)
-    app.json_encoder = AlchemyEncoder
     app.config.from_pyfile('settings.py')
-
+    app.json_encoder = AlchemyEncoder
     app.config.update(config_overrides)
     app.config.update(dict(
 
