@@ -15,7 +15,7 @@
 {% endblock %}
 {% block content %}
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-7">
             <!-- BEGIN Portlet PORTLET-->
             <div class="portlet light">
                 <div class="portlet-title">
@@ -38,6 +38,8 @@
                                 <th> Documento </th>
                                 <th> Nombre </th>
                                 <th> Correo </th>
+                                <th> Modificar </th>
+                                <th> Eliminar </th>
                             </tr>
                             </thead>
                             <tbody>
@@ -48,7 +50,7 @@
             </div>
             <!-- END Portlet PORTLET-->
         </div>
-        <div class="col-md-6">
+        <div class="col-md-5">
             <!-- BEGIN Portlet PORTLET-->
             <div class="portlet light">
                 <div class="portlet-title">
@@ -60,8 +62,6 @@
                     <div class="actions">
                         <a href="javascript:;" class="btn btn-circle btn-default">
                             <i class="fa fa-pencil"></i> Editar </a>
-                        <a href="javascript:;" class="btn btn-circle btn-default">
-                            <i class="fa fa-minus"></i> Eliminar </a>
                         <a class="btn btn-circle btn-icon-only btn-default fullscreen" href="javascript:;"> </a>
                     </div>
                 </div>
@@ -79,23 +79,40 @@
     <script src="{{ url_for('static', filename='assets/global/scripts/datatable.js') }}" type="text/javascript"></script>
     <script src="{{ url_for('static', filename='assets/global/plugins/datatables/datatables.min.js') }}" type="text/javascript"></script>
     <script src="{{ url_for('static', filename='assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js') }}" type="text/javascript"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="{{ url_for('static', filename='node_modules/sweetalert2/dist/sweetalert2.min.js')}}" type="text/javascript"></script>
     <script>
         $(document).ready(function() {
             let table = $('#tabla_colegios');
             table.dataTable( {
                 "ajax":{
-                "url": '{{ url_for("usuario.administrar_colegios") }}',
-                "headers": {"X-CSRFToken": '{{csrf_token()}}'},
-                "type": "post",
-                "data":{}
-            },
-            "dataSrc":"",
-            "columns": [
-                { "data": "colegio.documento" },
-                { "data": "colegio.nombre" },
-                { "data": "usuario.correo" },
+                    "url": '{{ url_for("usuario.administrar_colegios") }}',
+                    "headers": {"X-CSRFToken": '{{csrf_token()}}'},
+                    "type": "post",
+                    "data":{}
+                },
+                "dataSrc":"",
+                "createdRow": function (row, data, dataIndex) {
+                    $(row).addClass("odd gradeX");
+                },
+                "columns": [
+                    { "data": "colegio.documento" },
+                    { "data": "colegio.nombre" },
+                    { "data": "usuario.correo" },
+                    { "data": "colegio.id",
+                        "render": function (data, type, row) {
+                            return  "<button class='btn green' >Modificar</button>"
+                        }
 
-            ],
+                    },
+                    { "data": "usuario.id",
+                        "render": function (data, type, row) {
+                            return  "<button class='btn red' onclick=desactivar('data')>Eliminar</button>"
+                        }
+
+                    }
+
+                ],
                 "language": {
                     "lengthMenu": "Mostrar _MENU_ registros por pagina",
                     "zeroRecords": "Nada encontrado - Lo siento",
@@ -112,5 +129,51 @@
                 }
             } );
         });
+    </script>
+    <script>
+        desactivar = function (id_colegio) {
+            swal({
+                title: "Está seguro?",
+                type: "error",
+                text: "Esta accion no podra ser revertida",
+                showCancelButton: !0,
+                confirmButtonClass: "btn-danger",
+                confirmButtonText: "Eliminar"
+            }, function (isConfirm) {
+                if(isConfirm){
+                    swal({
+                        title: 'Procesando Cambios',
+                        onOpen: () => {
+                            swal.showLoading();
+                        },
+                        allowOutsideClick: () => !swal.isLoading()
+                    });
+
+                    axios.post('{{ url_for('usuario.eliminar_colegio') }}', {id: id_colegio})
+                        .then(function () {
+                            swal({
+                                type: 'success',
+                                title: 'Operacion Exitosa',
+                                text: 'Colegio Registrado',
+                            });
+                        }).catch(function () {
+                        swal({
+                            type: 'error',
+                            title: 'Oops...',
+                            text: 'Error!',
+                        })
+                    })
+                }
+            });
+        }
+    </script>
+    <script>
+        $(document).ready(function () {
+            swal({
+                type: 'success',
+                title: 'Operacion Exitosa',
+                text: 'Colegio Registrado',
+            });
+        })
     </script>
 {% endblock %}

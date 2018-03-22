@@ -27,3 +27,11 @@ def administrar_colegios():
             })
         return jsonify({'data': data})
     return render_template('usuario/administracion_colegio.html')
+
+
+@usuario_app.route('/eliminar/colegio', methods=["POST"])
+def eliminar_colegio():
+    form = request.form
+    usuario = Usuario.query.filter_by(id=form["id"]).first_or_404()
+    usuario.live = False
+    return "ok"
