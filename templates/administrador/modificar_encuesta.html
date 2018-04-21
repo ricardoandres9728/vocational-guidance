@@ -1,0 +1,98 @@
+{% extends 'administrador/dashboard_administrador.html' %}
+{% block title %}Encuesta | Crear{% endblock %}
+{% block header_page %}
+<h1 class="page-header">Modificar <small>Encuesta</small></h1>
+{% endblock %}
+{% block content_page %}
+<div class="row">
+    <div class="col-md-4">
+        <div class="panel panel-inverse">
+            <div class="panel-heading">
+                <div class="panel-heading-btn"></div>
+                Encuestas del sistema
+            </div>
+            <div class="panel-body">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Perfil vocacional</th>
+                            <th>Administrar</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% raw %}
+                        <tr v-for="(encuesta, index) in encuestas">
+                            <td>{{index + 1}}</td>
+                            <td>{{encuesta.perfil}}</td>
+                            <td><a @click="asignar_encuesta(index)" class="btn btn-warning">Administrar</a></td>
+                        </tr>
+                        {% endraw %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-8">
+        <div id="div-encuesta-modificar" class="panel panel-inverse" style="display:none;">
+            <form class="form-horizontal"  v-on:submit.prevent="modificar_encuesta">
+                <div class="panel-heading">
+                    <div class="panel-heading-btn">
+                        <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-success" data-click="panel-expand"><i class="fa fa-expand"></i></a>
+                    </div>
+                    Encuesta a modificar
+                </div>
+                <div class="panel-body">
+                    <div class="panel panel-inverse panel-with-tabs">
+                        <div class="panel-heading p-0">
+                            <!-- begin nav-tabs -->
+                            <div class="tab-overflow">
+                                {% raw %}
+                                <ul class="nav nav-tabs nav-tabs-inverse">
+                                    <li class="prev-button"><a href="javascript:;" data-click="prev-tab" class="text-success"><i class="fa fa-arrow-left"></i></a></li>
+                                    <li class=""  v-for="(pregunta, index) in encuesta_editar.preguntas" @click="asignar_pregunta_e(index)"><a href="#nav-respuestas" data-toggle="tab">Pregunta # {{index +1}}</a></li>
+                                    <li class="next-button"><a href="javascript:;" data-click="next-tab" class="text-success"><i class="fa fa-arrow-right"></i></a></li>
+                                </ul>
+                                {% endraw %}
+                            </div>
+                        </div>
+                        <div class="tab-content">
+                            <div class="tab-pane fade" id="nav-respuestas">
+                                {% raw %}
+
+                                <div class="form-group">
+                                    <label class="control-label col-md-1">Pregunta: </label>
+                                    <div class="col-md-offset-1 col-md-10"><textarea rows="3" v-model="pregunta_editar.pregunta.pregunta" class="form-control" required></textarea></div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-12" >
+                                        <div class="form-group" v-for="(rta, key) in pregunta_editar.pregunta.respuestas">
+                                            <div class="input-group">
+                                                <span class="input-group-addon text-center"> {{key}} </span>
+                                                <input class="form-control" v-model="pregunta_editar.pregunta.respuestas[key]" required/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {% endraw %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-footer" style="text-align: right">
+                    <a class="btn btn-danger" @click="desactivar_encuesta">Desactivar</a>
+                    <button class="btn btn-warning" type="submit">Cambiar información</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block script %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.16.2/axios.min.js"></script>
+<script src="https://unpkg.com/vue@2.4.2"></script>
+<script src="{{url_for('static', filename='archivos_vue/crear_encuesta.js')}}"></script>
+{% endblock %}

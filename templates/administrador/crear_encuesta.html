@@ -1,0 +1,159 @@
+{% extends 'administrador/dashboard_administrador.html' %}
+{% block title %}Encuesta | Crear{% endblock %}
+{% block header_page %}
+<h1 class="page-header">
+    <div class="row">
+        <div class="col-md-4">Crear <small>Encuesta</small></div>
+        <div class="col-md-4"><small>Selecciona un perfil para la encuesta</small></div>
+        <div class="col-md-4">
+            {% raw %}
+            <select class="form-control" v-model="encuesta.perfil">
+                <option disabled value="" class="form-control">Escoge un perfil</option>
+                <option v-for="perfil in perfiles" class="form-control">{{perfil.nombre}}</option>
+            </select>
+            {% endraw %}
+        </div>
+    </div>
+</h1>
+{% endblock %}
+{% block content_page %}
+<div class="row">
+    <div class="col-md-6">
+        <form class="panel panel-inverse" v-on:submit.prevent="agregar_pregunta">
+            <div class="panel-heading">Pregunta nueva</div>
+            <div class="panel-body">
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">Pregunta</label>
+                        <div class="col-md-9">
+                            <textarea v-model="pregunta.pregunta" class="form-control" placeholder="Escribe aquí tu pregunta..." rows="3" required="required"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">Respuesta 1</label>
+                        <div class="col-md-9">
+                            <input v-model="pregunta.respuestas.Uno" type="text" class="form-control" placeholder="Esccribe la respuesta correspondiente" required="required"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">Respuesta 2</label>
+                        <div class="col-md-9">
+                            <input v-model="pregunta.respuestas.Dos" type="text" class="form-control" placeholder="Esccribe la respuesta correspondiente" required="required"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">Respuesta 3</label>
+                        <div class="col-md-9">
+                            <input v-model="pregunta.respuestas.Tres" type="text" class="form-control" placeholder="Esccribe la respuesta correspondiente" required="required"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">Respuesta 4</label>
+                        <div class="col-md-9">
+                            <input v-model="pregunta.respuestas.Cuatro" type="text" class="form-control" placeholder="Esccribe la respuesta correspondiente" required="required"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">Respuesta 5</label>
+                        <div class="col-md-9">
+                            <input v-model="pregunta.respuestas.Cinco" type="text" class="form-control" placeholder="Esccribe la respuesta correspondiente" required="required"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-footer" style="text-align: right">
+                <button class="btn btn-primary" type="submit">Agregar pregunta</button>
+            </div>
+        </form>
+    </div>
+    <div class="col-md-6">
+        <form v-on:submit.prevent="guardar_encuesta">
+            <div class="panel panel-inverse" v-show="encuesta.preguntas.length != '0'">
+                <div class="panel-heading">
+                    <div class="panel-heading-btn">
+                        <a @click="limpiar_campos" class="btn btn-xs btn-danger">Limpiar campos</a>
+                        <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-success" data-click="panel-collapse"><i class="fa fa-plus"></i></a>
+                    </div>
+                    Preguntas hechas
+                </div>
+                <div class="panel-body">
+                    {% raw %}
+                    <div class="panel panel-inverse" v-for="(pregunta, index) in encuesta.preguntas">
+                        <div class="panel-heading">
+                            <div class="panel-heading-btn">
+                                <a href="#modal-modificar-pregunta" @click="asignar_pregunta(index)" data-toggle="modal" class="btn btn-xs btn-icon btn-circle btn-warning" title="Editar pregunta"><span class="fa fa-pencil"></span></a>
+                                <a href="javascript:;" @click="eliminar_pregunta(index)" class="btn btn-xs btn-icon btn-circle btn-danger" title="Eliminar pregunta"><i class="fa fa-eraser"></i></a>
+                                <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-success" data-click="panel-collapse"><i class="fa fa-plus"></i></a>
+                            </div>
+                            Pregunta {{index + 1}}
+                        </div>
+                        <div class="panel-body" style="display: none">
+                            <div class="form-horizontal">
+                                <div class="form-group">
+                                    <label class="control-label col-md-1">Pregunta</label>
+                                    <div class="col-md-offset-1 col-md-10"><p style="text-align: justify">{{pregunta.pregunta}}</p></div>
+                                </div>
+                                <div class="form-group" v-for="(rta, key) in pregunta.respuestas">
+                                    <div class="col-md-12" >
+                                        <div class="input-group">
+                                            <span class="input-group-addon text-center"> {{key}} </span>
+                                            <label class="form-control">{{rta}}</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endraw %}
+                </div>
+                <div class="panel-footer" style="text-align: right">
+                    <button class="btn text-white" style="background: rgb(19,61,57)" type="submit">Crear encuesta</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal fade" id="modal-modificar-pregunta" v-if="encuesta.preguntas.length != '0'">
+        {% raw %}
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title">Modificar pregunta</h4>
+                </div>
+                <form v-on:submit.prevent="editar_pregunta">
+                    <div class="modal-body">
+                        <div class="panel-body">
+                            <div class="form-horizontal">
+                                <div class="form-group">
+                                    <label class="control-label col-md-1">Pregunta: </label>
+                                    <div class="col-md-offset-1 col-md-10"><textarea rows="3" v-model="pregunta_editar.pregunta.pregunta" class="form-control"></textarea></div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-12" >
+                                        <div class="form-group" v-for="(rta, key) in pregunta_editar.pregunta.respuestas">
+                                            <div class="input-group">
+                                                <span class="input-group-addon text-center"> {{key}} </span>
+                                                <input class="form-control" v-model="pregunta_editar.pregunta.respuestas[key]"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <a href="javascript:;" class="btn btn-sm btn-white" data-dismiss="modal">Cancelar</a>
+                        <button class="btn btn-sm btn-warning">Cambiar información</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        {% endraw %}
+    </div>
+</div>
+{% endblock %}
+{% block script %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.16.2/axios.min.js"></script>
+<script src="https://unpkg.com/vue@2.4.2"></script>
+<script src="{{url_for('static', filename='archivos_vue/crear_encuesta.js')}}"></script>
+{% endblock %}

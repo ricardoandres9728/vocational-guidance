@@ -20,10 +20,16 @@ def registrar_blueprints(app):
     from colegio.view import colegio_app
     from usuario.view import usuario_app
     from login.view import login_app
+    from administrador.view import administrador_app
+    from perfil.view import perfil_app
+    from encuesta.view import encuesta_app
     app.register_blueprint(login_app)
     app.register_blueprint(colegio_app)
     app.register_blueprint(aspirante_app)
     app.register_blueprint(usuario_app)
+    app.register_blueprint(administrador_app)
+    app.register_blueprint(perfil_app)
+    app.register_blueprint(encuesta_app)
 
 
 def create_app(**config_overrides):
@@ -39,7 +45,6 @@ def create_app(**config_overrides):
     csrf.init_app(app)
     mail.init_app(app)
     login.init_app(app)
-    configure_uploads(app, uploaded_images)
     registrar_blueprints(app)
 
     return app

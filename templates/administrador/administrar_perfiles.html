@@ -1,0 +1,58 @@
+{% extends 'administrador/dashboard_administrador.html' %}
+{% block title %}Perfil | Administrar{% endblock %}
+{% block header_page %}
+<h1 class="page-header">Administrar <small>Perfiles vocacionales</small></h1>
+{% endblock %}
+{% block content_page %}
+<div class="row">
+    <div class="col-md-6">
+        <div class="panel panel-inverse">
+            <div class="panel-heading">Perfiles</div>
+            <div class="panel-body">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Perfil vocacional</th>
+                            <th>Administrar</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% raw %}
+                        <tr v-for="(perfil, index) in perfiles">
+                            <td>{{index +1}}</td>
+                            <td>{{perfil.nombre}}</td>
+                            <td><a @click="desactivar_perfil(index)" class="btn btn-danger">Desactivar</a><a @click="asignar_perfil(index)" class="btn btn-warning">Editar</a></td>
+                        </tr>
+                        {% endraw %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="panel panel-inverse" style="display: none;" id="div-editar-perfil">
+            <div class="panel-heading">Editar perfil</div>
+            <div class="panel-body">
+                <form v-on:submit.prevent="modificar_perfil">
+                    <div class="form-inline" style="text-align: center">
+                        <div class="form-group ">
+                            <input class="form-control" v-model="perfil.nombre" placeholder="Nombre de perfil" required />
+                        </div>
+                        <div class="form-group">
+                            <button class="btn btn-warning" type="submit">Cambiar información</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block script %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.16.2/axios.min.js"></script>
+<script src="https://unpkg.com/vue@2.4.2"></script>
+<script src="{{url_for('static', filename='archivos_vue/administrar_perfiles.js')}}"></script>
+{% endblock %}
