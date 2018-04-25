@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<!--[if IE 8]> <html lang="en" class="ie8"> <![endif]-->
+<!--[if !IE]><!-->
+<html lang="en">
+<!--<![endif]-->
+<head>
+    <meta charset="utf-8" />
+    <title>Aspirante | Registro</title>
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport" />
+    <meta content="" name="description" />
+    <meta content="" name="author" />
+
+    <!-- ================== BEGIN BASE CSS STYLE ================== -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,100italic,300,300italic,400,400italic,500,500italic,700,700italic,900,900italic" rel="stylesheet" type="text/css" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="{{url_for('static', filename='assets/plugins/jquery-ui/themes/base/minified/jquery-ui.min.css')}}" rel="stylesheet" />
+    <link href="{{url_for('static', filename='assets/plugins/bootstrap/css/bootstrap.min.css')}}" rel="stylesheet" />
+    <link href="{{url_for('static', filename='assets/plugins/font-awesome/css/font-awesome.min.css')}}" rel="stylesheet" />
+    <link href="{{url_for('static', filename='assets/css/animate.min.css')}}" rel="stylesheet" />
+    <link href="{{url_for('static', filename='assets/css/style.min.css')}}" rel="stylesheet" />
+    <link href="{{url_for('static', filename='assets/css/style-responsive.min.css')}}" rel="stylesheet" />
+    <link href="{{url_for('static', filename='assets/css/theme/default.css')}}" rel="stylesheet" id="theme" />
+    <!-- ================== END BASE CSS STYLE ================== -->
+
+    <!-- ================== BEGIN BASE JS ================== -->
+    <script src="{{url_for('static', filename='assets/plugins/pace/pace.min.js')}}"></script>
+    <!-- ================== END BASE JS ================== -->
+</head>
+<body class="pace-top bg-white">
+<!-- begin #page-loader -->
+<div id="page-loader">
+    <div class="material-loader">
+        <svg class="circular" viewBox="25 25 50 50">
+            <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10"/>
+        </svg>
+        <div class="message">Loading...</div>
+    </div>
+</div>
+<!-- end #page-loader -->
+
+<!-- begin #page-container -->
+<div id="page-container" class="fade">
+    <!-- begin register -->
+    <div class="register register-with-news-feed">
+        <!-- begin news-feed -->
+        <div class="news-feed">
+            <div class="news-image">
+                <img src="/static/assets/img/login-bg/bg-1.jpg" alt="" />
+            </div>
+            <div class="news-caption">
+                <h4 class="caption-title">
+                    <div class="media">
+                        <a class="media-left" href="javascript:;">
+                            <img src="/static/assets/img/logos/escudo-udec.png" alt="" class="media-object" />
+                        </a>
+                        <div class="media-body">
+                            <h4 class="media-heading text-white">Universidad de Cundinamarca</h4>
+                            Bienvenido al registro de nuestro sistema de orientación vocacional.
+                        </div>
+                    </div>
+                </h4>
+            </div>
+        </div>
+        <!-- end news-feed -->
+        <!-- begin right-content -->
+        <div class="right-content">
+            <!-- begin register-header -->
+            <h1 class="register-header">
+                Registro
+                <small>Ingresa los siguientes datos para acceder al sistema.</small>
+            </h1>
+            <!-- end register-header -->
+            <!-- begin register-content -->
+            <div class="register-content">
+                <form action="{{url_for('aspirante.registro_aspirante')}}" method="POST" class="margin-bottom-0">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" id="csrf" />
+                    <label class="control-label">Nombre<span class="text-danger">*</span></label>
+                    <div class="row m-b-15">
+                        <input name="fullname" type="text" class="form-control" placeholder="Nombres & apellidos" required />
+                    </div>
+                    <label class="control-label">Correo <span class="text-danger">*</span></label>
+                    <div class="row m-b-15">
+                        <div class="col-md-12">
+                            <input name="email" type="text" class="form-control" placeholder="Dirección de correo electrónico" required />
+                        </div>
+                    </div>
+                    <label class="control-label">Contraseña <span class="text-danger">*</span></label>
+                    <div class="row row-space-10">
+                        <div class="col-md-6 m-b-15">
+                            <div class="col-md-12">
+                                <input name="password" type="password" class="form-control" placeholder="Password" required />
+                            </div>
+                        </div>
+                        <div class="col-md-6 m-b-15">
+                            <div class="col-md-12">
+                                <input type="password" class="form-control" placeholder="Password" required />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="register-buttons">
+                        <button type="submit" class="btn btn-info btn-block btn-lg">Sign Up</button>
+                    </div>
+                    <div class="m-t-20 m-b-40 p-b-40 text-inverse">
+                        Ya eres miembro? Haz click <a href="login_v3.html">aquí</a> para iniciar sesión.
+                    </div>
+                    <hr />
+                </form>
+            </div>
+            <!-- end register-content -->
+        </div>
+        <!-- end right-content -->
+    </div>
+    <!-- end register -->
+</div>
+<!-- end page container -->
+
+<!-- ================== BEGIN BASE JS ================== -->
+<script src="{{url_for('static', filename='assets/plugins/jquery/jquery-1.9.1.min.js')}}"></script>
+<script src="{{url_for('static', filename='assets/plugins/jquery/jquery-migrate-1.1.0.min.js')}}"></script>
+<script src="{{url_for('static', filename='assets/plugins/jquery-ui/ui/minified/jquery-ui.min.js')}}"></script>
+<script src="{{url_for('static', filename='assets/plugins/bootstrap/js/bootstrap.min.js')}}"></script>
+<!--[if lt IE 9]>
+<script src="{{url_for('static', filename='assets/crossbrowserjs/html5shiv.js')}}"></script>
+<script src="{{url_for('static', filename='assets/crossbrowserjs/respond.min.js')}}"></script>
+<script src="{{url_for('static', filename='assets/crossbrowserjs/excanvas.min.js')}}"></script>
+<![endif]-->
+<script src="{{url_for('static', filename='assets/plugins/slimscroll/jquery.slimscroll.min.js')}}"></script>
+<script src="{{url_for('static', filename='assets/plugins/jquery-cookie/jquery.cookie.js')}}"></script>
+<!-- ================== END BASE JS ================== -->
+
+<!-- ================== BEGIN PAGE LEVEL JS ================== -->
+<script src="{{url_for('static', filename='assets/js/apps.min.js')}}"></script>
+<!-- ================== END PAGE LEVEL JS ================== -->
+
+<script>
+    $(document).ready(function() {
+        App.init();
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,82 @@
+{% extends 'administrador/dashboard_administrador.html' %}
+{% block title %}Colegio | Administrar{% endblock %}
+{% block header_page %}
+<h1 class="page-header">
+    <div class="row">
+        Administrar <small>Colegios</small>
+    </div>
+</h1>
+{% endblock %}
+{% block content_page %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-inverse">
+            <div class="panel-heading">Aspirantes</div>
+            <div class="panel-body">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Nombre</th>
+                            <th>Documento</th>
+                            <th>Correo</th>
+                            <th>Colegio</th>
+                            <th>Fecha creación</th>
+                            <th style="text-align: center">Administrar</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% raw %}
+                        <tr v-for="(aspirante, index) in aspirantes">
+                            <td>{{index+1}}</td>
+                            <td>{{aspirante.nombre}}</td>
+                            <td>{{aspirante.documento}}</td>
+                            <td>{{aspirante.correo}}</td>
+                            <td style="text-align: center">
+                                <div>
+                                    <div class="col-md-6"><a class="btn btn-danger">Desactivar</a></div>
+                                    <div class="col-md-6"><a class="btn btn-warning">Editar</a></div>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endraw %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--<div class="col-md-4">-->
+        <!--<div class="panel panel-inverse">-->
+            <!--<div class="panel-heading">Modificar colegio</div>-->
+            <!--<form id="div-editar-colegio" style="display: none" v-on:submit.prevent="modificar_colegio">-->
+                <!--<div class="panel-body">-->
+                    <!--<div class="form-horizontal">-->
+                        <!--<div class="form-group col-md-12">-->
+                            <!--<input class="form-control" maxlength="80" required v-model="colegio.nombre" placeholder="Nombre">-->
+                        <!--</div>-->
+                        <!--<div class="form-group col-md-12">-->
+                            <!--<input class="form-control" maxlength="80" required v-model="colegio.correo" placeholder="Correo">-->
+                        <!--</div>-->
+                        <!--<div class="form-group col-md-12">-->
+                            <!--<input class="form-control" maxlength="80" required v-model="colegio.documento" placeholder="Documento">-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
+                <!--<div class="panel-footer" style="text-align: justify">-->
+                    <!--<div class="row">-->
+                        <!--&lt;!&ndash;<div class="col-md-6"><a class="btn btn-inverse">Cambiar contraseña</a></div>&ndash;&gt;-->
+                        <!--<div class="col-md-6"><button class="btn btn-warning">Modificar</button></div>-->
+                    <!--</div>-->
+                <!--</div>-->
+            <!--</form>-->
+        <!--</div>-->
+    <!--</div>-->
+</div>
+{% endblock %}
+{% block script %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.16.2/axios.min.js"></script>
+<script src="https://unpkg.com/vue@2.4.2"></script>
+<script src="{{url_for('static', filename='archivos_vue/administrar_aspirantes.js')}}"></script>
+{% endblock %}

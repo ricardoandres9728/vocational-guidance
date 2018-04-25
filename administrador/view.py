@@ -2,17 +2,135 @@ from flask import Blueprint, jsonify, render_template, request,url_for, redirect
 from colegio.model import Colegio
 from usuario.model import Usuario
 from perfil.model import Perfil
+from aspirante.model import Aspirante
 from encuesta.model import Encuesta
+from colegio.model import AspiranteColegio
 from application import csrf, db
+from werkzeug.security import generate_password_hash
+
 
 administrador_app = Blueprint("administrador", __name__, url_prefix="/administrador")
+
+
+@administrador_app.route('/aspirante/cargar/todos', methods=["POST"])
+def cargar_aspirantes():
+    usuarios = Usuario.query.filter_by(live=True, id_tipo_usuario=1).all()
+    data = []
+    for usuario in usuarios:
+        aspirante = Aspirante.query.filter_by(id_usuario=usuario.id).first()
+        id_colegio = AspiranteColegio.query.filter_by(id_aspirante=aspirante.id).first()
+        if id_colegio:
+            colegio = Colegio.query.filter_by(id=id_colegio).first()
+        else:
+            colegio = "No registra."
+        data.append(
+            {
+                "nombre":aspirante.nombre,
+                "documento":aspirante.documento,
+                "correo":usuario.correo,
+                "colegio":colegio
+            }
+        )
+    return jsonify(data)
+
+
+@administrador_app.route('/aspirante/administrar')
+def administrar_aspirante():
+    return render_template('administrador/administrar_aspirantes.html')
+
+@administrador_app.route('/colegio/desactivar', methods=["POST"])
+def desactivar_colegio():
+    if request.method == "POST":
+        data = request.json
+        usuario = Usuario.query.filter_by(id=data.get("colegio").get("id_usuario")).first()
+        usuario.live = False
+        db.session.commit()
+        return "ok"
+
+
+@administrador_app.route('/colegio/modificar', methods=["POST"])
+def modificar_colegio():
+    if request.method == "POST":
+        data = request.json
+        usuario = Usuario.query.filter_by(id=data.get("colegio").get("id_usuario")).first()
+        colegio = Colegio.query.filter_by(id=data.get("colegio").get("id_colegio")).first()
+        usuario.correo = data.get("colegio").get("correo")
+        colegio.nombre = data.get("colegio").get("nombre")
+        colegio.documento = data.get("colegio").get("documento")
+        db.session.commit()
+        return "ok"
+
+
+@administrador_app.route('/colegio/cargar/todos', methods=["POST"])
+def cargar_colegios():
+    if request.method == "POST":
+        colegios = Colegio.query.all()
+        data = []
+        for colegio in colegios:
+            usuario = Usuario.query.filter_by(id=colegio.id_usuario).first()
+            if usuario.live:
+                data.append(
+                    {
+                        "correo":usuario.correo,
+                        "nombre":colegio.nombre,
+                        "documento":colegio.documento,
+                        "id_usuario":usuario.id,
+                        "id_colegio":colegio.id
+                    }
+                )
+        return jsonify(data)
+
+
+@administrador_app.route('/colegio/administrar')
+def administrar_colegio():
+    return render_template('administrador/administrar_colegios.html')
+
+@administrador_app.route('/colegio/registrar', methods=["POST"])
+def registrar_colegio():
+    if request.method == "POST":
+        data = request.json
+        if not Usuario.query.filter_by(correo=data.get("colegio").get("correo")).first() or Usuario.query.filter_by(documento=Usuario.query.filter_by(correo=data.get("colegio").get("documento")).first()):
+            hashed_pass = generate_password_hash(data.get("colegio").get("password"))
+            usuario = Usuario(
+                correo=data.get("colegio").get("correo"),
+                password=hashed_pass,
+                id_tipo_usuario=2
+            )
+            db.session.add(usuario)
+            db.session.flush()
+            colegio = Colegio(
+                nombre=data.get("colegio").get("nombre"),
+                documento=data.get("colegio").get("documento"),
+                id_usuario=usuario.id
+            )
+            db.session.add(colegio)
+            db.session.commit()
+            return "ok"
+        else:
+            return "Correo y/o documento ya registrado en el sistema."
+
+
+@administrador_app.route('/perfil/agregar', methods=["POST"])
+def agregar_perfil():
+    if request.method == "POST":
+        data = request.json
+        perfil_existente = Perfil.query.filter_by(nombre=data.get("perfil").get("nombre")).first()
+        if not perfil_existente:
+            perfil = Perfil(
+                nombre=data.get("perfil").get("nombre")
+            )
+            db.session.add(perfil)
+            db.session.commit()
+            return "ok"
+        else:
+            return "Perfil ya registrado en el sistema."
 
 
 @administrador_app.route('/perfil/desactivar', methods=["POST"])
 def desactivar_perfil():
     if request.method == "POST":
         data = request.json
-        perfil = Perfil.query.filter_by(id=data.get("perfil").get("id"))
+        perfil = Perfil.query.filter_by(id=data.get("perfil").get("id")).first()
         perfil.live = False
         db.session.commit()
         return "ok"
@@ -22,7 +140,7 @@ def desactivar_perfil():
 def modificar_perfil():
     if request.method == "POST":
         data = request.json
-        perfil = Perfil.query.filter_by(id=data.get("perfil").get("id"))
+        perfil = Perfil.query.filter_by(id=data.get("perfil").get("id")).first()
         perfil.nombre = data.get("perfil").get("nombre")
         db.session.commit()
         return "ok"

@@ -1,0 +1,112 @@
+{% extends 'administrador/dashboard_administrador.html' %}
+{% block title %}Colegio | Administrar{% endblock %}
+{% block header_page %}
+<h1 class="page-header">
+    <div class="row">
+        Administrar <small>Colegios</small>
+    </div>
+</h1>
+{% endblock %}
+{% block content_page %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-inverse">
+            <div class="panel-heading">
+                <div class="panel-heading-btn">
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-success" data-click="panel-collapse"><i class="fa fa-minus"></i></a>
+                </div>
+                Agregar nuevo colegio
+            </div>
+            <div class="panel-body">
+                <form class="form-inline" v-on:submit.prevent="registrar_colegio">
+                    <div class="form-group">
+                        <input id="nombre" class="form-control" placeholder="Nombre" v-model="colegio.nombre" required maxlength="80"/>
+                    </div>
+                    <div class="form-group">
+                        <input id="documento" class="form-control" placeholder="Documento" v-model="colegio.documento" required maxlength="80"/>
+                    </div>
+                    <div class="form-group">
+                        <input id="correo" type="email" class="form-control" placeholder="Correo" v-model="colegio.correo" required maxlength="80"/>
+                    </div>
+                    <div class="form-group">
+                        <input id="password" type="password" class="form-control" placeholder="Contraseña" v-model="colegio.password" required maxlength="120"/>
+                    </div>
+                    <div class="form-group">
+                        <input id="confirmar" type="password" class="form-control" placeholder="Confirmar contraseña" required maxlength="120"/>
+                    </div>
+                    <div class="form-group">
+                        <button class="btn text-white" style="background: rgb(19,61,57)" type="submit">Registrar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-8">
+        <div class="panel panel-inverse">
+            <div class="panel-heading">Colegios</div>
+            <div class="panel-body">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Nombre</th>
+                            <th>Documento</th>
+                            <th>Correo</th>
+                            <th style="text-align: center">Administrar</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% raw %}
+                        <tr v-for="(colegio, index) in colegios">
+                            <td>{{index +1}}</td>
+                            <td>{{colegio.nombre}}</td>
+                            <td>{{colegio.documento}}</td>
+                            <td>{{colegio.correo}}</td>
+                            <td style="text-align: center">
+                                <div>
+                                    <div class="col-md-6"><a @click="desactivar_colegio(index)" class="btn btn-danger">Desactivar</a></div>
+                                    <div class="col-md-6"><a @click="asignar_colegio(index)" class="btn btn-warning">Editar</a></div>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endraw %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="panel panel-inverse">
+            <div class="panel-heading">Modificar colegio</div>
+            <form id="div-editar-colegio" style="display: none" v-on:submit.prevent="modificar_colegio">
+                <div class="panel-body">
+                    <div class="form-horizontal">
+                        <div class="form-group col-md-12">
+                            <input class="form-control" maxlength="80" required v-model="colegio.nombre" placeholder="Nombre">
+                        </div>
+                        <div class="form-group col-md-12">
+                            <input class="form-control" maxlength="80" required v-model="colegio.correo" placeholder="Correo">
+                        </div>
+                        <div class="form-group col-md-12">
+                            <input class="form-control" maxlength="80" required v-model="colegio.documento" placeholder="Documento">
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-footer" style="text-align: justify">
+                    <div class="row">
+                        <!--<div class="col-md-6"><a class="btn btn-inverse">Cambiar contraseña</a></div>-->
+                        <div class="col-md-6"><button class="btn btn-warning">Modificar</button></div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block script %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.16.2/axios.min.js"></script>
+<script src="https://unpkg.com/vue@2.4.2"></script>
+<script src="{{url_for('static', filename='archivos_vue/administrar_colegios.js')}}"></script>
+{% endblock %}

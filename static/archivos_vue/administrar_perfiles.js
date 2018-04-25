@@ -13,6 +13,50 @@ const vm = new Vue({
         this.cargar_perfiles();
     },
     methods:{
+        agregar_perfil(){
+            var self = this;
+            let aux = self.perfil;
+            swal({
+                title: '¿Estás seguro?',
+                text: "Esta acción agregará el perfil en el sistema, si estás seguro da click en Confirmar",
+                type: 'question',
+                showCancelButton: true,
+                confirmButtonColor: 'rgb(19,61,57)',
+                cancelButtonColor: 'gray',
+                confirmButtonText: 'Confirmar',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.value) {
+                    axios({
+                        method: 'post',
+                        url: '/administrador/perfil/agregar',
+                        datatype: 'json',
+                        data: {
+                            perfil: aux,
+                        },
+                        headers: { "X-CSRFToken": self.token }
+                    }).then(function (respuesta) {
+                        if (respuesta.data == "ok") {
+                            swal({
+                                title: 'Bien!',
+                                text: 'Has agregado el nuevo perfil.',
+                                type: 'success'
+                            }).then((result) => {
+                                localStorage.clear();
+                                location.reload();
+                            })
+                        }
+                        else {
+                            swal(
+                                'Ups...',
+                                respuesta.data,
+                                'error'
+                            )
+                        }
+                    })
+                }
+            })
+        },
         desactivar_perfil(id){
             var self = this
             var aux = self.perfiles[id]
@@ -39,8 +83,8 @@ const vm = new Vue({
                         if (respuesta.data == "ok") {
                             swal({
                                 title: 'Bien!',
-                                text: 'Has cambiado el perfil.',
-                                type: 'success'
+                                text: 'Has desactivado el perfil.',
+                                type: 'error'
                             }).then((result) => {
                                 localStorage.clear();
                                 location.reload();

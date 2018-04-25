@@ -1,7 +1,26 @@
 {% extends 'administrador/dashboard_administrador.html' %}
 {% block title %}Perfil | Administrar{% endblock %}
 {% block header_page %}
-<h1 class="page-header">Administrar <small>Perfiles vocacionales</small></h1>
+<h1 class="page-header">
+    <div class="row">
+        <div class="col-md-4">Administrar <small>Perfiles vocacionales</small></div>
+        <div class="col-md-8">
+            <form v-on:submit.prevent="agregar_perfil">
+                <div class="form-inline" style="text-align: center">
+                    <div class="form-group">
+                        <small>Agrega un nuevo perfil: </small>
+                    </div>
+                    <div class="form-group ">
+                        <input class="form-control" v-model="perfil.nombre" placeholder="Nuevo de perfil" required />
+                    </div>
+                    <div class="form-group">
+                        <button class="btn text-white" style="background: rgb(19,61,57)" type="submit">Agregar perfil</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</h1>
 {% endblock %}
 {% block content_page %}
 <div class="row">
@@ -15,7 +34,7 @@
                         <tr>
                             <th>#</th>
                             <th>Perfil vocacional</th>
-                            <th>Administrar</th>
+                            <th style="text-align: center">Administrar</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -23,7 +42,12 @@
                         <tr v-for="(perfil, index) in perfiles">
                             <td>{{index +1}}</td>
                             <td>{{perfil.nombre}}</td>
-                            <td><a @click="desactivar_perfil(index)" class="btn btn-danger">Desactivar</a><a @click="asignar_perfil(index)" class="btn btn-warning">Editar</a></td>
+                            <td style="text-align: center">
+                                <div>
+                                    <div class="col-md-6"><a @click="desactivar_perfil(index)" class="btn btn-danger">Desactivar</a></div>
+                                    <div class="col-md-6"><a @click="asignar_perfil(index)" class="btn btn-warning">Editar</a></div>
+                                </div>
+                            </td>
                         </tr>
                         {% endraw %}
                         </tbody>
