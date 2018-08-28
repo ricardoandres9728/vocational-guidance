@@ -33,7 +33,7 @@
         <svg class="circular" viewBox="25 25 50 50">
             <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10"/>
         </svg>
-        <div class="message">Loading...</div>
+        <div class="message">Cargando...</div>
     </div>
 </div>
 <!-- end #page-loader -->
@@ -54,7 +54,7 @@
                             <img src="/static/assets/img/logos/escudo-udec.png" alt="" class="media-object" />
                         </a>
                         <div class="media-body">
-                            <h4 class="media-heading text-white">Universidad de Cundinamarca</h4>
+                            <h3 class="media-heading text-white">UNIVERSIDAD DE CUNDINAMARCA</h3>
                             Bienvenido al registro de nuestro sistema de orientación vocacional.
                         </div>
                     </div>
@@ -72,36 +72,64 @@
             <!-- end register-header -->
             <!-- begin register-content -->
             <div class="register-content">
-                <form action="{{url_for('aspirante.registro_aspirante')}}" method="POST" class="margin-bottom-0">
+                <form action="{{url_for('aspirante.registro_aspirante')}}" method="POST" class="margin-bottom-0" data-parsley-validate="">
+                    {% if error %}
+                    <div class="alert alert-danger">
+                        <strong>Error!</strong>
+                        {{error}}
+                        <span class="close" data-dismiss="alert">&times;</span>
+                    </div>
+                    {% endif %}
+                    {% if mensaje %}
+                    <div class="alert alert-success">
+                        <span class="close" data-dismiss="alert">&times;</span>
+                        <strong>Hecho!</strong>
+                        <a style="color: green">{{mensaje}}</a>
+                    </br>
+                        <a href="{{url_for('login.login')}}" style="color:green;">Haz click aquí para iniciar sesión.</a>
+                    </div>
+                    {% endif %}
                     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" id="csrf" />
-                    <label class="control-label">Nombre<span class="text-danger">*</span></label>
+                    <label class="control-label">Nombre completo<span class="text-danger">*</span></label>
                     <div class="row m-b-15">
-                        <input name="fullname" type="text" class="form-control" placeholder="Nombres & apellidos" required />
+                        <div class="col-md-6"><input name="nombres" type="text" class="form-control col-md-6" placeholder="Nombres" data-parsley-length="[4, 80]" required data-parsley-trigger="focus change"/></div>
+                        <div class="col-md-6"><input name="apellidos" type="text" class="form-control col-md-6" placeholder="Apellidos" data-parsley-length="[4, 80]" required data-parsley-trigger="focus change"/></div>
                     </div>
                     <label class="control-label">Correo <span class="text-danger">*</span></label>
                     <div class="row m-b-15">
-                        <div class="col-md-12">
-                            <input name="email" type="text" class="form-control" placeholder="Dirección de correo electrónico" required />
+                        <div class="col-md-12"><input name="correo" type="text" class="form-control" placeholder="Dirección de correo electrónico" data-parsley-length="[4, 80]" required data-parsley-trigger="focus change"/></div>
+                    </div>
+
+                    <div class="row m-b-15">
+                        <div class="col-md-6">
+                            <label class="control-label">Colegio <span class="text-danger">*</span></label>
+                            <select class="form-control" name="colegio" required data-parsley-trigger="focus change">
+                                <option disabled value="" class="form-control selected">Escoge el colegio donde estudiaste</option>
+                                {% for colegio in colegios %}
+                                <option class="form-control" value="{{colegio.Colegio.id}}">{{colegio.Colegio.nombre}}</option>
+                                {% endfor %}
+                                <option value="0" class="form-control">Otro colegio</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="control-label">Documento <span class="text-danger">*</span></label>
+                            <input name="documento" type="number" class="form-control" placeholder="Identificación" data-parsley-length="[4, 80]" required data-parsley-trigger="focus change"/>
                         </div>
                     </div>
                     <label class="control-label">Contraseña <span class="text-danger">*</span></label>
                     <div class="row row-space-10">
                         <div class="col-md-6 m-b-15">
-                            <div class="col-md-12">
-                                <input name="password" type="password" class="form-control" placeholder="Password" required />
-                            </div>
+                            <input name="password" id="password" type="password" class="form-control" placeholder="Contraseña" data-parsley-length="[4, 80]" required data-parsley-trigger="focus change"/>
                         </div>
                         <div class="col-md-6 m-b-15">
-                            <div class="col-md-12">
-                                <input type="password" class="form-control" placeholder="Password" required />
-                            </div>
+                            <input type="password" class="form-control" placeholder="Repetir contraseña" data-parsley-length="[4, 80]" required data-parsley-trigger="focus change" data-parsley-equalto="#password"/>
                         </div>
                     </div>
                     <div class="register-buttons">
-                        <button type="submit" class="btn btn-info btn-block btn-lg">Sign Up</button>
+                        <button type="submit" class="btn btn-block btn-lg text-white" style="background: rgb(19,61,57)">Registro</button>
                     </div>
                     <div class="m-t-20 m-b-40 p-b-40 text-inverse">
-                        Ya eres miembro? Haz click <a href="login_v3.html">aquí</a> para iniciar sesión.
+                        Ya eres miembro? Haz click <a href="{{url_for('login.login')}}">aquí</a> para iniciar sesión.
                     </div>
                     <hr />
                 </form>
@@ -130,6 +158,8 @@
 
 <!-- ================== BEGIN PAGE LEVEL JS ================== -->
 <script src="{{url_for('static', filename='assets/js/apps.min.js')}}"></script>
+<script src="{{ url_for('static', filename='assets/plugins/parsley/dist/parsley.min.js') }}"></script>
+<script src="{{ url_for('static', filename='assets/plugins/parsley/dist/i18n/es.js') }}"></script>
 <!-- ================== END PAGE LEVEL JS ================== -->
 
 <script>

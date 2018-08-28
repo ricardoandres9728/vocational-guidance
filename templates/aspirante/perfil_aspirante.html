@@ -1,0 +1,68 @@
+{% extends 'aspirante/dashboard_aspirante.html' %}
+{% block title %}
+Perfil | Aspirante
+{% endblock %}
+{% block header_page %}
+<h1 class="page-header">Perfil de Aspirante</h1>
+{% endblock %}
+{% block content_page %}
+<div class="profile-container">
+    <!-- begin profile-section -->
+    <div class="profile-section">
+        <!-- begin profile-left -->
+        <div class="profile-left">
+            <!-- begin profile-image -->
+            <div class="profile-image">
+                <img src="/static/assets/img/logos/logo-aspirante.png" />
+                <i class="fa fa-user hide"></i>
+            </div>
+            <!-- end profile-image -->
+        </div>
+        <!-- end profile-left -->
+        <!-- begin profile-right -->
+        <div class="profile-right">
+            <!-- begin profile-info -->
+            <div class="profile-info">
+                <!-- begin table -->
+                <div class="table-responsive">
+                    <table class="table table-profile">
+                        {% raw %}
+                        <thead>
+                        <tr>
+                            <th></th>
+                            <th>
+                                <h2>{{aspirante.apellidos}}
+                                    </br><small>{{aspirante.nombres}}</small>
+                                </h2>
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr class="highlight">
+                            <td class="field">Documento</td>
+                            <td><a href="#">{{aspirante.documento}}</a></td>
+                        </tr>
+                        <tr class="divider">
+                            <td colspan="2"></td>
+                        </tr>
+                        <tr>
+                            <td class="field">Correo electrónico</td>
+                            <td><a href="#">{{aspirante.correo}}</a></td>
+                        </tr>
+                        <tr>
+                            <td class="field">Colegio</td>
+                            <td><a href="#">{{aspirante.colegio}}</a></td>
+                        </tr>
+                        </tbody>
+                        {% endraw %}
+                    </table>
+                </div>
+                <!-- end table -->
+            </div>
+            <!-- end profile-info -->
+        </div>
+        <!-- end profile-right -->
+    </div>
+    <!-- end profile-section -->
+</div>
+{% endblock %}

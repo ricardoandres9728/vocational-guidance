@@ -1,15 +1,11 @@
-{% extends 'aspirante/dashboard.html' %}
+{% extends 'aspirante/dashboard_aspirante.html' %}
 {% block title %}
-    Perfil
+    Perfil | Aspirante
 {% endblock %}
-{% block header %}
+{% block header_page %}
     Perfil de Aspirante
 {% endblock %}
-{% block navegacion %}
-    {% from 'aspirante/navegacion.html' import render_navbar %}
-    {{ render_navbar('home') }}
-{% endblock %}
-{% block content %}
+{% block content_page %}
     <div class="row">
         <div class="col-md-12">
             <!-- BEGIN Portlet PORTLET-->

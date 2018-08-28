@@ -1,196 +1,117 @@
 <!DOCTYPE html>
-<!--
-Template Name: Metronic - Responsive Admin Dashboard Template build with Twitter Bootstrap 3.3.7
-Version: 4.7.5
-Author: KeenThemes
-Purchase: http://themeforest.net/item/metronic-responsive-admin-dashboard-template/4021469?ref=keenthemes
-Renew Support: http://themeforest.net/item/metronic-responsive-admin-dashboard-template/4021469?ref=keenthemes
-License: You must have a valid license purchased only from themeforest(the above link) in order to legally use the theme for your project.
--->
-<!--[if IE 8]> <html lang="en" class="ie8 no-js"> <![endif]-->
-<!--[if IE 9]> <html lang="en" class="ie9 no-js"> <![endif]-->
+<!--[if IE 8]> <html lang="en" class="ie8"> <![endif]-->
 <!--[if !IE]><!-->
-<html lang="es">
+<html lang="en">
 <!--<![endif]-->
-<!-- BEGIN HEAD -->
-
 <head>
     <meta charset="utf-8" />
-    <title>Login</title>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta content="width=device-width, initial-scale=1" name="viewport" />
-    <meta content="Preview page of Metronic Admin Theme #2 for " name="description" />
+    <title>Vocacional UdeC | Login</title>
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport" />
+    <meta content="" name="description" />
     <meta content="" name="author" />
-    <!-- BEGIN GLOBAL MANDATORY STYLES -->
-    <link href="{{ url_for('static', filename='assets/global/plugins/font-awesome/css/font-awesome.min.css') }}" rel="stylesheet" type="text/css" />
-    <link href="{{ url_for('static', filename='assets/global/plugins/simple-line-icons/simple-line-icons.min.css') }}" rel="stylesheet" type="text/css" />
-    <link href="{{ url_for('static', filename='assets/global/plugins/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
-    <link href="{{ url_for('static', filename='assets/global/plugins/bootstrap-switch/css/bootstrap-switch.min.css') }}" rel="stylesheet" type="text/css" />
-    <link href="{{ url_for('static', filename='node_modules/sweetalert2/dist/sweetalert2.min.css') }}" rel="stylesheet" type="text/css" />
-    <!-- END GLOBAL MANDATORY STYLES -->
-    <!-- BEGIN PAGE LEVEL PLUGINS -->
-    <link href="{{ url_for('static', filename='assets/global/plugins/select2/css/select2.min.css') }}" rel="stylesheet" type="text/css" />
-    <link href="{{ url_for('static', filename='assets/global/plugins/select2/css/select2-bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
-    <!-- END PAGE LEVEL PLUGINS -->
-    <!-- BEGIN THEME GLOBAL STYLES -->
-    <link href="{{ url_for('static', filename='assets/global/css/components-md.min.css') }}" rel="stylesheet" id="style_components" type="text/css" />
-    <link href="{{ url_for('static', filename='assets/global/css/plugins-md.min.css') }}" rel="stylesheet" type="text/css" />
-    <!-- END THEME GLOBAL STYLES -->
-    <!-- BEGIN PAGE LEVEL STYLES -->
-    <link href="{{ url_for('static', filename='assets/pages/css/login-4.min.css') }}" rel="stylesheet" type="text/css" />
-    <!-- END PAGE LEVEL STYLES -->
-    <!-- BEGIN THEME LAYOUT STYLES -->
-    <!-- END THEME LAYOUT STYLES -->
-    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" /> </head>
-<!-- END HEAD -->
 
-<body class=" login">
-<!-- BEGIN LOGO -->
-<div class="logo">
-    <a href="{{ url_for("login.login") }}">
-        <img src="" alt="" /> </a>
+    <!-- ================== BEGIN BASE CSS STYLE ================== -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,100italic,300,300italic,400,400italic,500,500italic,700,700italic,900,900italic" rel="stylesheet" type="text/css" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="{{url_for('static', filename='assets/plugins/jquery-ui/themes/base/minified/jquery-ui.min.css')}}" rel="stylesheet" />
+    <link href="{{url_for('static', filename='assets/plugins/bootstrap/css/bootstrap.min.css')}}" rel="stylesheet" />
+    <link href="{{url_for('static', filename='assets/plugins/font-awesome/css/font-awesome.min.css')}}" rel="stylesheet" />
+    <link href="{{url_for('static', filename='assets/css/animate.min.css')}}" rel="stylesheet" />
+    <link href="{{url_for('static', filename='assets/css/style.min.css')}}" rel="stylesheet" />
+    <link href="{{url_for('static', filename='assets/css/style-responsive.min.css')}}" rel="stylesheet" />
+    <link href="{{url_for('static', filename='assets/css/theme/default.css')}}" rel="stylesheet" id="theme" />
+    <!-- ================== END BASE CSS STYLE ================== -->
+
+    <!-- ================== BEGIN BASE JS ================== -->
+    <script src="{{url_for('static', filename='assets/plugins/pace/pace.min.js')}}"></script>
+    <!-- ================== END BASE JS ================== -->
+</head>
+<body class="pace-top">
+<!-- begin #page-loader -->
+<div id="page-loader">
+    <div class="material-loader">
+        <svg class="circular" viewBox="25 25 50 50">
+            <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10"/>
+        </svg>
+        <div class="message">Cargando...</div>
+    </div>
 </div>
-<!-- END LOGO -->
-<!-- BEGIN LOGIN -->
-<!-- BEGIN LOGIN -->
+<!-- end #page-loader -->
 
-<div class="content">
-    <!-- BEGIN LOGIN FORM -->
-    <form class="login-form" action="{{ url_for("login.login") }}" method="post">
-        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
-        <h3 class="form-title">Inicia sesion en tu cuenta</h3>
-        <div class="alert alert-danger display-hide">
-            <button class="close" data-close="alert"></button>
-            <span> Datos Incompletos. </span>
-        </div>
-        {% if error %}
-            <div class="alert alert-danger">
-                <button class="close" data-close="alert"></button>
-                <span> {{ error }} </span>
-            </div>
-        {% endif %}
-        <div class="form-group">
-            <!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
-            <label class="control-label visible-ie8 visible-ie9">Usuario</label>
-            <div class="input-icon">
-                <i class="fa fa-user"></i>
-                <input class="form-control placeholder-no-fix" type="text" autocomplete="off" placeholder="Usuario" name="username" /> </div>
-        </div>
-        <div class="form-group">
-            <label class="control-label visible-ie8 visible-ie9">Contraseña</label>
-            <div class="input-icon">
-                <i class="fa fa-lock"></i>
-                <input class="form-control placeholder-no-fix" type="password" autocomplete="off" placeholder="Contraseña" name="password" /> </div>
-        </div>
-        <div class="form-actions">
-            <button type="submit" class="btn green center-block "> Iniciar Sesion </button>
-        </div>
-        <div class="forget-password">
-            <h4>Olvidaste tu contraseña?</h4>
-            <p> Da click
-                <a href="javascript:;" id="forget-password"> aquí </a> para recuperarla</p>
-        </div>
-        <div class="create-account">
-            <p> Aún no tienes una cuenta ?&nbsp;
-                <a href="javascript:;" id="register-btn"> Registrarse </a>
-            </p>
-        </div>
-    </form>
-    <!-- END LOGIN FORM -->
-    <!-- BEGIN FORGOT PASSWORD FORM -->
-    <form class="forget-form" action="" method="post">
-        <h3>Olvidaste tu contraseña ?</h3>
-        <p> Introduce tu correo para modificar tu contraseña </p>
-        <div class="form-group">
-            <div class="input-icon">
-                <i class="fa fa-envelope"></i>
-                <input class="form-control placeholder-no-fix" type="text" autocomplete="off" placeholder="Correo" name="email" /> </div>
-        </div>
-        <div class="form-actions">
-            <button type="button" id="back-btn" class="btn red btn-outline">Atras </button>
-            <button type="submit" class="btn green pull-right"> Enviar </button>
-        </div>
-    </form>
-    <!-- END FORGOT PASSWORD FORM -->
-    <!-- BEGIN REGISTRATION FORM -->
-    <form class="register-form" action="{{ url_for("aspirante.registro_aspirante") }}" method="post">
-        <h3>Registro</h3>
-        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
-        <div class="form-group">
-            <label class="control-label visible-ie8 visible-ie9">Nombre Completo</label>
-            <div class="input-icon">
-                <i class="fa fa-font"></i>
-                <input class="form-control placeholder-no-fix" type="text" placeholder="Nombre Completo" name="fullname" /> </div>
-        </div>
-        <div class="form-group">
-            <label class="control-label visible-ie8 visible-ie9">Correo</label>
-            <div class="input-icon">
-                <i class="fa fa-envelope"></i>
-                <input class="form-control placeholder-no-fix" type="text" placeholder="Correo" name="email" /> </div>
-        </div>
-        <div class="form-group">
-            <label class="control-label visible-ie8 visible-ie9">Documento</label>
-            <div class="input-icon">
-                <i class="fa fa-bars"></i>
-                <input class="form-control placeholder-no-fix" type="text" placeholder="Documento" name="document" /> </div>
-        </div>
-        <div class="form-group">
-            <label class="control-label visible-ie8 visible-ie9">Contraseña</label>
-            <div class="input-icon">
-                <i class="fa fa-lock"></i>
-                <input class="form-control placeholder-no-fix" type="password" autocomplete="off" id="register_password" placeholder="Contraseña" name="password" /> </div>
-        </div>
-        <div class="form-group">
-            <label class="control-label visible-ie8 visible-ie9">Reescriba su contraseña</label>
-            <div class="controls">
-                <div class="input-icon">
-                    <i class="fa fa-check"></i>
-                    <input class="form-control placeholder-no-fix" type="password" autocomplete="off" placeholder="Reescriba su contraseña" name="rpassword" /> </div>
+<div class="login-cover">
+    <div class="login-cover-image"><img src="{{url_for('static', filename='assets/img/login-bg/bg-1.jpg')}}" data-id="login-cover-image" alt="" /></div>
+    <div class="login-cover-bg"></div>
+</div>
+<!-- begin #page-container -->
+<div id="page-container" class="fade">
+    <!-- begin login -->
+    <div class="login login-v2" data-pageload-addclass="animated fadeIn">
+        <!-- begin brand -->
+        <div class="login-header">
+            <div class="media media-sm">
+                <div class="media-body text-center">
+                    <h2 class="media-heading text-white">VOCACIONAL UDEC</h2>
+                    <p>UNIVERSIDAD DE CUNDINAMARCA</p>
+                </div>
+                <div class="media-right text-left">
+                    <img src="/static/assets/img/logos/escudo-udec.png" class="media-object">
+                </div>
             </div>
         </div>
-        <div class="form-group">
-            <label class="control-label visible-ie8 visible-ie9">Colegio</label>
-            <select name="colegio" id="colegio_list" class="select2 form-control">
-                <option value="0">No está en la lista</option>
-            </select>
+        <!-- end brand -->
+        <div class="login-content">
+            <form method="POST" action="{{url_for('login.login')}}" class="margin-bottom-0">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" id="csrf" />
+                {% if error %}
+                <div class="alert alert-danger">
+                    <strong>Error!</strong>
+                    {{error}}
+                    <span class="close" data-dismiss="alert">&times;</span>
+                </div>
+                {% endif %}
+                <div class="form-group m-b-20">
+                    <input name="correo" type="text" class="form-control input-lg" placeholder="Correo electrónico" required />
+                </div>
+                <div class="form-group m-b-20">
+                    <input name="password" type="password" class="form-control input-lg" placeholder="Contraseña" required />
+                </div>
+                <div class="login-buttons">
+                    <button type="submit" class="btn btn-block btn-lg text-white" style="background: rgb(19,61,57)">Iniciar sesión</button>
+                </div>
+                <div class="m-t-20 text-justify">
+                    Aún no eres miembro? Haz click <a href="{{url_for('aspirante.registro_aspirante')}}">aquí</a> para registrarte como aspirante.
+                </div>
+            </form>
         </div>
-        <div class="form-actions">
-            <button id="register-back-btn" type="button" class="btn red btn-outline"> Atras </button>
-            <button type="submit" id="register-submit-btn" class="btn green pull-right"> Registrarse </button>
-        </div>
-    </form>
-    <!-- END REGISTRATION FORM -->
+    </div>
+    <!-- end login -->
 </div>
+<!-- end page container -->
 
-<!-- END LOGIN -->
-<!-- END LOGIN -->
+<!-- ================== BEGIN BASE JS ================== -->
+<script src="{{url_for('static', filename='assets/plugins/jquery/jquery-1.9.1.min.js')}}"></script>
+<script src="{{url_for('static', filename='assets/plugins/jquery/jquery-migrate-1.1.0.min.js')}}"></script>
+<script src="{{url_for('static', filename='assets/plugins/jquery-ui/ui/minified/jquery-ui.min.js')}}"></script>
+<script src="{{url_for('static', filename='assets/plugins/bootstrap/js/bootstrap.min.js')}}"></script>
 <!--[if lt IE 9]>
-<script src="{{ url_for('static', filename='assets/global/plugins/respond.min.js')}}"></script>
-<script src="{{ url_for('static', filename='assets/global/plugins/excanvas.min.js')}}"></script>
-<script src="{{ url_for('static', filename='assets/global/plugins/ie8.fix.min.js')}}"></script>
+<script src="{{url_for('static', filename='assets/crossbrowserjs/html5shiv.js')}}"></script>
+<script src="{{url_for('static', filename='assets/crossbrowserjs/respond.min.js')}}"></script>
+<script src="{{url_for('static', filename='assets/crossbrowserjs/excanvas.min.js')}}"></script>
 <![endif]-->
-<!-- BEGIN CORE PLUGINS -->
-<script src="{{ url_for('static', filename='assets/global/plugins/jquery.min.js')}}" type="text/javascript"></script>
-<script src="{{ url_for('static', filename='assets/global/plugins/bootstrap/js/bootstrap.min.js')}}" type="text/javascript"></script>
-<script src="{{ url_for('static', filename='assets/global/plugins/js.cookie.min.js')}}" type="text/javascript"></script>
-<script src="{{ url_for('static', filename='assets/global/plugins/jquery-slimscroll/jquery.slimscroll.min.js')}}" type="text/javascript"></script>
-<script src="{{ url_for('static', filename='assets/global/plugins/jquery.blockui.min.js')}}" type="text/javascript"></script>}
-<script src="{{ url_for('static', filename='node_modules/sweetalert2/dist/sweetalert2.min.js')}}" type="text/javascript"></script>
-<script src="{{ url_for('static', filename='assets/global/plugins/bootstrap-switch/js/bootstrap-switch.min.js')}}" type="text/javascript"></script>
-<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-<!-- END CORE PLUGINS -->
-<!-- BEGIN PAGE LEVEL PLUGINS -->
-<script src="{{ url_for('static', filename='assets/global/plugins/jquery-validation/js/jquery.validate.min.js')}}" type="text/javascript"></script>
-<script src="{{ url_for('static', filename='assets/global/plugins/jquery-validation/js/additional-methods.min.js')}}" type="text/javascript"></script>
-<script src="{{ url_for('static', filename='assets/global/plugins/jquery-validation/js/localization/messages_es.js')}}" type="text/javascript"></script>
-<script src="{{ url_for('static', filename='assets/global/plugins/select2/js/select2.full.min.js')}}" type="text/javascript"></script>
-<script src="{{ url_for('static', filename='assets/global/plugins/backstretch/jquery.backstretch.min.js')}}" type="text/javascript"></script>
-<!-- END PAGE LEVEL PLUGINS -->
-<!-- BEGIN THEME GLOBAL SCRIPTS -->
-<script src="{{ url_for('static', filename='assets/global/scripts/app.min.js')}}" type="text/javascript"></script>
-<!-- END THEME GLOBAL SCRIPTS -->
-<!-- BEGIN PAGE LEVEL SCRIPTS -->
-<script src="{{ url_for('static', filename='assets/pages/scripts/login-4.js')}}" type="text/javascript"></script>
-<!-- END PAGE LEVEL SCRIPTS -->
+<script src="{{url_for('static', filename='assets/plugins/slimscroll/jquery.slimscroll.min.js')}}"></script>
+<script src="{{url_for('static', filename='assets/plugins/jquery-cookie/jquery.cookie.js')}}"></script>
+<!-- ================== END BASE JS ================== -->
+
+<!-- ================== BEGIN PAGE LEVEL JS ================== -->
+<script src="{{url_for('static', filename='assets/js/login-v2.demo.min.js')}}"></script>
+<script src="{{url_for('static', filename='assets/js/apps.min.js')}}"></script>
+<!-- ================== END PAGE LEVEL JS ================== -->
+
+<script>
+    $(document).ready(function() {
+        App.init();
+        LoginV2.init();
+    });
+</script>
 </body>
 </html>

@@ -5,20 +5,30 @@ from usuario.model import Usuario
 login_app = Blueprint("login", __name__)
 
 
+@login_app.route('/logout')
+def logout():
+    session.pop('id', None)
+    session.pop('aspirante', None)
+    session.pop('colegio', None)
+    return redirect(url_for('.login'))
+
+
 @login_app.route('/', methods=["GET", "POST"])
 def login():
     error = None
     if request.method == "POST":
         form = request.form
-        if Usuario.query.filter_by(correo=form["username"]).first():
-            usuario = Usuario.query.filter_by(correo=form["username"]).first()
+        if Usuario.query.filter_by(correo=form["correo"]).first():
+            usuario = Usuario.query.filter_by(correo=form["correo"]).first()
             if check_password_hash(usuario.password, form["password"]):
                 if usuario.id_tipo_usuario == 1:
-                    session["usuario"] = usuario.id
-                    return redirect(url_for('aspirante.home'))
+                    session["id"] = usuario.id
+                    session["apirante"] = True
+                    return redirect(url_for('aspirante.perfil'))
                 if usuario.id_tipo_usuario == 2:
-                    session["usuario"] = usuario.id
-                    return redirect(url_for('aspirante.home'))
+                    session["id"] = usuario.id
+                    session["colegio"] = True
+                    return redirect(url_for('colegio.perfil'))
             else:
                 error = "Correo y/o contraseña incorrectos"
         else:

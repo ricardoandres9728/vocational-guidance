@@ -14,3 +14,9 @@ class Usuario(db.Model):
 class TipoUsuario(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     nombre = db.Column(db.String(80))
+
+class Feedback(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    comentario = db.Column(db.String(500))
+    fecha = db.Column(db.DateTime, default=datetime.now())
+    id_usuario = db.Column(db.Integer, db.ForeignKey('usuario.id'))

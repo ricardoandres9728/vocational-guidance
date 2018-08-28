@@ -25,7 +25,8 @@ def cargar_aspirantes():
             colegio = "No registra."
         data.append(
             {
-                "nombre":aspirante.nombre,
+                "nombres":aspirante.nombre,
+                "apellidos":aspirante.apellidos,
                 "documento":aspirante.documento,
                 "correo":usuario.correo,
                 "colegio":colegio

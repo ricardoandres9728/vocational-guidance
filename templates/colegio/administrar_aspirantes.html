@@ -1,0 +1,42 @@
+{% extends 'colegio/dashboard_colegio.html' %}
+{% block title %}Aspirantes | Administrar{% endblock %}
+{% block header_page %}
+<h1 class="page-header">
+    <div class="row">
+        Administrar <small>Aspirantes</small>
+    </div>
+</h1>
+{% endblock %}
+{% block content_page %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-inverse">
+            <div class="panel-heading">Aspirantes</div>
+            <div class="panel-body">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Nombres</th>
+                            <th>Apellidos</th>
+                            <th>Correo</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% raw %}
+                        <tr v-for="(aspirante, index) in aspirantes">
+                            <td>{{index +1}}</td>
+                            <td>{{aspirante.nombres}}</td>
+                            <td>{{aspirante.apellidos}}</td>
+                            <td>{{aspirante.correo}}</td>
+                        </tr>
+                        {% endraw %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
