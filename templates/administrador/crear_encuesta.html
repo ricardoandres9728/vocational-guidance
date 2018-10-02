@@ -26,7 +26,13 @@
                     <div class="form-group">
                         <label class="col-md-3 control-label">Pregunta</label>
                         <div class="col-md-9">
-                            <textarea v-model="pregunta.pregunta" class="form-control" placeholder="Escribe aquí tu pregunta..." rows="3" required="required"></textarea>
+                            <textarea v-model="pregunta.pregunta" class="form-control" placeholder="Escribe aquí la pregunta..." rows="3" required="required"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">Recomendación</label>
+                        <div class="col-md-9">
+                            <textarea v-model="pregunta.recomendacion" class="form-control" placeholder="Escribe aquí la recomendación a la pregunta..." rows="3" required="required"></textarea>
                         </div>
                     </div>
                     <div class="form-group">
@@ -93,6 +99,10 @@
                                     <label class="control-label col-md-1">Pregunta</label>
                                     <div class="col-md-offset-1 col-md-10"><p style="text-align: justify">{{pregunta.pregunta}}</p></div>
                                 </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-1">Recom.</label>
+                                    <div class="col-md-offset-1 col-md-10"><p style="text-align: justify">{{pregunta.recomendacion}}</p></div>
+                                </div>
                                 <div class="form-group" v-for="(rta, key) in pregunta.respuestas">
                                     <div class="col-md-12" >
                                         <div class="input-group">
@@ -127,6 +137,10 @@
                                 <div class="form-group">
                                     <label class="control-label col-md-1">Pregunta: </label>
                                     <div class="col-md-offset-1 col-md-10"><textarea rows="3" v-model="pregunta_editar.pregunta.pregunta" class="form-control"></textarea></div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-1">Recomendación: </label>
+                                    <div class="col-md-offset-1 col-md-10"><textarea rows="3" v-model="pregunta_editar.pregunta.recomendacion" class="form-control"></textarea></div>
                                 </div>
                                 <div class="form-group">
                                     <div class="col-md-12" >

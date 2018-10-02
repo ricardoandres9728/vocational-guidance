@@ -12,6 +12,20 @@ from werkzeug.security import generate_password_hash
 administrador_app = Blueprint("administrador", __name__, url_prefix="/administrador")
 
 
+@administrador_app.route('/principal')
+def panel_principal():
+    return render_template('administrador/modificar_encuesta.html')
+
+@administrador_app.route('/aspirante/desactivar', methods=["POST"])
+def desactivar_aspirante():
+    if request.method == "POST":
+        data = request.json
+        usuario = Usuario.query.filter_by(id=data.get("aspirante").get("id_usuario")).first()
+        usuario.live = False
+        db.session.commit()
+        return "ok"
+
+
 @administrador_app.route('/aspirante/cargar/todos', methods=["POST"])
 def cargar_aspirantes():
     usuarios = Usuario.query.filter_by(live=True, id_tipo_usuario=1).all()
@@ -20,16 +34,19 @@ def cargar_aspirantes():
         aspirante = Aspirante.query.filter_by(id_usuario=usuario.id).first()
         id_colegio = AspiranteColegio.query.filter_by(id_aspirante=aspirante.id).first()
         if id_colegio:
-            colegio = Colegio.query.filter_by(id=id_colegio).first()
+            colegio = db.session.query(Colegio.nombre).filter(Colegio.id==id_colegio.id_colegio).first()
+            colegio = colegio.nombre
         else:
             colegio = "No registra."
         data.append(
             {
-                "nombres":aspirante.nombre,
+                "nombres":aspirante.nombres,
                 "apellidos":aspirante.apellidos,
                 "documento":aspirante.documento,
                 "correo":usuario.correo,
-                "colegio":colegio
+                "colegio":colegio,
+                "fecha": usuario.fecha_creacion,
+                "id_usuario": usuario.id
             }
         )
     return jsonify(data)

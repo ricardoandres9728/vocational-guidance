@@ -29,6 +29,10 @@ def login():
                     session["id"] = usuario.id
                     session["colegio"] = True
                     return redirect(url_for('colegio.perfil'))
+                if usuario.id_tipo_usuario == 0:
+                    session["id"] = usuario.id
+                    session["administrador"] = True
+                    return redirect(url_for())
             else:
                 error = "Correo y/o contraseña incorrectos"
         else:

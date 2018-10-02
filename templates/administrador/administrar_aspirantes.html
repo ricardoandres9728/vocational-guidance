@@ -33,9 +33,11 @@
                             <td>{{aspirante.nombre}}</td>
                             <td>{{aspirante.documento}}</td>
                             <td>{{aspirante.correo}}</td>
+                            <td>{{aspirante.colegio}}</td>
+                            <td>{{aspirante.fecha}}</td>
                             <td style="text-align: center">
                                 <div>
-                                    <div class="col-md-6"><a class="btn btn-danger">Desactivar</a></div>
+                                    <div class="col-md-6"><a class="btn btn-danger" @click="desactivar_aspirante(index)">Desactivar</a></div>
                                     <div class="col-md-6"><a class="btn btn-warning">Editar</a></div>
                                 </div>
                             </td>

@@ -5,6 +5,7 @@ const vm = new Vue({
         token: $("#csrf").val(),
         pregunta:{
             pregunta:'',
+            recomendacion:'',
             respuestas:{
                 Uno:'',
                 Dos: '',
@@ -40,6 +41,61 @@ const vm = new Vue({
     },
     methods:{
         //migrar a modificar_encuesta.js
+        eliminar_pregunta_encuesta(id){
+            var self = this;
+            numero = id + 1;
+            swal({
+                title: '¿Estás seguro?',
+                text: "Estás a punto de eliminar la pregunta " + numero + " de la encuesta.",
+                type: 'question',
+                showCancelButton: true,
+                confirmButtonColor: 'red',
+                cancelButtonColor: 'gray',
+                confirmButtonText: 'Si, borrar pregunta!',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.value) {
+                swal({
+                    title: 'Eliminada!',
+                    text: 'La pregunta ha sido eliminada, no olvides confirmar los cambios hechos antes de salir del sistema.',
+                    type: 'error'
+                }).then((result) =>{
+                    self.encuesta_editar.preguntas.splice(id,1);
+                    localStorage.setItem('encuesta', JSON.stringify(self.encuesta_editar))
+            })
+            }
+        })
+        },
+        agregar_pregunta_nueva(){
+            var self = this
+            if (self.pregunta.pregunta.length == 0 || self.pregunta.recomendacion.length == 0 || self.pregunta.respuestas.Uno.length == 0 || self.pregunta.respuestas.Dos.length == 0 || self.pregunta.respuestas.Tres.length == 0 || self.pregunta.respuestas.Cuatro.length == 0 || self.pregunta.respuestas.Cinco.length == 0){
+                swal(
+                    'Ups...',
+                    'Todos los campos de la nueva pregunta son obligatorios.',
+                    'error'
+                )
+            }
+            else {
+                var aux = JSON.parse(JSON.stringify(self.pregunta));
+                self.encuesta_editar.preguntas.push(aux);
+                self.pregunta = {
+                    pregunta: '',
+                    respuestas: {
+                        Uno: '',
+                        Dos: '',
+                        Tres: '',
+                        Cuatro: '',
+                        Cinco: '',
+                    }
+                }
+                localStorage.setItem('encuesta', JSON.stringify(self.encuesta_editar))
+                swal(
+                    'Bien!',
+                    'Has agregado una nueva pregunta a la encuesta, no olvides confirmar los cambios hechos antes de salir del sistema.',
+                    'success'
+                )
+            }
+        },
         desactivar_encuesta(){
             var self = this;
             swal({
@@ -53,34 +109,34 @@ const vm = new Vue({
                 cancelButtonText: 'Cancelar'
             }).then((result) => {
                 if (result.value) {
-                    axios({
-                        method: 'post',
-                        url: '/administrador/encuesta/desactivar',
-                        datatype: 'json',
-                        data: {
-                            id: self.encuesta_editar.id,
-                        },
-                        headers: { "X-CSRFToken": self.token }
-                    }).then(function (respuesta) {
-                        if (respuesta.data == "ok"){
-                            swal({
-                                title: 'Bien!',
-                                text: 'Has desactivado la encuesta.',
-                                type: 'error'
-                            }).then((result) => {
-                                location.reload();
-                            })
-                        }
-                        else{
-                            swal(
-                                'Ups...',
-                                'Algo ha salido mal & la acción no se llevó a cabo.',
-                                'error'
-                            )
-                        }
+                axios({
+                    method: 'post',
+                    url: '/administrador/encuesta/desactivar',
+                    datatype: 'json',
+                    data: {
+                        id: self.encuesta_editar.id,
+                    },
+                    headers: { "X-CSRFToken": self.token }
+                }).then(function (respuesta) {
+                    if (respuesta.data == "ok"){
+                        swal({
+                            title: 'Bien!',
+                            text: 'Has desactivado la encuesta.',
+                            type: 'error'
+                        }).then((result) => {
+                            location.reload();
                     })
-                }
-            })
+                    }
+                    else{
+                        swal(
+                            'Ups...',
+                            'Algo ha salido mal & la acción no se llevó a cabo.',
+                            'error'
+                        )
+                    }
+                })
+            }
+        })
         },
         modificar_encuesta(){
             var self = this;
@@ -104,25 +160,26 @@ const vm = new Vue({
                     cancelButtonText: 'Cancelar'
                 }).then((result) => {
                     if (result.value) {
-                        axios({
-                            method: 'post',
-                            url: '/administrador/encuesta/modificar',
-                            datatype: 'json',
-                            data: {
-                                encuesta: aux,
-                            },
-                            headers: { "X-CSRFToken": self.token }
-                        }).then(function (respuesta) {
-                                swal({
-                                    title: 'Bien!',
-                                    text: 'Has guardado la encuesta.',
-                                    type: 'success'
-                                }).then((result) => {
-                                    location.reload();
-                                })
-                        })
-                    }
-                })
+                    axios({
+                        method: 'post',
+                        url: '/administrador/encuesta/modificar',
+                        datatype: 'json',
+                        data: {
+                            encuesta: aux,
+                        },
+                        headers: { "X-CSRFToken": self.token }
+                    }).then(function (respuesta) {
+                        swal({
+                            title: 'Bien!',
+                            text: 'Has guardado la encuesta.',
+                            type: 'success'
+                        }).then((result) => {
+                            localStorage.removeItem('encuesta');
+                            location.reload();
+                    })
+                    })
+                }
+            })
             }
 
         },
@@ -147,11 +204,11 @@ const vm = new Vue({
                 headers: { "X-CSRFToken": this.token }
             }).then((respuesta) => {
                 respuesta.data.forEach(element => {
-                    self.encuestas.push(element);
-                });
-            })
+                self.encuestas.push(element);
+        });
+        })
         },
-        
+
         //---//
         guardar_encuesta(){
             var self = this;
@@ -175,35 +232,35 @@ const vm = new Vue({
                     cancelButtonText: 'Cancelar'
                 }).then((result) => {
                     if (result.value) {
-                        axios({
-                            method: 'post',
-                            url: '/administrador/encuesta/guardar',
-                            datatype: 'json',
-                            data: {
-                                encuesta: aux,
-                            },
-                            headers: { "X-CSRFToken": self.token }
-                        }).then(function (respuesta) {
-                            if (respuesta.data == "ok"){
-                                swal({
-                                    title: 'Bien!',
-                                    text: 'Has guardado la encuesta.',
-                                    type: 'success'
-                                }).then((result) => {
-                                    localStorage.clear();
-                                    location.reload();
-                                })
-                            }
-                            else{
-                                swal(
-                                    'Ups...',
-                                    respuesta.data,
-                                    'error'
-                                )
-                            }
+                    axios({
+                        method: 'post',
+                        url: '/administrador/encuesta/guardar',
+                        datatype: 'json',
+                        data: {
+                            encuesta: aux,
+                        },
+                        headers: { "X-CSRFToken": self.token }
+                    }).then(function (respuesta) {
+                        if (respuesta.data == "ok"){
+                            swal({
+                                title: 'Bien!',
+                                text: 'Has guardado la encuesta.',
+                                type: 'success'
+                            }).then((result) => {
+                                localStorage.clear();
+                            location.reload();
                         })
-                    }
-                })
+                        }
+                        else{
+                            swal(
+                                'Ups...',
+                                respuesta.data,
+                                'error'
+                            )
+                        }
+                    })
+                }
+            })
             }
         },
         eliminar_pregunta(id){
@@ -219,17 +276,17 @@ const vm = new Vue({
                 cancelButtonText: 'Cancelar'
             }).then((result) => {
                 if (result.value) {
-                    swal({
-                        title: 'Eliminada!',
-                        text: 'La pregunta ha sido eliminada.',
-                        type: 'error'
-                    }).then((result) =>{
-                        self.encuesta.preguntas.splice(id,1);
-                        localStorage.setItem('encuesta', JSON.stringify(self.encuesta))
-                        location.reload();
-                    })
-                }
+                swal({
+                    title: 'Eliminada!',
+                    text: 'La pregunta ha sido eliminada.',
+                    type: 'error'
+                }).then((result) =>{
+                    self.encuesta.preguntas.splice(id,1);
+                localStorage.setItem('encuesta', JSON.stringify(self.encuesta))
+                location.reload();
             })
+            }
+        })
         },
         editar_pregunta() {
             var self = this;
@@ -246,9 +303,9 @@ const vm = new Vue({
                 headers: { "X-CSRFToken": this.token }
             }).then((respuesta)=>{
                 respuesta.data.forEach(element => {
-                    self.perfiles.push(element);
-                });
-            })
+                self.perfiles.push(element);
+        });
+        })
         },
         agregar_pregunta(){
             var self = this
@@ -278,16 +335,16 @@ const vm = new Vue({
                 cancelButtonText: 'Cancelar'
             }).then((result) => {
                 if (result.value) {
-                    swal({
-                        title: 'Borrado!',
-                        text: 'Se han limpiado todos los campos.',
-                        type: 'success'
-                    }).then((result)=>{
-                        localStorage.clear();
-                        location.reload();
-                    })
-                }
-            })  
+                swal({
+                    title: 'Borrado!',
+                    text: 'Se han limpiado todos los campos.',
+                    type: 'success'
+                }).then((result)=>{
+                    localStorage.clear();
+                location.reload();
+            })
+            }
+        })
         },
         asignar_pregunta(id){
             var self = this;
@@ -295,6 +352,6 @@ const vm = new Vue({
             self.pregunta_editar.id = id;
             self.pregunta_editar.pregunta = aux;
         },
-        
+
     },
 });

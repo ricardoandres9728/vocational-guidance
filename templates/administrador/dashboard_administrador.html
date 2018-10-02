@@ -135,13 +135,11 @@
                         <span class="hidden-xs">Bienvenido Administrador!</span>
                     </a>
                     <ul class="dropdown-menu animated fadeInLeft">
-                        <!--<li class="arrow"></li>-->
-                        <!--<li><a href="javascript:;">Edit Profile</a></li>-->
-                        <!--<li><a href="javascript:;"><span class="badge badge-danger pull-right">2</span> Inbox</a></li>-->
-                        <!--<li><a href="javascript:;">Calendar</a></li>-->
-                        <!--<li><a href="javascript:;">Setting</a></li>-->
-                        <!--<li class="divider"></li>-->
-                        <!--<li><a href="javascript:;">Log Out</a></li>-->
+                        <li class="arrow"></li>
+                        <li><a href="javascript:;">Panel principal</a></li>
+                        <li><a href="javascript:;">Cambiar contraseña</a></li>
+                        <li class="divider"></li>
+                        <li><a href="{{url_for('login.logout')}}">Cerrar sesión</a></li>
                     </ul>
                 </li>
             </ul>
@@ -163,7 +161,7 @@
         <div data-scrollbar="true" data-height="100%">
             <!-- begin sidebar user -->
             <ul class="nav">
-                <li class="nav-profile no-bg">
+                <li class="nav-profile">
                     <a href="#" data-toggle="nav-profile">
                         <div class="image">
                             <img src="/static/assets/img/logos/escudo-udec.png" alt=""  />
@@ -171,15 +169,17 @@
                         <div class="info">
                             <b class="caret pull-right"></b>
                             Administrador
-                            <small>Administración de perfil</small>
+                            <small>Vocacional UDEC</small>
                         </div>
                     </a>
                 </li>
                 <li>
                     <ul class="nav nav-profile">
-                        <li><a href="#"><i class="material-icons"></i> Opción 1</a></li>
-                        <li><a href="#"><i class="material-icons"></i> Opción 2</a></li>
-                        <li><a href="#"><i class="material-icons"></i> Opción 3</a></li>
+                        <li><a href="#"><i class="material-icons">settings</i>Panel principal</a></li>
+                        <li><a href="#"><i class="material-icons"><span class="fa fa-file-excel-o"></span></i>Encuestas inactivas</a></li>
+                        <li><a href="#"><i class="material-icons"><span class="fa fa-users"></span></i>Perfiles inactivos</a></li>
+                        <li><a href="#"><i class="material-icons"><span class="fa fa-institution"></span></span></i>Colegios inactivos</a></li>
+                        <li><a href="#"><i class="material-icons"><span class="fa fa-child"></span></i>Aspirantes inactivos</a></li>
                     </ul>
                 </li>
             </ul>
@@ -190,7 +190,7 @@
                 <li class="has-sub">
                     <a href="javascript:;">
                         <b class="caret pull-right"></b>
-                        <i class="material-icons"><span class="fa fa-file-text"></span></i>
+                        <i class="material-icons text-white"><span class="fa fa-file-text"></span></i>
                         <span>Encuestas</span>
                     </a>
                     <ul class="sub-menu">
@@ -200,19 +200,19 @@
                 </li>
                 <li class="has-sub">
                     <a href="{{url_for('administrador.administrar_perfiles')}}">
-                        <i class="material-icons"><span class="fa fa-users"></span></i>
+                        <i class="material-icons text-white"><span class="fa fa-users"></span></i>
                         <span>Perfiles vocacionales</span>
                     </a>
                 </li>
                 <li class="has-sub">
                     <a href="{{url_for('administrador.administrar_colegio')}}">
-                        <i class="material-icons"><span class="fa fa-institution"></span></i>
+                        <i class="material-icons text-white"><span class="fa fa-institution"></span></i>
                         <span>Colegios</span>
                     </a>
                 </li>
                 <li class="has-sub">
                     <a href="{{url_for('administrador.administrar_aspirante')}}">
-                        <i class="material-icons"><span class="fa fa-child"></span></i>
+                        <i class="material-icons text-white"><span class="fa fa-child"></span></i>
                         <span>Aspirantes</span>
                     </a>
                 </li>
