@@ -223,14 +223,8 @@
                                         <input type="email" class="form-control" placeholder="Ingresa tu correo electrónico" required v-model="aspirante.correo" maxlength="30"/>
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <label class="col-md-2 control-label">Documento</label>
-                                    <div class="col-md-10">
-                                        <input class="form-control" placeholder="Ingresa tu direccion de domicilio o vivienda" v-model="aspirante.documento" maxlength="80" required/>
-                                    </div>
-                                </div>
-                                {% endraw %}
                             </div>
+                            {% endraw %}
                             <div class="modal-footer">
                                 <a href="javascript:;" class="btn btn-sm btn-white" data-dismiss="modal">Cancelar</a>
                                 <button type="submit" class="btn btn-sm btn-warning">Cambiar información</button>
@@ -300,9 +294,9 @@
 <script src="{{url_for('static', filename='assets/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js')}}"></script>
 <script src="{{url_for('static', filename='assets/js/dashboard.min.js')}}"></script>
 <script src="{{url_for('static', filename='assets/js/apps.min.js')}}"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.16.2/axios.min.js"></script>
-<script src="https://unpkg.com/vue@2.4.2"></script>
-<script src="{{url_for('static', filename='archivos_vue/main_aspirante.js')}}"></script>
+<script src="{{ url_for('static', filename='node_modules/vue/dist/vue.js')}}"></script>
+<script src="{{ url_for('static', filename='node_modules/axios/dist/axios.js')}}"></script>
+<script src="{{ url_for('static', filename='archivos_vue/main_aspirante.js')}}"></script>
 <script src="{{ url_for('static', filename='assets/plugins/parsley/dist/parsley.min.js') }}"></script>
 <script src="{{ url_for('static', filename='assets/plugins/parsley/dist/i18n/es.js') }}"></script>
 <script src="{{ url_for('static', filename='assets/plugins/switchery/switchery.min.js')}}"></script>

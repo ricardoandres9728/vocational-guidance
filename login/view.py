@@ -32,7 +32,7 @@ def login():
                 if usuario.id_tipo_usuario == 0:
                     session["id"] = usuario.id
                     session["administrador"] = True
-                    return redirect(url_for())
+                    return redirect(url_for('administrador.panel_principal'))
             else:
                 error = "Correo y/o contraseña incorrectos"
         else:

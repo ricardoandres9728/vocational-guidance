@@ -5,7 +5,6 @@ const vm = new Vue({
         aspirante: {
             nombres: '',
             apellidos: '',
-            documento: '',
             correo: '',
             password:{
                 anterior:'',
@@ -31,23 +30,11 @@ const vm = new Vue({
         this.cargar_encuestas();
     },
     methods: {
-        next(){
-            var self = this;
-            if(self.id_pregunta+1<self.encuesta.preguntas.length){
-            self.id_pregunta++;
-            self.mostrar_encuesta();
-            }
-        },
         mostrar_encuesta(){
             var self = this;
-            aux = self.encuesta.preguntas[self.id_pregunta];
+            encuesta = self.encuestas[0];
+            console.log(encuesta);
             self.pregunta = aux;
-        },
-        asignar_encuesta() {
-            var self = this;
-            aux = self.encuestas[self.encuesta.id];
-            self.encuesta = aux;
-            console.log(self.encuesta.id);
         },
         cargar_encuestas() {
             var self = this;
@@ -56,9 +43,7 @@ const vm = new Vue({
                 url: "/administrador/encuesta/cargar/todos",
                 headers: { "X-CSRFToken": this.token }
             }).then((respuesta) => {
-                respuesta.data.forEach(element => {
-                    self.encuestas.push(element);
-                });
+                self.encuestas = respuesta.data
             })
         },
         newsletter(){

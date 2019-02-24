@@ -31,8 +31,16 @@
                     </div>
                     <div class="form-group">
                         <label class="col-md-3 control-label">Recomendación</label>
-                        <div class="col-md-9">
+                        <div class="col-md-5">
                             <textarea v-model="pregunta.recomendacion" class="form-control" placeholder="Escribe aquí la recomendación a la pregunta..." rows="3" required="required"></textarea>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label">Centroide</label>
+                            </div>
+                            <div class="form-group">
+                                <input v-model="pregunta.centroide" type="number" class="row form-control" placeholder="Valor de centroide">
+                            </div>
                         </div>
                     </div>
                     <div class="form-group">

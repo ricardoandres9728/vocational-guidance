@@ -1,6 +1,7 @@
-from flask import Blueprint, jsonify, render_template, request,url_for, redirect
+from flask import Blueprint, jsonify, render_template, request,url_for, redirect, session
 from colegio.model import Colegio
 from usuario.model import Usuario
+from usuario.model import Feedback
 from perfil.model import Perfil
 from aspirante.model import Aspirante
 from encuesta.model import Encuesta
@@ -11,10 +12,55 @@ from werkzeug.security import generate_password_hash
 
 administrador_app = Blueprint("administrador", __name__, url_prefix="/administrador")
 
+@administrador_app.route('/cambiar/pass', methods=["POST"])
+def cambiar_pass():
+    print("Entró a cambiar pass")
+
+@administrador_app.route('/principal/cargar', methods=["POST"])
+def principal_cargar():
+    if request.method == "POST":
+        adm = Usuario.query.filter_by(id=session["id"]).first()
+        aspirantes = Usuario.query.filter_by(id_tipo_usuario=1, live=True).all()
+        colegios = Usuario.query.filter_by(id_tipo_usuario=2, live=True).all()
+        encuestas = Encuesta.query.filter_by(live=True).all()
+        perfiles = Perfil.query.filter_by(live=True).all()
+        feedback = Feedback.query.order_by(Feedback.fecha.desc()).all()
+        comentarios = []
+        for feed in feedback:
+            usuario = Usuario.query.filter_by(id=feed.id_usuario, live=True).first()
+            if usuario:
+                user = {}
+                if usuario.id_tipo_usuario == 1:
+                    aspirante = Aspirante.query.filter_by(id_usuario=usuario.id).first()
+                    user = {
+                        "nombre" : aspirante.nombres+" "+aspirante.apellidos,
+                        "tipo_usuario": 1,
+                    }
+                if usuario.id_tipo_usuario == 2:
+                    colegio = Colegio.query.filter_by(id_usuario=usuario.id).first()
+                    user = {
+                        "nombre" : colegio.nombre,
+                        "tipo_usuario" : 2,
+                    }
+                comentarios.append({
+                    "usuario": user,
+                    "comentario": feed.comentario,
+                    "fecha": feed.fecha
+                })
+        data = {
+            "aspirantes" : len(aspirantes),
+            "colegios" : len(colegios),
+            "perfiles" : len(perfiles),
+            "encuestas" : len(encuestas),
+            "feedback" : comentarios,
+            "correo" : adm.correo
+        }
+        return jsonify(data)
+
 
 @administrador_app.route('/principal')
 def panel_principal():
-    return render_template('administrador/modificar_encuesta.html')
+    return render_template('administrador/panel_principal.html')
 
 @administrador_app.route('/aspirante/desactivar', methods=["POST"])
 def desactivar_aspirante():
@@ -42,7 +88,6 @@ def cargar_aspirantes():
             {
                 "nombres":aspirante.nombres,
                 "apellidos":aspirante.apellidos,
-                "documento":aspirante.documento,
                 "correo":usuario.correo,
                 "colegio":colegio,
                 "fecha": usuario.fecha_creacion,
@@ -74,7 +119,6 @@ def modificar_colegio():
         colegio = Colegio.query.filter_by(id=data.get("colegio").get("id_colegio")).first()
         usuario.correo = data.get("colegio").get("correo")
         colegio.nombre = data.get("colegio").get("nombre")
-        colegio.documento = data.get("colegio").get("documento")
         db.session.commit()
         return "ok"
 
@@ -91,7 +135,6 @@ def cargar_colegios():
                     {
                         "correo":usuario.correo,
                         "nombre":colegio.nombre,
-                        "documento":colegio.documento,
                         "id_usuario":usuario.id,
                         "id_colegio":colegio.id
                     }
@@ -107,7 +150,10 @@ def administrar_colegio():
 def registrar_colegio():
     if request.method == "POST":
         data = request.json
-        if not Usuario.query.filter_by(correo=data.get("colegio").get("correo")).first() or Usuario.query.filter_by(documento=Usuario.query.filter_by(correo=data.get("colegio").get("documento")).first()):
+        usuario = Usuario.query.filter_by(correo=data.get("colegio").get("correo")).first()
+        if usuario:
+            return "Correo ya registrado en el sistema."
+        else:
             hashed_pass = generate_password_hash(data.get("colegio").get("password"))
             usuario = Usuario(
                 correo=data.get("colegio").get("correo"),
@@ -118,14 +164,11 @@ def registrar_colegio():
             db.session.flush()
             colegio = Colegio(
                 nombre=data.get("colegio").get("nombre"),
-                documento=data.get("colegio").get("documento"),
                 id_usuario=usuario.id
             )
             db.session.add(colegio)
             db.session.commit()
             return "ok"
-        else:
-            return "Correo y/o documento ya registrado en el sistema."
 
 
 @administrador_app.route('/perfil/agregar', methods=["POST"])

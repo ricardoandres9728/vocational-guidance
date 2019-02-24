@@ -4,7 +4,6 @@ const vm = new Vue({
         token: $("#csrf").val(),
         colegio:{
             nombre:'',
-            documento:'',
             correo:'',
             password:''
         },
@@ -157,9 +156,7 @@ const vm = new Vue({
                     }
                     else {
                         let nombre = document.getElementById("nombre");
-                        let documento = document.getElementById("documento");
                         nombre.setAttribute("class", "form-control parsley-error");
-                        documento.setAttribute("class", "form-control parsley-error");
                         swal(
                             'Ups...',
                             respuesta.data,

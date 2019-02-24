@@ -1,0 +1,189 @@
+{% extends 'administrador/dashboard_administrador.html' %}
+{% block title %}Panel | Principal{% endblock %}
+{% block style %}
+{% endblock %}
+{% block header_page %}
+<h1 class="page-header">Panel <small>Principal</small></h1>
+{% endblock %}
+{% block content_page %}
+{% raw %}
+<!-- begin row -->
+<div class="row">
+    <!-- begin col-3 -->
+    <div class="col-md-3 col-sm-6">
+        <div class="widget widget-stats bg-pink">
+            <div class="stats-icon"><i class="material-icons"><span class="fa fa-child"></span></i></div>
+            <div class="stats-info">
+                <h4>ASPIRANTES</h4>
+                <p>{{aspirantes}}</p>
+            </div>
+            {% endraw %}
+            <div class="stats-link">
+                <a href="{{url_for('.administrar_aspirante')}}">Administrar <i class="fa fa-arrow-circle-o-right"></i></a>
+            </div>
+            {% raw %}
+        </div>
+    </div>
+    <!-- end col-3 -->
+    <!-- begin col-3 -->
+    <div class="col-md-3 col-sm-6">
+        <div class="widget widget-stats bg-orange">
+            <div class="stats-icon"><i class="material-icons"><span class="fa fa-institution"></span></i></div>
+            <div class="stats-info">
+                <h4>COLEGIOS</h4>
+                <p>{{colegios}}</p>
+            </div>
+            {% endraw %}
+            <div class="stats-link">
+                <a href="{{url_for('.administrar_colegio')}}">Administrar <i class="fa fa-arrow-circle-o-right"></i></a>
+            </div>
+            {% raw %}
+        </div>
+    </div>
+    <!-- end col-3 -->
+    <!-- begin col-3 -->
+    <div class="col-md-3 col-sm-6">
+        <div class="widget widget-stats bg-grey-600">
+            <div class="stats-icon"><i class="material-icons"><span class="fa fa-users"></span></i></div>
+            <div class="stats-info">
+                <h4>PERFILES</h4>
+                <p>{{perfiles}}</p>
+            </div>
+            {% endraw %}
+            <div class="stats-link">
+                <a href="{{url_for('.administrar_perfiles')}}">Administrar <i class="fa fa-arrow-circle-o-right"></i></a>
+            </div>
+            {% raw %}
+        </div>
+    </div>
+    <!-- end col-3 -->
+    <!-- begin col-3 -->
+    <div class="col-md-3 col-sm-6">
+        <div class="widget widget-stats bg-red">
+            <div class="stats-icon"><i class="material-icons"><span class="fa fa-file-text"></span></i></div>
+            <div class="stats-info">
+                <h4>ENCUESTAS</h4>
+                <p>{{encuestas}}</p>
+            </div>
+            {% endraw %}
+            <div class="stats-link">
+                <a href="{{url_for('.administrar_encuesta')}}">Administrar <i class="fa fa-arrow-circle-o-right"></i></a>
+            </div>
+            {% raw %}
+        </div>
+    </div>
+    <!-- end col-3 -->
+</div>
+<!-- end row -->
+<!-- begin row -->
+<div class="row">
+    <!-- begin col-8 -->
+    <div class="col-md-6">
+        <div class="panel panel-inverse">
+            <div class="panel-heading">
+                <div class="panel-heading-btn">
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-success" data-click="panel-reload"><i class="fa fa-repeat"></i></a>
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-warning" data-click="panel-collapse"><i class="fa fa-minus"></i></a>
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-danger" data-click="panel-remove"><i class="fa fa-times"></i></a>
+                </div>
+                <h4 class="panel-title">Feedback</h4>
+            </div>
+            <div class="panel-body bg-grey-200">
+                <div class="height-250" data-scrollbar="true" v-if="feedback.length != 0">
+                    <ul class="chats">
+                        <li class="left" v-for="feed in feedback">
+                            <span class="date-time">{{feed.fecha}}</span>
+                            <div href="javascript:;" class="name">
+                                {{feed.usuario.nombre}}
+                                <a href="#" class="btn btn-xs btn-icon btn-circle btn-danger"><span class="fa fa-download"></span></a>
+                            </div>
+                            <div href="javascript:;" class="image">
+                                <img v-show="feed.usuario.tipo_usuario == 1"src="../static/assets/img/logos/logo-aspirante.png" alt="" class="media-object" />
+                                <img v-show="feed.usuario.tipo_usuario == 2"src="../static/assets/img/logos/logo-colegio.png" alt="" class="media-object" />
+                            </div>
+                            <div class="message text-center">
+                                {{feed.comentario}}
+
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div v-else>
+                    <div class="note note-warning">
+                        <h4>No hay comentarios en el sistema.</h4>
+                        <p>
+                            En el  sistema no se registra ningún comentario hecho por algún aspirante.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- end col-8 -->
+    <div class="col-md-6">
+        <div class="panel panel-inverse">
+            <div class="panel-inverse">
+                <div class="panel-heading">
+                    <h4 class="panel-title text-white">Cambiar correo</h4>
+                </div>
+                <div class="panel-body">
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <div class="col-md-7">
+                                    <input class="form-control" maxlength="80" v-model="correo" placeholder="Correo">
+                                </div>
+                                <div class="col-md-5">
+                                    <a class="btn btn-block btn-warning">Modificar</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-inverse">
+            <div class="panel-inverse">
+                <div class="panel-heading">
+                    <h4 class="panel-title text-white">Cambiar contraseña</h4>
+                </div>
+                <div class="panel-body">
+                    <div class="form-horizontal">
+                        {% endraw %}
+                        <form data-parsley-validate="" action="{{url_for('administrador.cambiar_pass')}}" method="POST">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" id="csrf" />
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <div class="col-md-4">
+                                        <input type="password" class="form-control" maxlength="80" v-model="password.anterior" required data-parsley-length="[4,80]" placeholder="Actual" data-parsley-trigger="focus change">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <input type="password" id="password" class="form-control" maxlength="80" v-model="password.nueva" required data-parsley-length="[4,80]" placeholder="Nueva" data-parsley-trigger="focus change">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <input type="password" class="form-control" maxlength="80" required data-parsley-length="[4,80]" data-parsley-equalto="#password" placeholder="Confirmar" data-parsley-trigger="focus change">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-12 text-center">
+                                    <button type="submit" class="btn btn-warning">Modificar</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end row -->
+{% endblock %}
+{% block script %}
+<script src="{{ url_for('static', filename='assets/plugins/parsley/dist/parsley.min.js') }}"></script>
+<script src="{{ url_for('static', filename='assets/plugins/parsley/dist/i18n/es.js') }}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.16.2/axios.min.js"></script>
+<script src="https://unpkg.com/vue@2.4.2"></script>
+<script src="{{url_for('static', filename='archivos_vue/panel_principal.js')}}"></script>
+{% endblock %}

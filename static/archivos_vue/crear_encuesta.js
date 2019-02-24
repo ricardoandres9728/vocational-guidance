@@ -6,6 +6,7 @@ const vm = new Vue({
         pregunta:{
             pregunta:'',
             recomendacion:'',
+            centroide:'',
             respuestas:{
                 Uno:'',
                 Dos: '',

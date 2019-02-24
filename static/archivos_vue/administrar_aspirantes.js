@@ -3,8 +3,7 @@ const vm = new Vue({
     data: {
         token: $("#csrf").val(),
         aspirante: {
-            nombre: '',
-            documento: '',
+            nombres: '',
             correo: '',
             password: ''
         },

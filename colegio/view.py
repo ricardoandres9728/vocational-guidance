@@ -52,7 +52,6 @@ def modificar_perfil():
         usuario.correo = data.get("colegio").get("correo")
         colegio = Colegio.query.filter_by(id_usuario=usuario.id).first()
         colegio.nombre= data.get("colegio").get("nombre")
-        colegio.documento = data.get("colegio").get("documento")
         db.session.commit()
         session["nombre"] = colegio.nombre
         return "ok"
@@ -70,7 +69,6 @@ def cargar_aspirante():
         colegio = Colegio.query.filter_by(id_usuario=usuario.id).first()
         col = {
             "nombre":colegio.nombre,
-            "documento":colegio.documento,
             "correo":usuario.correo,
             "password":{
                 "anterior":'',
