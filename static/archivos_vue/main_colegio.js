@@ -4,7 +4,6 @@ const vm = new Vue({
         token: $("#csrf").val(),
         colegio: {
             nombre: '',
-            documento: '',
             correo: '',
             password: {
                 anterior: '',

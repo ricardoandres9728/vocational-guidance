@@ -58,7 +58,6 @@ def modificar_perfil():
         aspirante = Aspirante.query.filter_by(id_usuario=usuario.id).first()
         aspirante.nombres = data.get("aspirante").get("nombres")
         aspirante.apellidos = data.get("aspirante").get("apellidos")
-        aspirante.documento = data.get("aspirante").get("documento")
         db.session.commit()
         session["nombres"] = aspirante.nombres
         session["apellidos"] = aspirante.apellidos
@@ -84,7 +83,6 @@ def cargar_aspirante():
         asp = {
             "nombres":aspirante.nombres,
             "apellidos":aspirante.apellidos,
-            "documento":aspirante.documento,
             "correo":usuario.correo,
             "colegio":colegio,
             "password":{
@@ -120,7 +118,6 @@ def registro_aspirante():
             aspirante = Aspirante(
                 nombres=form["nombres"],
                 apellidos=form["apellidos"],
-                documento=form["documento"],
                 id_usuario=usuario.id
             )
             db.session.add(aspirante)

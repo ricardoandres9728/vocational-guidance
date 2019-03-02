@@ -12,7 +12,7 @@
                     </div>
                     <div class="form-group ">
                         {% raw %}
-                        <select class="form-control" v-model="encuesta.id" @change="asignar_encuesta">
+                        <select class="form-control" v-model="encuesta.id">
                             <option disabled value="" class="form-control">Escoge un perfil</option>
                             <option v-for="(perfil, index) in encuestas" class="form-control" v-bind:value="index">{{perfil.perfil}}</option>
                         </select>
@@ -30,31 +30,7 @@
 {% block content_page %}
 <div class="row">
     {% raw %}
-    <div class="panel panel-inverse">
-        <div class="panel-heading">
-            Encuesta para {{encuesta.perfil}}
-        </div>
-        <div class="panel-body">
-            <p>
-            <h3>{{pregunta.pregunta}}</h3>
-            </p>
-            <p>
-            <div class="form-group" v-for="(rta, key) in pregunta.respuestas">
-                <div class="col-md-12" >
-                    <div class="input-group" @click="contestar(rta, key)">
-                        <span class="input-group-addon text-center"> {{key}} </span>
-                        <label class="form-control" >{{rta}}</label>
-                    </div>
-                </div>
-            </div>
-            </p>
-        </div>
-        <div class="panel-footer">
-            <div class="text-center">
-                <button class="btn btn-info"  @click="next">Siguiente pregunta</button>
-            </div>
-        </div>
-    </div>
+
     {%  endraw %}
 </div>
 {% endblock %}
