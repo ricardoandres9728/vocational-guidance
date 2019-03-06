@@ -13,11 +13,8 @@ const vm = new Vue({
             newsletter:''
         },
         encuestas:[],
-        encuesta:{
-            id: 0,
-            preguntas:{},
-            perfil:'',
-        },
+        encuesta: null,
+        id_encuesta: 0,
         id_pregunta:0,
         pregunta:{},
         rta:{
@@ -30,11 +27,12 @@ const vm = new Vue({
         this.cargar_encuestas();
     },
     methods: {
+        next(){
+            this.id_pregunta ++;
+        },
         mostrar_encuesta(){
-            var self = this;
-            encuesta = self.encuestas[0];
-            console.log(encuesta);
-            self.pregunta = aux;
+            this.encuesta = this.encuestas[this.id_encuesta];
+            console.log(this.encuesta.preguntas.length);
         },
         cargar_encuestas() {
             var self = this;

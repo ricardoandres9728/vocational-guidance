@@ -3,35 +3,55 @@
 {% block header_page %}
 <h1 class="page-header">
     <div class="row">
-        <div class="col-md-4">Encuesta <small>Responder</small></div>
+        <div class="col-md-4">Encuesta
+            <small>Responder</small>
+        </div>
         <div class="col-md-8">
-            <form>
+            {% raw %}
+            <form v-show="!encuesta">
                 <div class="form-inline" style="text-align: center">
                     <div class="form-group">
-                        <small>Selecciona la carrera: </small>
+                        <small>Selecciona la carrera:</small>
                     </div>
                     <div class="form-group ">
-                        {% raw %}
-                        <select class="form-control" v-model="encuesta.id">
+                        <select class="form-control" v-model="id_encuesta">
                             <option disabled value="" class="form-control">Escoge un perfil</option>
-                            <option v-for="(perfil, index) in encuestas" class="form-control" v-bind:value="index">{{perfil.perfil}}</option>
+                            <option v-for="(perfil, index) in encuestas" class="form-control" v-bind:value="index">
+                                {{perfil.perfil}}
+                            </option>
                         </select>
-                        {% endraw %}
                     </div>
                     <div class="form-group">
-                        <a @click="mostrar_encuesta" class="btn text-white" style="background: rgb(19,61,57)">Responder encuesta</a>
+                        <a @click="mostrar_encuesta" class="btn text-white" style="background: rgb(19,61,57)">Responder
+                            encuesta</a>
                     </div>
                 </div>
             </form>
+            {% endraw %}
         </div>
     </div>
 </h1>
 {% endblock %}
 {% block content_page %}
-<div class="row">
-    {% raw %}
-
-    {%  endraw %}
+{% raw %}
+<div class="row" v-if="encuesta">
+    <div class="panel panel-inverse">
+        <div class="panel-heading">
+            Encuesta para {{encuesta.perfil}}
+        </div>
+        <div class="panel-body">
+            <div>
+                {{encuesta.preguntas[id_pregunta]}}
+            </div>
+        </div>
+        <div class="panel-footer">
+            <div class="text-center">
+                <button class="btn btn-info"  @click="next" v-if="id_pregunta<encuesta.preguntas.length - 1">Siguiente pregunta</button>
+                <button class="btn btn-"></button>
+            </div>
+        </div>
+    </div>
 </div>
+{% endraw %}
 {% endblock %}
 
