@@ -13,6 +13,21 @@ def encuesta():
     return render_template("aspirante/encuesta_aspirante.html")
 
 
+@aspirante_app.route('/encuesta/guardar', methods=["POST"])
+def encuesta():
+    form = request.json
+    usuario = Usuario.query.filter_by(id=session["id"]).first()
+    aspirante = Aspirante.query.filter_by(id_usuario=usuario.id).first()
+    respuesta = Respuestas(
+        id_aspirante=aspirante.id,
+        id_encuesta=form["id_encuesta"],
+        respuestas=form["respuestas"]
+    )
+    db.session.add(respuesta)
+    db.session.commit()
+    print(form)
+    return "ok", 200
+
 @aspirante_app.route('/comentarios', methods=["GET", "POST"])
 def comentario():
     if request.method == "POST":
