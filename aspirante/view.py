@@ -1,5 +1,5 @@
 from flask import Blueprint, request, render_template, session, jsonify, redirect, url_for
-from .model import Aspirante
+from .model import Aspirante, Respuestas
 from usuario.model import Usuario, Feedback
 from colegio.model import Colegio, AspiranteColegio
 from application import db
