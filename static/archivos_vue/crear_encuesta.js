@@ -6,13 +6,13 @@ const vm = new Vue({
         pregunta:{
             pregunta:'',
             recomendacion:'',
-            centroide:'',
+            centroide: 0,
             respuestas:{
-                Uno:'',
-                Dos: '',
-                Tres: '',
-                Cuatro: '',
-                Cinco: '',
+                1:'',
+                2: '',
+                3: '',
+                4: '',
+                5: '',
             }
         },
         //Copiar a modificar
@@ -69,7 +69,7 @@ const vm = new Vue({
         },
         agregar_pregunta_nueva(){
             var self = this
-            if (self.pregunta.pregunta.length == 0 || self.pregunta.recomendacion.length == 0 || self.pregunta.respuestas.Uno.length == 0 || self.pregunta.respuestas.Dos.length == 0 || self.pregunta.respuestas.Tres.length == 0 || self.pregunta.respuestas.Cuatro.length == 0 || self.pregunta.respuestas.Cinco.length == 0){
+            if (self.pregunta.pregunta.length == 0 || self.pregunta.recomendacion.length == 0 || self.pregunta.respuestas[1].length == 0 || self.pregunta.respuestas[2].length == 0 || self.pregunta.respuestas[3].length == 0 || self.pregunta.respuestas[4].length == 0 || self.pregunta.respuestas[5].length == 0){
                 swal(
                     'Ups...',
                     'Todos los campos de la nueva pregunta son obligatorios.',
@@ -82,11 +82,11 @@ const vm = new Vue({
                 self.pregunta = {
                     pregunta: '',
                     respuestas: {
-                        Uno: '',
-                        Dos: '',
-                        Tres: '',
-                        Cuatro: '',
-                        Cinco: '',
+                        1: '',
+                        2: '',
+                        3: '',
+                        4: '',
+                        5: '',
                     }
                 }
                 localStorage.setItem('encuesta', JSON.stringify(self.encuesta_editar))
@@ -315,11 +315,11 @@ const vm = new Vue({
             self.pregunta = {
                 pregunta: '',
                 respuestas: {
-                    Uno: '',
-                    Dos: '',
-                    Tres: '',
-                    Cuatro: '',
-                    Cinco: '',
+                    1: '',
+                    2: '',
+                    3: '',
+                    4: '',
+                    5: '',
                 }
             }
             localStorage.setItem('encuesta', JSON.stringify(self.encuesta))

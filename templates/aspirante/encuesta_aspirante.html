@@ -41,13 +41,28 @@
         </div>
         <div class="panel-body">
             <div>
-                {{encuesta.preguntas[id_pregunta]}}
+                <div class="jumbotron">
+                    <h2 class="text-center">{{encuesta.preguntas[id_pregunta].pregunta}}</h2>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="col-md-6" v-for="(respuesta, key) in encuesta.preguntas[id_pregunta].respuestas">
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio" name="respuestas" :value="key" v-model="respuesta_pregunta.respuesta">
+                                        {{respuesta}}
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
         <div class="panel-footer">
             <div class="text-center">
                 <button class="btn btn-info"  @click="next" v-if="id_pregunta<encuesta.preguntas.length - 1">Siguiente pregunta</button>
-                <button class="btn btn-"></button>
+                <button class="btn btn-warning"  @click="finalizar_encuesta" v-if="id_pregunta==encuesta.preguntas.length - 1">Finalizar</button>
             </div>
         </div>
     </div>
