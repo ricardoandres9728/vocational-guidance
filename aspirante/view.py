@@ -14,7 +14,7 @@ def encuesta():
 
 
 @aspirante_app.route('/encuesta/guardar', methods=["POST"])
-def encuesta():
+def encuesta_guardar():
     form = request.json
     usuario = Usuario.query.filter_by(id=session["id"]).first()
     aspirante = Aspirante.query.filter_by(id_usuario=usuario.id).first()

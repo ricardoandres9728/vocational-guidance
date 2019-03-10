@@ -35,15 +35,47 @@ const vm = new Vue({
         this.cargar_encuestas();
     },
     methods: {
+        prev(){
+            this.respuestas_encuesta.respuestas.pop();
+            this.id_pregunta --;
+        },
         next(){
             this.respuesta_pregunta.id_pregunta = this.id_pregunta;
             this.respuestas_encuesta.respuestas.push(JSON.parse(JSON.stringify(this.respuesta_pregunta)));
             this.id_pregunta ++;
         },
         finalizar_encuesta(){
-            this.respuesta_pregunta.id_pregunta = this.id_pregunta;
-            this.respuestas_encuesta.respuestas.push(JSON.parse(JSON.stringify(this.respuesta_pregunta)));
-        },
+            swal({
+                title: '¿Estás seguro?',
+                text: "Esta acción guardará tus respuestas en el sistema.",
+                type: 'question',
+                showCancelButton: true,
+                confirmButtonColor: 'rgb(19,61,57)',
+                cancelButtonColor: 'gray',
+                confirmButtonText: 'Confirmar',
+                cancelButtonText: 'Cancelar',
+                allowOutsideClick: false,
+            }).then((result) =>{
+                if(result.value)
+            {
+                this.respuesta_pregunta.id_pregunta = this.id_pregunta;
+                this.respuestas_encuesta.respuestas.push(JSON.parse(JSON.stringify(this.respuesta_pregunta)));
+                axios({
+                    method:"POST",
+                    url: "/encuesta/guardar",
+                    headers: { "X-CSRFToken": this.token }
+                }).then((respuesta) =>{
+                    if(respuesta.data == "ok"){
+                swal({
+                    title: 'Bien!',
+                    text: 'Has cambiado el aspirante.',
+                    type: 'success'
+                }).then((result) => {
+                    localStorage.clear();
+                location.reload();
+                })
+            }})}})}
+            ,
         mostrar_encuesta(){
             this.encuesta = this.encuestas[this.id_encuesta];
             this.respuestas_encuesta.id_encuesta = this.encuesta.id;
