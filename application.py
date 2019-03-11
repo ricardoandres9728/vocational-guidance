@@ -6,6 +6,7 @@ from flask_uploads import UploadSet, configure_uploads, IMAGES
 from flask_mail import Mail
 from flask_login import LoginManager
 from utilities.json_encoder import AlchemyEncoder
+from sqlalchemy import event
 
 uploaded_images = UploadSet('images', IMAGES)
 db = SQLAlchemy()
@@ -14,6 +15,26 @@ csrf = CSRFProtect()
 mail = Mail()
 login = LoginManager()
 
+def insertar_datos_iniciales():
+    from usuario.model import TipoUsuario
+    from usuario.model import Usuario
+    @event.listens_for(TipoUsuario.__table__, 'after_create')
+    def insentar_tipos_usuario(*args, **kwargs):
+        db.session.add(TipoUsuario(nombre="administrador", id=0))
+        db.session.add(TipoUsuario(nombre="aspirante", id=1))
+        db.session.add(TipoUsuario(nombre="colegio", id=2))
+        db.session.commit()
+
+    @event.listens_for(Usuario.__table__, 'after_create')
+    def intertar_administrador(*args, **kwargs):
+        from werkzeug.security import generate_password_hash
+        db.session.add(Usuario(
+            correo="1@1",
+            password=generate_password_hash('1234'),
+            live=True,
+            id_tipo_usuario=0
+        ))
+        db.session.commit()
 
 def registrar_blueprints(app):
     from aspirante.view import aspirante_app
@@ -46,5 +67,5 @@ def create_app(**config_overrides):
     mail.init_app(app)
     login.init_app(app)
     registrar_blueprints(app)
-
+    insertar_datos_iniciales()
     return app

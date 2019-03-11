@@ -8,7 +8,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 aspirante_app = Blueprint("aspirante", __name__, url_prefix="/aspirante")
 
 
-@aspirante_app.route('/encuesta/responder', methods=["GET", "POST"])
+@aspirante_app.route('/encuesta/responder', methods=["GET"])
 def encuesta():
     return render_template("aspirante/encuesta_aspirante.html")
 

@@ -62,10 +62,11 @@ const vm = new Vue({
                 this.respuestas_encuesta.respuestas.push(JSON.parse(JSON.stringify(this.respuesta_pregunta)));
                 axios({
                     method:"POST",
-                    url: "/encuesta/guardar",
-                    headers: { "X-CSRFToken": this.token }
+                    url: "/aspirante/encuesta/guardar",
+                    headers: { "X-CSRFToken": this.token },
+                    data: this.respuestas_encuesta
                 }).then((respuesta) =>{
-                    if(respuesta.data == "ok"){
+                    if(respuesta.data === "ok"){
                 swal({
                     title: 'Bien!',
                     text: 'Has cambiado el aspirante.',
