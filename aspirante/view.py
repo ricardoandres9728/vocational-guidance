@@ -10,6 +10,16 @@ aspirante_app = Blueprint("aspirante", __name__, url_prefix="/aspirante")
 
 @aspirante_app.route('/encuesta/responder', methods=["GET"])
 def encuesta():
+    from sklearn.naive_bayes import GaussianNB
+    from sklearn.model_selection import train_test_split
+    import json
+    with open('codebeautify.json', 'rb') as file:
+        data = json.load(file)
+    diccionaro = data["dict"]
+    data = data["data"]
+    for value in data:
+        print(value)
+    return "ok"
     return render_template("aspirante/encuesta_aspirante.html")
 
 
@@ -25,8 +35,8 @@ def encuesta_guardar():
     )
     db.session.add(respuesta)
     db.session.commit()
-    print(form)
     return "ok", 200
+
 
 @aspirante_app.route('/comentarios', methods=["GET", "POST"])
 def comentario():
@@ -96,15 +106,15 @@ def cargar_aspirante():
         else:
             colegio = None
         asp = {
-            "nombres":aspirante.nombres,
-            "apellidos":aspirante.apellidos,
-            "correo":usuario.correo,
-            "colegio":colegio,
-            "password":{
-                "anterior":'',
-                "nueva":''
+            "nombres": aspirante.nombres,
+            "apellidos": aspirante.apellidos,
+            "correo": usuario.correo,
+            "colegio": colegio,
+            "password": {
+                "anterior": '',
+                "nueva": ''
             },
-            "newsletter":aspirante.newsletter
+            "newsletter": aspirante.newsletter
         }
         session["nombres"] = aspirante.nombres
         session["apellidos"] = aspirante.apellidos
