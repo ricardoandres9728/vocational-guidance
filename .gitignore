@@ -102,3 +102,6 @@ ENV/
 .mypy_cache/
 
 .idea/
+.vscode/settings.json
+static/package-lock.json
+static/package-lock.json
