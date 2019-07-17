@@ -4,10 +4,11 @@ from usuario.model import Usuario
 from usuario.model import Feedback
 from perfil.model import Perfil
 from aspirante.model import Aspirante
-from encuesta.model import Encuesta
+from encuesta.model import Encuesta, Pregunta, Respuesta
 from colegio.model import AspiranteColegio
 from application import csrf, db
 from werkzeug.security import generate_password_hash
+from sqlalchemy.orm import joinedload
 
 
 administrador_app = Blueprint("administrador", __name__, url_prefix="/administrador")
@@ -242,7 +243,7 @@ def modificar_encuesta():
 
 @administrador_app.route('/encuesta/cargar/todos', methods=["POST"])
 def cargar_encuestas():
-    encuestas = Encuesta.query.filter_by(live=True).all()
+    encuestas = Encuesta.query.options(joinedload(Encuesta.preguntas).joinedload(Pregunta.respuestas)).filter_by(live=True).all()
     data = []
     for encuesta in encuestas:
         perfil = Perfil.query.filter_by(id=encuesta.id_perfil).first()
@@ -269,9 +270,25 @@ def guardar_encuesta():
         if not encuesta_existente:
             encuesta = Encuesta(
                 id_perfil=perfil.id,
-                preguntas=data.get("encuesta").get("preguntas")
             )
             db.session.add(encuesta)
+            db.session.flush()
+            preguntas = data.get("encuesta").get("preguntas")
+            for pregunta in preguntas:
+                newPregunta = Pregunta(
+                    pregunta=pregunta.get("pregunta"),
+                    id_encuesta=encuesta.id
+                )
+                db.session.add(newPregunta)
+                db.session.flush()
+                respuestas = pregunta.get("respuestas")
+                for key, respuesta in respuestas.items():
+                    newRespuesta = Respuesta(
+                        id_pregunta = newPregunta.id,
+                        valor = int(key),
+                        respuesta   =  respuesta
+                    )
+                    db.session.add(newRespuesta)
             db.session.commit()
             mensaje = "ok"
             return mensaje

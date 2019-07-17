@@ -1,5 +1,5 @@
 from flask import Blueprint, request, render_template, session, jsonify, redirect, url_for
-from .model import Aspirante, Respuestas
+from .model import Aspirante
 from usuario.model import Usuario, Feedback
 from colegio.model import Colegio, AspiranteColegio
 from application import db
@@ -28,11 +28,11 @@ def encuesta_guardar():
     form = request.json
     usuario = Usuario.query.filter_by(id=session["id"]).first()
     aspirante = Aspirante.query.filter_by(id_usuario=usuario.id).first()
-    respuesta = Respuestas(
-        id_aspirante=aspirante.id,
-        id_encuesta=form["id_encuesta"],
-        respuestas=form["respuestas"]
-    )
+    # respuesta = Respuestas(
+    #     id_aspirante=aspirante.id,
+    #     id_encuesta=form["id_encuesta"],
+    #     respuestas=form["respuestas"]
+    # )
     db.session.add(respuesta)
     db.session.commit()
     return "ok", 200

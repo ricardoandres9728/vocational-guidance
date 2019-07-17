@@ -1,5 +1,5 @@
 from application import db
-
+from encuesta.model import aspirante_respuesta
 
 class Aspirante(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -9,3 +9,5 @@ class Aspirante(db.Model):
         db.Integer, db.ForeignKey("usuario.id"), unique=True)
     newsletter = db.Column(db.Boolean, default=True)
     live = db.Column(db.Boolean, default=True)
+    respuestas = db.relationship('Respuesta', secondary=aspirante_respuesta,
+        backref=db.backref('respuestas', lazy='dynamic'))
