@@ -1,47 +1,54 @@
-from flask import Blueprint, jsonify, render_template, request,url_for, redirect, session
+from flask import Blueprint, jsonify, render_template, request, url_for, redirect, session
 from colegio.model import Colegio
 from usuario.model import Usuario
 from usuario.model import Feedback
 from perfil.model import Perfil
 from aspirante.model import Aspirante
-from encuesta.model import Encuesta, Pregunta, Respuesta
+from encuesta.model import Encuesta, Pregunta, Respuesta, Recomendacion
 from colegio.model import AspiranteColegio
 from application import csrf, db
 from werkzeug.security import generate_password_hash
 from sqlalchemy.orm import joinedload
 
 
-administrador_app = Blueprint("administrador", __name__, url_prefix="/administrador")
+administrador_app = Blueprint(
+    "administrador", __name__, url_prefix="/administrador")
+
 
 @administrador_app.route('/cambiar/pass', methods=["POST"])
 def cambiar_pass():
     print("Entró a cambiar pass")
 
+
 @administrador_app.route('/principal/cargar', methods=["POST"])
 def principal_cargar():
     if request.method == "POST":
         adm = Usuario.query.filter_by(id=session["id"]).first()
-        aspirantes = Usuario.query.filter_by(id_tipo_usuario=1, live=True).all()
+        aspirantes = Usuario.query.filter_by(
+            id_tipo_usuario=1, live=True).all()
         colegios = Usuario.query.filter_by(id_tipo_usuario=2, live=True).all()
         encuestas = Encuesta.query.filter_by(live=True).all()
         perfiles = Perfil.query.filter_by(live=True).all()
         feedback = Feedback.query.order_by(Feedback.fecha.desc()).all()
         comentarios = []
         for feed in feedback:
-            usuario = Usuario.query.filter_by(id=feed.id_usuario, live=True).first()
+            usuario = Usuario.query.filter_by(
+                id=feed.id_usuario, live=True).first()
             if usuario:
                 user = {}
                 if usuario.id_tipo_usuario == 1:
-                    aspirante = Aspirante.query.filter_by(id_usuario=usuario.id).first()
+                    aspirante = Aspirante.query.filter_by(
+                        id_usuario=usuario.id).first()
                     user = {
-                        "nombre" : aspirante.nombres+" "+aspirante.apellidos,
+                        "nombre": aspirante.nombres+" "+aspirante.apellidos,
                         "tipo_usuario": 1,
                     }
                 if usuario.id_tipo_usuario == 2:
-                    colegio = Colegio.query.filter_by(id_usuario=usuario.id).first()
+                    colegio = Colegio.query.filter_by(
+                        id_usuario=usuario.id).first()
                     user = {
-                        "nombre" : colegio.nombre,
-                        "tipo_usuario" : 2,
+                        "nombre": colegio.nombre,
+                        "tipo_usuario": 2,
                     }
                 comentarios.append({
                     "usuario": user,
@@ -49,12 +56,12 @@ def principal_cargar():
                     "fecha": feed.fecha
                 })
         data = {
-            "aspirantes" : len(aspirantes),
-            "colegios" : len(colegios),
-            "perfiles" : len(perfiles),
-            "encuestas" : len(encuestas),
-            "feedback" : comentarios,
-            "correo" : adm.correo
+            "aspirantes": len(aspirantes),
+            "colegios": len(colegios),
+            "perfiles": len(perfiles),
+            "encuestas": len(encuestas),
+            "feedback": comentarios,
+            "correo": adm.correo
         }
         return jsonify(data)
 
@@ -63,11 +70,13 @@ def principal_cargar():
 def panel_principal():
     return render_template('administrador/panel_principal.html')
 
+
 @administrador_app.route('/aspirante/desactivar', methods=["POST"])
 def desactivar_aspirante():
     if request.method == "POST":
         data = request.json
-        usuario = Usuario.query.filter_by(id=data.get("aspirante").get("id_usuario")).first()
+        usuario = Usuario.query.filter_by(
+            id=data.get("aspirante").get("id_usuario")).first()
         usuario.live = False
         db.session.commit()
         return "ok"
@@ -79,18 +88,20 @@ def cargar_aspirantes():
     data = []
     for usuario in usuarios:
         aspirante = Aspirante.query.filter_by(id_usuario=usuario.id).first()
-        id_colegio = AspiranteColegio.query.filter_by(id_aspirante=aspirante.id).first()
+        id_colegio = AspiranteColegio.query.filter_by(
+            id_aspirante=aspirante.id).first()
         if id_colegio:
-            colegio = db.session.query(Colegio.nombre).filter(Colegio.id==id_colegio.id_colegio).first()
+            colegio = db.session.query(Colegio.nombre).filter(
+                Colegio.id == id_colegio.id_colegio).first()
             colegio = colegio.nombre
         else:
             colegio = "No registra."
         data.append(
             {
-                "nombres":aspirante.nombres,
-                "apellidos":aspirante.apellidos,
-                "correo":usuario.correo,
-                "colegio":colegio,
+                "nombres": aspirante.nombres,
+                "apellidos": aspirante.apellidos,
+                "correo": usuario.correo,
+                "colegio": colegio,
                 "fecha": usuario.fecha_creacion,
                 "id_usuario": usuario.id
             }
@@ -102,11 +113,13 @@ def cargar_aspirantes():
 def administrar_aspirante():
     return render_template('administrador/administrar_aspirantes.html')
 
+
 @administrador_app.route('/colegio/desactivar', methods=["POST"])
 def desactivar_colegio():
     if request.method == "POST":
         data = request.json
-        usuario = Usuario.query.filter_by(id=data.get("colegio").get("id_usuario")).first()
+        usuario = Usuario.query.filter_by(
+            id=data.get("colegio").get("id_usuario")).first()
         usuario.live = False
         db.session.commit()
         return "ok"
@@ -116,8 +129,10 @@ def desactivar_colegio():
 def modificar_colegio():
     if request.method == "POST":
         data = request.json
-        usuario = Usuario.query.filter_by(id=data.get("colegio").get("id_usuario")).first()
-        colegio = Colegio.query.filter_by(id=data.get("colegio").get("id_colegio")).first()
+        usuario = Usuario.query.filter_by(
+            id=data.get("colegio").get("id_usuario")).first()
+        colegio = Colegio.query.filter_by(
+            id=data.get("colegio").get("id_colegio")).first()
         usuario.correo = data.get("colegio").get("correo")
         colegio.nombre = data.get("colegio").get("nombre")
         db.session.commit()
@@ -134,10 +149,10 @@ def cargar_colegios():
             if usuario.live:
                 data.append(
                     {
-                        "correo":usuario.correo,
-                        "nombre":colegio.nombre,
-                        "id_usuario":usuario.id,
-                        "id_colegio":colegio.id
+                        "correo": usuario.correo,
+                        "nombre": colegio.nombre,
+                        "id_usuario": usuario.id,
+                        "id_colegio": colegio.id
                     }
                 )
         return jsonify(data)
@@ -147,15 +162,18 @@ def cargar_colegios():
 def administrar_colegio():
     return render_template('administrador/administrar_colegios.html')
 
+
 @administrador_app.route('/colegio/registrar', methods=["POST"])
 def registrar_colegio():
     if request.method == "POST":
         data = request.json
-        usuario = Usuario.query.filter_by(correo=data.get("colegio").get("correo")).first()
+        usuario = Usuario.query.filter_by(
+            correo=data.get("colegio").get("correo")).first()
         if usuario:
             return "Correo ya registrado en el sistema."
         else:
-            hashed_pass = generate_password_hash(data.get("colegio").get("password"))
+            hashed_pass = generate_password_hash(
+                data.get("colegio").get("password"))
             usuario = Usuario(
                 correo=data.get("colegio").get("correo"),
                 password=hashed_pass,
@@ -176,7 +194,8 @@ def registrar_colegio():
 def agregar_perfil():
     if request.method == "POST":
         data = request.json
-        perfil_existente = Perfil.query.filter_by(nombre=data.get("perfil").get("nombre")).first()
+        perfil_existente = Perfil.query.filter_by(
+            nombre=data.get("perfil").get("nombre")).first()
         if not perfil_existente:
             perfil = Perfil(
                 nombre=data.get("perfil").get("nombre")
@@ -192,7 +211,8 @@ def agregar_perfil():
 def desactivar_perfil():
     if request.method == "POST":
         data = request.json
-        perfil = Perfil.query.filter_by(id=data.get("perfil").get("id")).first()
+        perfil = Perfil.query.filter_by(
+            id=data.get("perfil").get("id")).first()
         perfil.live = False
         db.session.commit()
         return "ok"
@@ -202,7 +222,8 @@ def desactivar_perfil():
 def modificar_perfil():
     if request.method == "POST":
         data = request.json
-        perfil = Perfil.query.filter_by(id=data.get("perfil").get("id")).first()
+        perfil = Perfil.query.filter_by(
+            id=data.get("perfil").get("id")).first()
         perfil.nombre = data.get("perfil").get("nombre")
         db.session.commit()
         return "ok"
@@ -225,32 +246,72 @@ def desactivar_encuesta():
 
 @administrador_app.route('/encuesta/modificar', methods=["POST"])
 def modificar_encuesta():
+    import pdb
+    pdb.set_trace()
     if request.method == "POST":
         data = request.json
-        encuesta = Encuesta.query.filter_by(id=data.get("encuesta").get("id")).first_or_404()
+        encuesta = Encuesta.query.filter_by(
+            id=data.get("encuesta").get("id")).first_or_404()
         db.session.delete(encuesta)
-        db.session.commit()
-        perfil = Perfil.query.filter_by(nombre=data.get("encuesta").get("perfil")).first()
-        evaluacion = Encuesta(
-            id = data.get("encuesta").get("id"),
+        perfil = Perfil.query.filter_by(
+            nombre=data.get("encuesta").get("perfil")).first()
+        encuesta = Encuesta(
             id_perfil=perfil.id,
-            preguntas=data.get("encuesta").get("preguntas")
         )
-        db.session.add(evaluacion)
+        db.session.add(encuesta)
+        db.session.flush()
+        preguntas = data.get("encuesta").get("preguntas")
+        for pregunta in preguntas:
+            newPregunta = Pregunta(
+                pregunta=pregunta.get("pregunta"),
+                id_encuesta=encuesta.id
+            )
+            db.session.add(newPregunta)
+            db.session.flush()
+            if not pregunta.get("id"):
+                recomendacion = Recomendacion(
+                    recomendacion=pregunta.get("recomendacion"),
+                    id_pregunta=newPregunta.id
+                )
+                db.session.add(recomendacion)
+            else:
+                recomendacion = Recomendacion(
+                    recomendacion=pregunta.get("recomendacion")[0].get("recomendacion"),
+                    id_pregunta=newPregunta.id
+                )
+                db.session.add(recomendacion)
+            respuestas = pregunta.get("respuestas")
+            if not pregunta.get("id"):
+                for key, respuesta in respuestas.items():
+                    newRespuesta = Respuesta(
+                        id_pregunta=newPregunta.id,
+                        valor=int(key),
+                        respuesta=respuesta
+                    )
+                    db.session.add(newRespuesta)
+            else:
+                for respuesta in respuestas:
+                    newRespuesta = Respuesta(
+                        id_pregunta=newPregunta.id,
+                        valor=respuesta.get("valor"),
+                        respuesta=respuesta.get("respuesta")
+                    )
+                    db.session.add(newRespuesta)
         db.session.commit()
         return redirect(url_for(".administrar_encuesta"))
 
 
 @administrador_app.route('/encuesta/cargar/todos', methods=["POST"])
 def cargar_encuestas():
-    encuestas = Encuesta.query.options(joinedload(Encuesta.preguntas).joinedload(Pregunta.respuestas)).filter_by(live=True).all()
+    encuestas = Encuesta.query.options(joinedload(Encuesta.preguntas).joinedload(Pregunta.respuestas), joinedload(
+        Encuesta.preguntas).joinedload(Pregunta.recomendacion)).filter_by(live=True).all()
     data = []
     for encuesta in encuestas:
         perfil = Perfil.query.filter_by(id=encuesta.id_perfil).first()
         data.append({
-            "id":encuesta.id,
-            "perfil":perfil.nombre,
-            "preguntas":encuesta.preguntas
+            "id": encuesta.id,
+            "perfil": perfil.nombre,
+            "preguntas": encuesta.preguntas
         })
     return jsonify(data)
 
@@ -265,8 +326,10 @@ def guardar_encuesta():
     mensaje = None
     if request.method == "POST":
         data = request.json
-        perfil = Perfil.query.filter_by(nombre=data.get("encuesta").get("perfil")).first()
-        encuesta_existente = Encuesta.query.filter_by(id_perfil=perfil.id, live=True).first()
+        perfil = Perfil.query.filter_by(
+            nombre=data.get("encuesta").get("perfil")).first()
+        encuesta_existente = Encuesta.query.filter_by(
+            id_perfil=perfil.id, live=True).first()
         if not encuesta_existente:
             encuesta = Encuesta(
                 id_perfil=perfil.id,
@@ -281,12 +344,17 @@ def guardar_encuesta():
                 )
                 db.session.add(newPregunta)
                 db.session.flush()
+                recomendacion = Recomendacion(
+                    recomendacion=pregunta.get("recomendacion"),
+                    id_pregunta=newPregunta.id
+                )
+                db.session.add(recomendacion)
                 respuestas = pregunta.get("respuestas")
                 for key, respuesta in respuestas.items():
                     newRespuesta = Respuesta(
-                        id_pregunta = newPregunta.id,
-                        valor = int(key),
-                        respuesta   =  respuesta
+                        id_pregunta=newPregunta.id,
+                        valor=int(key),
+                        respuesta=respuesta
                     )
                     db.session.add(newRespuesta)
             db.session.commit()
@@ -297,8 +365,6 @@ def guardar_encuesta():
             return mensaje
 
 
-
-
 @administrador_app.route('/perfil/cargar/todos', methods=["POST"])
 def cargar_perfiles():
     perfiles = Perfil.query.filter_by(live=True).all()
@@ -306,8 +372,8 @@ def cargar_perfiles():
     for perfil in perfiles:
         data.append({
             "id": perfil.id,
-            "nombre":perfil.nombre,
-            "live":perfil.live,
+            "nombre": perfil.nombre,
+            "live": perfil.live,
         })
     return jsonify(data)
 

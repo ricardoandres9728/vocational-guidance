@@ -27,6 +27,7 @@ class Respuesta(db.Model):
 
 class Recomendacion(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    recomendacion = db.Column(db.String())
     id_pregunta = db.Column(db.Integer, db.ForeignKey("pregunta.id"))
     live = db.Column(db.Boolean, default=True)
 
