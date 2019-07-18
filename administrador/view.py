@@ -268,18 +268,11 @@ def modificar_encuesta():
             )
             db.session.add(newPregunta)
             db.session.flush()
-            if not pregunta.get("id"):
-                recomendacion = Recomendacion(
-                    recomendacion=pregunta.get("recomendacion"),
-                    id_pregunta=newPregunta.id
-                )
-                db.session.add(recomendacion)
-            else:
-                recomendacion = Recomendacion(
-                    recomendacion=pregunta.get("recomendacion")[0].get("recomendacion"),
-                    id_pregunta=newPregunta.id
-                )
-                db.session.add(recomendacion)
+            recomendacion = Recomendacion(
+                recomendacion=pregunta.get("recomendacion"),
+                id_pregunta=newPregunta.id
+            )
+            db.session.add(recomendacion)
             respuestas = pregunta.get("respuestas")
             if not pregunta.get("id"):
                 for key, respuesta in respuestas.items():
