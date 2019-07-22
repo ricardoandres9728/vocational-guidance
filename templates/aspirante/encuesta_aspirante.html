@@ -64,12 +64,13 @@
                     <h2 class="text-center text-white">{{encuesta.preguntas[id_pregunta].pregunta}}</h2>
                     <div class="row">
                         <div class="col-md-12">
-                            <div class="col-md-6" v-for="(respuesta, key) in encuesta.preguntas[id_pregunta].respuestas">
+                            <div class="col-md-6" v-for="respuesta in encuesta.preguntas[id_pregunta].respuestas">
+                                {{ respuesta.respuesta }}
                                 <div class="input-group">
-                                    <span class="input-group-addon bg-white">{{key}}</span>
+                                    <span class="input-group-addon bg-white">{{respuesta.valor}}</span>
                                     <label class="form-control bg-white">{{respuesta}}</label>
                                     <span class="input-group-addon bg-white">
-                                        <input type="radio" name="respuestas" :value="key" v-model="respuesta_pregunta.respuesta"/>
+                                        <input type="radio" name="respuestas" :value="respuesta.valor" v-model="respuesta['respuesta']"/>
                                     </span>
                                 </div>
                                 <p></p>

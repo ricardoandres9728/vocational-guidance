@@ -6,7 +6,7 @@ from perfil.model import Perfil
 from aspirante.model import Aspirante
 from encuesta.model import Encuesta, Pregunta, Respuesta, Recomendacion
 from colegio.model import AspiranteColegio
-from application import csrf, db
+from application import db
 from werkzeug.security import generate_password_hash
 from sqlalchemy.orm import joinedload
 
@@ -246,8 +246,6 @@ def desactivar_encuesta():
 
 @administrador_app.route('/encuesta/modificar', methods=["POST"])
 def modificar_encuesta():
-    import pdb
-    pdb.set_trace()
     if request.method == "POST":
         data = request.json
         encuesta = Encuesta.query.filter_by(
@@ -262,34 +260,41 @@ def modificar_encuesta():
         db.session.flush()
         preguntas = data.get("encuesta").get("preguntas")
         for pregunta in preguntas:
-            newPregunta = Pregunta(
+            new_pregunta = Pregunta(
                 pregunta=pregunta.get("pregunta"),
                 id_encuesta=encuesta.id
             )
-            db.session.add(newPregunta)
+            db.session.add(new_pregunta)
             db.session.flush()
-            recomendacion = Recomendacion(
-                recomendacion=pregunta.get("recomendacion"),
-                id_pregunta=newPregunta.id
-            )
-            db.session.add(recomendacion)
+            if not isinstance(pregunta.get("recomendacion"), list):
+                recomendacion = Recomendacion(
+                    recomendacion=pregunta.get("recomendacion"),
+                    id_pregunta=new_pregunta.id
+                )
+                db.session.add(recomendacion)
+            else:
+                recomendacion = Recomendacion(
+                    recomendacion=pregunta.get("recomendacion")[0].get("recomendacion"),
+                    id_pregunta=new_pregunta.id
+                )
+                db.session.add(recomendacion)
             respuestas = pregunta.get("respuestas")
             if not pregunta.get("id"):
                 for key, respuesta in respuestas.items():
-                    newRespuesta = Respuesta(
-                        id_pregunta=newPregunta.id,
+                    new_respuesta = Respuesta(
+                        id_pregunta=new_pregunta.id,
                         valor=int(key),
                         respuesta=respuesta
                     )
-                    db.session.add(newRespuesta)
+                    db.session.add(new_respuesta)
             else:
                 for respuesta in respuestas:
-                    newRespuesta = Respuesta(
-                        id_pregunta=newPregunta.id,
+                    new_respuesta = Respuesta(
+                        id_pregunta=new_pregunta.id,
                         valor=respuesta.get("valor"),
                         respuesta=respuesta.get("respuesta")
                     )
-                    db.session.add(newRespuesta)
+                    db.session.add(new_respuesta)
         db.session.commit()
         return redirect(url_for(".administrar_encuesta"))
 
@@ -316,7 +321,6 @@ def administrar_encuesta():
 
 @administrador_app.route('/encuesta/guardar', methods=["POST"])
 def guardar_encuesta():
-    mensaje = None
     if request.method == "POST":
         data = request.json
         perfil = Perfil.query.filter_by(
@@ -331,25 +335,25 @@ def guardar_encuesta():
             db.session.flush()
             preguntas = data.get("encuesta").get("preguntas")
             for pregunta in preguntas:
-                newPregunta = Pregunta(
+                new_pregunta = Pregunta(
                     pregunta=pregunta.get("pregunta"),
                     id_encuesta=encuesta.id
                 )
-                db.session.add(newPregunta)
+                db.session.add(new_pregunta)
                 db.session.flush()
                 recomendacion = Recomendacion(
                     recomendacion=pregunta.get("recomendacion"),
-                    id_pregunta=newPregunta.id
+                    id_pregunta=new_pregunta.id
                 )
                 db.session.add(recomendacion)
                 respuestas = pregunta.get("respuestas")
                 for key, respuesta in respuestas.items():
-                    newRespuesta = Respuesta(
-                        id_pregunta=newPregunta.id,
+                    new_respuesta = Respuesta(
+                        id_pregunta=new_pregunta.id,
                         valor=int(key),
                         respuesta=respuesta
                     )
-                    db.session.add(newRespuesta)
+                    db.session.add(new_respuesta)
             db.session.commit()
             mensaje = "ok"
             return mensaje
