@@ -6,28 +6,28 @@ const vm = new Vue({
             nombres: '',
             apellidos: '',
             correo: '',
-            password:{
-                anterior:'',
-                nueva:'',
+            password: {
+                anterior: '',
+                nueva: '',
             },
-            newsletter:''
+            newsletter: ''
         },
-        encuestas:[],
+        encuestas: [],
         encuesta: null,
         id_encuesta: 0,
-        id_pregunta:0,
-        pregunta:{},
-        rta:{
-            rta:'',
-            pta:'',
+        id_pregunta: 0,
+        respuesta_id: 0,
+        rta: {
+            rta: '',
+            pta: '',
         },
-        respuesta_pregunta:{
-            id_pregunta:"",
+        respuesta_pregunta: {
+            id_pregunta: "",
             respuesta: "1"
         },
-        respuestas_encuesta:{
-            id_encuesta:0,
-            respuestas:[]
+        respuestas_encuesta: {
+            id_encuesta: 0,
+            respuestas: []
         }
     },
     created() {
@@ -35,16 +35,16 @@ const vm = new Vue({
         this.cargar_encuestas();
     },
     methods: {
-        prev(){
+        prev() {
             this.respuestas_encuesta.respuestas.pop();
-            this.id_pregunta --;
+            this.id_pregunta--;
         },
-        next(){
+        next() {
             this.respuesta_pregunta.id_pregunta = this.id_pregunta;
             this.respuestas_encuesta.respuestas.push(JSON.parse(JSON.stringify(this.respuesta_pregunta)));
-            this.id_pregunta ++;
+            this.id_pregunta++;
         },
-        finalizar_encuesta(){
+        finalizar_encuesta() {
             swal({
                 title: '¿Estás seguro?',
                 text: "Esta acción guardará tus respuestas en el sistema.",
@@ -55,29 +55,32 @@ const vm = new Vue({
                 confirmButtonText: 'Confirmar',
                 cancelButtonText: 'Cancelar',
                 allowOutsideClick: false,
-            }).then((result) =>{
-                if(result.value)
-            {
-                this.respuesta_pregunta.id_pregunta = this.id_pregunta;
-                this.respuestas_encuesta.respuestas.push(JSON.parse(JSON.stringify(this.respuesta_pregunta)));
-                axios({
-                    method:"POST",
-                    url: "/aspirante/encuesta/guardar",
-                    headers: { "X-CSRFToken": this.token },
-                    data: this.respuestas_encuesta
-                }).then((respuesta) =>{
-                    if(respuesta.data === "ok"){
-                swal({
-                    title: 'Bien!',
-                    text: 'Has cambiado el aspirante.',
-                    type: 'success'
-                }).then((result) => {
-                    localStorage.clear();
-                location.reload();
-                })
-            }})}})}
-            ,
-        mostrar_encuesta(){
+            }).then((result) => {
+                if (result.value) {
+                    this.respuesta_pregunta.id_pregunta = this.id_pregunta;
+                    this.respuestas_encuesta.respuestas.push(JSON.parse(JSON.stringify(this.respuesta_pregunta)));
+                    axios({
+                        method: "POST",
+                        url: "/aspirante/encuesta/guardar",
+                        headers: { "X-CSRFToken": this.token },
+                        data: this.respuestas_encuesta
+                    }).then((respuesta) => {
+                        if (respuesta.data === "ok") {
+                            swal({
+                                title: 'Bien!',
+                                text: 'Has cambiado el aspirante.',
+                                type: 'success'
+                            }).then((result) => {
+                                localStorage.clear();
+                                location.reload();
+                            })
+                        }
+                    })
+                }
+            })
+        }
+        ,
+        mostrar_encuesta() {
             this.encuesta = this.encuestas[this.id_encuesta];
             this.respuestas_encuesta.id_encuesta = this.encuesta.id;
         },
@@ -89,9 +92,9 @@ const vm = new Vue({
                 headers: { "X-CSRFToken": this.token }
             }).then((respuesta) => {
                 self.encuestas = respuesta.data;
-        })
+            })
         },
-        newsletter(){
+        newsletter() {
             var self = this;
             axios({
                 method: 'post',
@@ -99,7 +102,7 @@ const vm = new Vue({
                 headers: { "X-CSRFToken": self.token }
             })
         },
-        cambiar_password(){
+        cambiar_password() {
             var self = this
             swal({
                 title: '¿Estás seguro?',
@@ -112,35 +115,35 @@ const vm = new Vue({
                 cancelButtonText: 'Cancelar'
             }).then((result) => {
                 if (result.value) {
-                axios({
-                    method: 'post',
-                    url: '/aspirante/cambiar/password',
-                    datatype: 'json',
-                    data: {
-                        password: self.aspirante.password,
-                    },
-                    headers: { "X-CSRFToken": self.token }
-                }).then(function (respuesta) {
-                    if (respuesta.data == "ok") {
-                        swal({
-                            title: 'Bien!',
-                            text: 'Has cambiado el aspirante.',
-                            type: 'success'
-                        }).then((result) => {
-                            localStorage.clear();
-                        location.reload();
+                    axios({
+                        method: 'post',
+                        url: '/aspirante/cambiar/password',
+                        datatype: 'json',
+                        data: {
+                            password: self.aspirante.password,
+                        },
+                        headers: { "X-CSRFToken": self.token }
+                    }).then(function (respuesta) {
+                        if (respuesta.data == "ok") {
+                            swal({
+                                title: 'Bien!',
+                                text: 'Has cambiado el aspirante.',
+                                type: 'success'
+                            }).then((result) => {
+                                localStorage.clear();
+                                location.reload();
+                            })
+                        }
+                        else {
+                            swal(
+                                'Ups...',
+                                'No se hicieron cambios.',
+                                'error'
+                            )
+                        }
                     })
-                    }
-                    else {
-                        swal(
-                            'Ups...',
-                            'No se hicieron cambios.',
-                            'error'
-                        )
-                    }
-                })
-            }
-        })
+                }
+            })
         },
         modificar_aspirante() {
             var self = this
@@ -156,35 +159,35 @@ const vm = new Vue({
                 cancelButtonText: 'Cancelar'
             }).then((result) => {
                 if (result.value) {
-                axios({
-                    method: 'post',
-                    url: '/aspirante/modificar',
-                    datatype: 'json',
-                    data: {
-                        aspirante: aux,
-                    },
-                    headers: { "X-CSRFToken": self.token }
-                }).then(function (respuesta) {
-                    if (respuesta.data == "ok") {
-                        swal({
-                            title: 'Bien!',
-                            text: 'Has cambiado el aspirante.',
-                            type: 'success'
-                        }).then((result) => {
-                            localStorage.clear();
-                        location.reload();
+                    axios({
+                        method: 'post',
+                        url: '/aspirante/modificar',
+                        datatype: 'json',
+                        data: {
+                            aspirante: aux,
+                        },
+                        headers: { "X-CSRFToken": self.token }
+                    }).then(function (respuesta) {
+                        if (respuesta.data == "ok") {
+                            swal({
+                                title: 'Bien!',
+                                text: 'Has cambiado el aspirante.',
+                                type: 'success'
+                            }).then((result) => {
+                                localStorage.clear();
+                                location.reload();
+                            })
+                        }
+                        else {
+                            swal(
+                                'Ups...',
+                                'No se hicieron cambios.',
+                                'error'
+                            )
+                        }
                     })
-                    }
-                    else {
-                        swal(
-                            'Ups...',
-                            'No se hicieron cambios.',
-                            'error'
-                        )
-                    }
-                })
-            }
-        })
+                }
+            })
         },
         cargar_aspirante() {
             var self = this;
@@ -194,7 +197,7 @@ const vm = new Vue({
                 headers: { "X-CSRFToken": self.token }
             }).then((respuesta) => {
                 self.aspirante = respuesta.data;
-        })
+            })
         },
     }
 })

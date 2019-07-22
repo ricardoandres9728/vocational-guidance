@@ -35,7 +35,8 @@
 {% block content_page %}
 {% raw %}
 <div class="row" v-if="!encuesta">
-    <div class="jumbotron" style="background-image: url('../../static/assets/img/login-bg/bg-3.jpg'); border-radius: 10px">
+    <div class="jumbotron"
+        style="background-image: url('../../static/assets/img/login-bg/bg-3.jpg'); border-radius: 10px">
         <div class="row">
             <div class="col-md-2"></div>
             <div class="col-md-8">
@@ -43,7 +44,8 @@
                     <div class="col-md-1"></div>
                     <div class="col-md-10">
                         <h2 class="text-justify text-white">
-                            No has cargado ninguna encuesta, por favor elige el perfil al que deseas aplicar la encuesta y da click en el botón "Responder encuesta" ubicado en el panel superior.
+                            No has cargado ninguna encuesta, por favor elige el perfil al que deseas aplicar la encuesta
+                            y da click en el botón "Responder encuesta" ubicado en el panel superior.
                         </h2>
                     </div>
                     <div class="col-md-1"></div>
@@ -65,12 +67,12 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="col-md-6" v-for="respuesta in encuesta.preguntas[id_pregunta].respuestas">
-                                {{ respuesta.respuesta }}
                                 <div class="input-group">
                                     <span class="input-group-addon bg-white">{{respuesta.valor}}</span>
-                                    <label class="form-control bg-white">{{respuesta}}</label>
+                                    <label class="form-control bg-white">{{respuesta.respuesta}}</label>
                                     <span class="input-group-addon bg-white">
-                                        <input type="radio" name="respuestas" :value="respuesta.valor" v-model="respuesta['respuesta']"/>
+                                        <input type="radio" name="respuestas" :value="respuesta.id"
+                                            v-model="respuesta_id" />
                                     </span>
                                 </div>
                                 <p></p>
@@ -84,9 +86,12 @@
         <div class="panel-footer">
             <div class="text-center">
                 <div class="btn-group">
-                    <button class="btn text-white" style="background: rgb(19,61,57)" @click="prev" v-if="id_pregunta>0">Anterior pregunta</button>
-                    <button class="btn text-white" style="background: rgb(19,61,57)" @click="next" v-if="id_pregunta<encuesta.preguntas.length - 1">Siguiente pregunta</button>
-                    <button class="btn btn-warning"  @click="finalizar_encuesta" v-if="id_pregunta==encuesta.preguntas.length - 1">Finalizar</button>
+                    <button class="btn text-white" style="background: rgb(19,61,57)" @click="prev"
+                        v-if="id_pregunta>0">Anterior pregunta</button>
+                    <button class="btn text-white" style="background: rgb(19,61,57)" @click="next"
+                        v-if="id_pregunta<encuesta.preguntas.length - 1">Siguiente pregunta</button>
+                    <button class="btn btn-warning" @click="finalizar_encuesta"
+                        v-if="id_pregunta==encuesta.preguntas.length - 1">Finalizar</button>
                 </div>
             </div>
         </div>
@@ -94,4 +99,3 @@
 </div>
 {% endraw %}
 {% endblock %}
-
