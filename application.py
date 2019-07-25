@@ -17,7 +17,7 @@ login = LoginManager()
 
 
 def crear_perfiles():
-    from sklearn.ensemble import RandomForestClassifier as Linear
+    from sklearn.ensemble import GradientBoostingClassifier
     import json
     import pickle
     from sklearn.model_selection import train_test_split
@@ -27,12 +27,13 @@ def crear_perfiles():
     data = data["data"]
     features = []
     labels = []
-    model = Linear()
+    model = GradientBoostingClassifier()
     for value in data:
         tupla = ()
         labels.append(int(value["carrera"]))
         for dic in diccionaro:
             if not dic == "genero":
+                
                 tupla = tupla + tuple([float(value[dic])])
             else:
                 if value["genero"] == "MASCULINO":
@@ -40,8 +41,9 @@ def crear_perfiles():
                 else:
                     tupla = tupla + tuple([1])
         features.append(tupla)
+    
 
-    x_train, x_test, y_train, y_test = train_test_split(features, labels, test_size=0.4, shuffle=True)
+    x_train, x_test, y_train, y_test = train_test_split(features, labels, test_size=0.2, shuffle=True)
 
     model.fit(x_train, y_train)
     filename = "finalized_model.sav"
@@ -102,4 +104,5 @@ def create_app(**config_overrides):
     login.init_app(app)
     registrar_blueprints(app)
     insertar_datos_iniciales()
+    crear_perfiles()
     return app
