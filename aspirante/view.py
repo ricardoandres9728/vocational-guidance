@@ -2,6 +2,7 @@ from flask import Blueprint, request, render_template, session, jsonify, redirec
 from .model import Aspirante
 from usuario.model import Usuario, Feedback
 from colegio.model import Colegio, AspiranteColegio
+from encuesta.model import Respuesta
 from application import db
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -10,8 +11,8 @@ aspirante_app = Blueprint("aspirante", __name__, url_prefix="/aspirante")
 
 @aspirante_app.route('/encuesta/responder', methods=["GET"])
 def encuesta():
-    # from sklearn.naive_bayes import GaussianNB
-    # from sklearn.model_selection import train_test_split
+    # from sklearn.datasets import make_hastie_10_2
+    # from sklearn.ensemble import GradientBoostingClassifier
     # import json
     # with open('codebeautify.json', 'rb') as file:
     #     data = json.load(file)
@@ -28,12 +29,13 @@ def encuesta_guardar():
     form = request.json
     usuario = Usuario.query.filter_by(id=session["id"]).first()
     aspirante = Aspirante.query.filter_by(id_usuario=usuario.id).first()
-    # respuesta = Respuestas(
-    #     id_aspirante=aspirante.id,
-    #     id_encuesta=form["id_encuesta"],
-    #     respuestas=form["respuestas"]
-    # )
-    db.session.add(respuesta)
+    aspirante.respuestas = []
+    db.session.commit()
+    if len(form) > 0:
+        respuestas_form = form
+        for respuesta_form in respuestas_form:
+            respuesta = Respuesta.query.filter_by(id=respuesta_form).first()
+            aspirante.respuestas.append(respuesta)
     db.session.commit()
     return "ok", 200
 

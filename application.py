@@ -15,6 +15,39 @@ csrf = CSRFProtect()
 mail = Mail()
 login = LoginManager()
 
+
+def crear_perfiles():
+    from sklearn.ensemble import RandomForestClassifier as Linear
+    import json
+    import pickle
+    from sklearn.model_selection import train_test_split
+    with open('codebeautify.json', 'rb') as encuestas:
+        data = json.load(encuestas)
+    diccionaro = data["dict"]
+    data = data["data"]
+    features = []
+    labels = []
+    model = Linear()
+    for value in data:
+        tupla = ()
+        labels.append(int(value["carrera"]))
+        for dic in diccionaro:
+            if not dic == "genero":
+                tupla = tupla + tuple([float(value[dic])])
+            else:
+                if value["genero"] == "MASCULINO":
+                    tupla = tupla + tuple([0])
+                else:
+                    tupla = tupla + tuple([1])
+        features.append(tupla)
+
+    x_train, x_test, y_train, y_test = train_test_split(features, labels, test_size=0.4, shuffle=True)
+
+    model.fit(x_train, y_train)
+    filename = "finalized_model.sav"
+    pickle.dump(model, open(filename, 'wb'))
+
+
 def insertar_datos_iniciales():
     from usuario.model import TipoUsuario
     from usuario.model import Usuario
@@ -35,6 +68,7 @@ def insertar_datos_iniciales():
             id_tipo_usuario=0
         ))
         db.session.commit()
+
 
 def registrar_blueprints(app):
     from aspirante.view import aspirante_app

@@ -21,14 +21,7 @@ const vm = new Vue({
             rta: '',
             pta: '',
         },
-        respuesta_pregunta: {
-            id_pregunta: "",
-            respuesta: "1"
-        },
-        respuestas_encuesta: {
-            id_encuesta: 0,
-            respuestas: []
-        }
+        respuestas: []
     },
     created() {
         this.cargar_aspirante();
@@ -36,12 +29,11 @@ const vm = new Vue({
     },
     methods: {
         prev() {
-            this.respuestas_encuesta.respuestas.pop();
+            this.respuestas.pop();
             this.id_pregunta--;
         },
         next() {
-            this.respuesta_pregunta.id_pregunta = this.id_pregunta;
-            this.respuestas_encuesta.respuestas.push(JSON.parse(JSON.stringify(this.respuesta_pregunta)));
+            this.respuestas.push(this.respuesta_id);
             this.id_pregunta++;
         },
         finalizar_encuesta() {
@@ -57,13 +49,12 @@ const vm = new Vue({
                 allowOutsideClick: false,
             }).then((result) => {
                 if (result.value) {
-                    this.respuesta_pregunta.id_pregunta = this.id_pregunta;
-                    this.respuestas_encuesta.respuestas.push(JSON.parse(JSON.stringify(this.respuesta_pregunta)));
+                    this.respuestas.push(this.respuesta_id);
                     axios({
                         method: "POST",
                         url: "/aspirante/encuesta/guardar",
                         headers: { "X-CSRFToken": this.token },
-                        data: this.respuestas_encuesta
+                        data: this.respuestas
                     }).then((respuesta) => {
                         if (respuesta.data === "ok") {
                             swal({
@@ -71,18 +62,16 @@ const vm = new Vue({
                                 text: 'Has cambiado el aspirante.',
                                 type: 'success'
                             }).then((result) => {
+                                this.encuesta = null
                                 localStorage.clear();
-                                location.reload();
                             })
                         }
                     })
                 }
             })
-        }
-        ,
+        },
         mostrar_encuesta() {
             this.encuesta = this.encuestas[this.id_encuesta];
-            this.respuestas_encuesta.id_encuesta = this.encuesta.id;
         },
         cargar_encuestas() {
             var self = this;
