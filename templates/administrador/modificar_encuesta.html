@@ -84,7 +84,7 @@
                                     <div class="col-md-12" >
                                         <div class="form-group" v-for="(rta, key) in pregunta_editar.respuestas">
                                             <div class="input-group">
-                                                <span class="input-group-addon text-center"> {{key}} </span>
+                                                <span class="input-group-addon text-center"> {{rta.valor}} </span>
                                                 <input class="form-control" v-model="pregunta_editar.respuestas[key].respuesta" required/>
                                             </div>
                                         </div>

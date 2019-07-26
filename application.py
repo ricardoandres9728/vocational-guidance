@@ -33,7 +33,6 @@ def crear_perfiles():
         labels.append(int(value["carrera"]))
         for dic in diccionaro:
             if not dic == "genero":
-                
                 tupla = tupla + tuple([float(value[dic])])
             else:
                 if value["genero"] == "MASCULINO":
@@ -41,8 +40,6 @@ def crear_perfiles():
                 else:
                     tupla = tupla + tuple([1])
         features.append(tupla)
-    
-
     x_train, x_test, y_train, y_test = train_test_split(features, labels, test_size=0.2, shuffle=True)
 
     model.fit(x_train, y_train)
@@ -53,6 +50,8 @@ def crear_perfiles():
 def insertar_datos_iniciales():
     from usuario.model import TipoUsuario
     from usuario.model import Usuario
+    from encuesta.model import Encuesta, Pregunta, Respuesta, Recomendacion
+    from perfil.model import Perfil
     @event.listens_for(TipoUsuario.__table__, 'after_create')
     def insentar_tipos_usuario(*args, **kwargs):
         db.session.add(TipoUsuario(nombre="administrador", id=0))
@@ -69,6 +68,504 @@ def insertar_datos_iniciales():
             live=True,
             id_tipo_usuario=0
         ))
+        db.session.commit()
+
+    @event.listens_for(Recomendacion.__table__, 'after_create')
+    def intertar_encuesta(*args, **kwargs):
+        perfil = Perfil(
+            nombre="Ing. Sistemas"
+        )
+        db.session.add(perfil)
+        db.session.flush()
+        encuesta = Encuesta(
+            id_perfil=perfil.id
+        )
+        db.session.add(encuesta)
+        db.session.flush()
+        pregunta = Pregunta(
+            pregunta="¿Qué tanto te gusta saber acerca del funcionamiento interno "
+                     "de las máquinas y las computadoras? ",
+            id_encuesta=encuesta.id
+        )
+        db.session.add(pregunta)
+        db.session.flush()
+        respuesta = Respuesta(
+            id_pregunta=pregunta.id,
+            respuesta="1",
+            valor=1
+        )
+        db.session.add(respuesta)
+        respuesta = Respuesta(
+            id_pregunta=pregunta.id,
+            respuesta="2",
+            valor=2
+        )
+        db.session.add(respuesta)
+        respuesta = Respuesta(
+            id_pregunta=pregunta.id,
+            respuesta="3",
+            valor=3
+        )
+        db.session.add(respuesta)
+        respuesta = Respuesta(
+            id_pregunta=pregunta.id,
+            respuesta="4",
+            valor=4
+        )
+        db.session.add(respuesta)
+        respuesta = Respuesta(
+            id_pregunta=pregunta.id,
+            respuesta="5",
+            valor=5
+        )
+        db.session.add(respuesta)
+        recomendacion = Recomendacion(
+            recomendacion="Interesate más",
+            id_pregunta=pregunta.id
+        )
+        db.session.add(recomendacion)
+        pregunta = Pregunta(
+            pregunta="¿Prefieres trabajar con máquinas o con personas? "
+                     "(1 para “exclusivamente máquinas”, 5 para “exclusivamente personas”)",
+            id_encuesta=encuesta.id
+        )
+        db.session.add(pregunta)
+        db.session.flush()
+        respuesta = Respuesta(
+            id_pregunta=pregunta.id,
+            respuesta="1",
+            valor=1
+        )
+        db.session.add(respuesta)
+        respuesta = Respuesta(
+            id_pregunta=pregunta.id,
+            respuesta="2",
+            valor=2
+        )
+        db.session.add(respuesta)
+        respuesta = Respuesta(
+            id_pregunta=pregunta.id,
+            respuesta="3",
+            valor=3
+        )
+        db.session.add(respuesta)
+        respuesta = Respuesta(
+            id_pregunta=pregunta.id,
+            respuesta="4",
+            valor=4
+        )
+        db.session.add(respuesta)
+        respuesta = Respuesta(
+            id_pregunta=pregunta.id,
+            respuesta="5",
+            valor=5
+        )
+        db.session.add(respuesta)
+        recomendacion = Recomendacion(
+            recomendacion="",
+            id_pregunta=pregunta.id
+        )
+        db.session.add(recomendacion)
+        pregunta = Pregunta(
+            pregunta="¿Qué tanto te interesa trabajar con tecnología de última generación?",
+            id_encuesta=encuesta.id
+        )
+        db.session.add(pregunta)
+        db.session.flush()
+        respuesta = Respuesta(
+            id_pregunta=pregunta.id,
+            respuesta="1",
+            valor=1
+        )
+        db.session.add(respuesta)
+        respuesta = Respuesta(
+            id_pregunta=pregunta.id,
+            respuesta="2",
+            valor=2
+        )
+        db.session.add(respuesta)
+        respuesta = Respuesta(
+            id_pregunta=pregunta.id,
+            respuesta="3",
+            valor=3
+        )
+        db.session.add(respuesta)
+        respuesta = Respuesta(
+            id_pregunta=pregunta.id,
+            respuesta="4",
+            valor=4
+        )
+        db.session.add(respuesta)
+        respuesta = Respuesta(
+            id_pregunta=pregunta.id,
+            respuesta="5",
+            valor=5
+        )
+        db.session.add(respuesta)
+        recomendacion = Recomendacion(
+            recomendacion="Compra PC nuevo",
+            id_pregunta=pregunta.id
+        )
+        db.session.add(recomendacion)
+        pregunta = Pregunta(
+            pregunta="¿Antes de inscribirte en el programa conocías qué era un lenguaje de programación? ",
+            id_encuesta=encuesta.id
+        )
+        db.session.add(pregunta)
+        db.session.flush()
+        respuesta = Respuesta(
+            id_pregunta=pregunta.id,
+            respuesta="1",
+            valor=1
+        )
+        db.session.add(respuesta)
+        respuesta = Respuesta(
+            id_pregunta=pregunta.id,
+            respuesta="2",
+            valor=2
+        )
+        db.session.add(respuesta)
+        respuesta = Respuesta(
+            id_pregunta=pregunta.id,
+            respuesta="3",
+            valor=3
+        )
+        db.session.add(respuesta)
+        respuesta = Respuesta(
+            id_pregunta=pregunta.id,
+            respuesta="4",
+            valor=4
+        )
+        db.session.add(respuesta)
+        respuesta = Respuesta(
+            id_pregunta=pregunta.id,
+            respuesta="5",
+            valor=5
+        )
+        db.session.add(respuesta)
+        recomendacion = Recomendacion(
+            recomendacion="",
+            id_pregunta=pregunta.id
+        )
+        db.session.add(recomendacion)
+        pregunta = Pregunta(
+            pregunta="¿Cuántos lenguajes de programación conocías?",
+            id_encuesta=encuesta.id
+        )
+        db.session.add(pregunta)
+        db.session.flush()
+        respuesta = Respuesta(
+            id_pregunta=pregunta.id,
+            respuesta="Ninguno",
+            valor=1
+        )
+        db.session.add(respuesta)
+        respuesta = Respuesta(
+            id_pregunta=pregunta.id,
+            respuesta="1 lenguaje",
+            valor=2
+        )
+        db.session.add(respuesta)
+        respuesta = Respuesta(
+            id_pregunta=pregunta.id,
+            respuesta="Entre 1 & 3 lenguajes",
+            valor=3
+        )
+        db.session.add(respuesta)
+        respuesta = Respuesta(
+            id_pregunta=pregunta.id,
+            respuesta="Entre 3 & 5 lenguajes",
+            valor=4
+        )
+        db.session.add(respuesta)
+        respuesta = Respuesta(
+            id_pregunta=pregunta.id,
+            respuesta="Más de 5 lenguajes",
+            valor=5
+        )
+        db.session.add(respuesta)
+        recomendacion = Recomendacion(
+            recomendacion="Aprende más",
+            id_pregunta=pregunta.id
+        )
+        db.session.add(recomendacion)
+        pregunta = Pregunta(
+            pregunta="Tu nota media de matemáticas en el bachillerato fue de:",
+            id_encuesta=encuesta.id
+        )
+        db.session.add(pregunta)
+        db.session.flush()
+        respuesta = Respuesta(
+            id_pregunta=pregunta.id,
+            respuesta="1",
+            valor=1
+        )
+        db.session.add(respuesta)
+        respuesta = Respuesta(
+            id_pregunta=pregunta.id,
+            respuesta="2",
+            valor=2
+        )
+        db.session.add(respuesta)
+        respuesta = Respuesta(
+            id_pregunta=pregunta.id,
+            respuesta="3",
+            valor=3
+        )
+        db.session.add(respuesta)
+        respuesta = Respuesta(
+            id_pregunta=pregunta.id,
+            respuesta="4",
+            valor=4
+        )
+        db.session.add(respuesta)
+        respuesta = Respuesta(
+            id_pregunta=pregunta.id,
+            respuesta="5",
+            valor=5
+        )
+        db.session.add(respuesta)
+        recomendacion = Recomendacion(
+            recomendacion="Echale ganas a la matematica",
+            id_pregunta=pregunta.id
+        )
+        db.session.add(recomendacion)
+        pregunta = Pregunta(
+            pregunta="¿Qué tan “cacharrero” te consideras para arreglar los aparatos electrónicos en tu hogar?",
+            id_encuesta=encuesta.id
+        )
+        db.session.add(pregunta)
+        db.session.flush()
+        respuesta = Respuesta(
+            id_pregunta=pregunta.id,
+            respuesta="1",
+            valor=1
+        )
+        db.session.add(respuesta)
+        respuesta = Respuesta(
+            id_pregunta=pregunta.id,
+            respuesta="2",
+            valor=2
+        )
+        db.session.add(respuesta)
+        respuesta = Respuesta(
+            id_pregunta=pregunta.id,
+            respuesta="3",
+            valor=3
+        )
+        db.session.add(respuesta)
+        respuesta = Respuesta(
+            id_pregunta=pregunta.id,
+            respuesta="4",
+            valor=4
+        )
+        db.session.add(respuesta)
+        respuesta = Respuesta(
+            id_pregunta=pregunta.id,
+            respuesta="5",
+            valor=5
+        )
+        db.session.add(respuesta)
+        recomendacion = Recomendacion(
+            recomendacion="Desbarata cosas",
+            id_pregunta=pregunta.id
+        )
+        db.session.add(recomendacion)
+        pregunta = Pregunta(
+            pregunta="¿Sabías qué era un algoritmo cuando te presentaste al programa?",
+            id_encuesta=encuesta.id
+        )
+        db.session.add(pregunta)
+        db.session.flush()
+        respuesta = Respuesta(
+            id_pregunta=pregunta.id,
+            respuesta="1",
+            valor=1
+        )
+        db.session.add(respuesta)
+        respuesta = Respuesta(
+            id_pregunta=pregunta.id,
+            respuesta="2",
+            valor=2
+        )
+        db.session.add(respuesta)
+        respuesta = Respuesta(
+            id_pregunta=pregunta.id,
+            respuesta="3",
+            valor=3
+        )
+        db.session.add(respuesta)
+        respuesta = Respuesta(
+            id_pregunta=pregunta.id,
+            respuesta="4",
+            valor=4
+        )
+        db.session.add(respuesta)
+        respuesta = Respuesta(
+            id_pregunta=pregunta.id,
+            respuesta="5",
+            valor=5
+        )
+        db.session.add(respuesta)
+        recomendacion = Recomendacion(
+            recomendacion="Aprende que es",
+            id_pregunta=pregunta.id
+        )
+        db.session.add(recomendacion)
+        pregunta = Pregunta(
+            pregunta="¿Qué tan fácil te resultaba manejar la computadora cuando te presentaste al programa?",
+            id_encuesta=encuesta.id
+        )
+        db.session.add(pregunta)
+        db.session.flush()
+        respuesta = Respuesta(
+            id_pregunta=pregunta.id,
+            respuesta="1",
+            valor=1
+        )
+        db.session.add(respuesta)
+        respuesta = Respuesta(
+            id_pregunta=pregunta.id,
+            respuesta="2",
+            valor=2
+        )
+        db.session.add(respuesta)
+        respuesta = Respuesta(
+            id_pregunta=pregunta.id,
+            respuesta="3",
+            valor=3
+        )
+        db.session.add(respuesta)
+        respuesta = Respuesta(
+            id_pregunta=pregunta.id,
+            respuesta="4",
+            valor=4
+        )
+        db.session.add(respuesta)
+        respuesta = Respuesta(
+            id_pregunta=pregunta.id,
+            respuesta="5",
+            valor=5
+        )
+        db.session.add(respuesta)
+        recomendacion = Recomendacion(
+            recomendacion="Practica",
+            id_pregunta=pregunta.id
+        )
+        db.session.add(recomendacion)
+        pregunta = Pregunta(
+            pregunta="Cuando te presentaste al programa, en tu casa trabajaban:",
+            id_encuesta=encuesta.id
+        )
+        db.session.add(pregunta)
+        db.session.flush()
+        respuesta = Respuesta(
+            id_pregunta=pregunta.id,
+            respuesta="Nadie",
+            valor=1
+        )
+        db.session.add(respuesta)
+        respuesta = Respuesta(
+            id_pregunta=pregunta.id,
+            respuesta="Solo yo",
+            valor=2
+        )
+        db.session.add(respuesta)
+        respuesta = Respuesta(
+            id_pregunta=pregunta.id,
+            respuesta="Solo papá y/o mamá",
+            valor=3
+        )
+        db.session.add(respuesta)
+        respuesta = Respuesta(
+            id_pregunta=pregunta.id,
+            respuesta="La mayoría ",
+            valor=4
+        )
+        db.session.add(respuesta)
+        respuesta = Respuesta(
+            id_pregunta=pregunta.id,
+            respuesta="Todos trabajamos",
+            valor=5
+        )
+        db.session.add(respuesta)
+        recomendacion = Recomendacion(
+            recomendacion="Asegurate de tener un buen soporte economico",
+            id_pregunta=pregunta.id
+        )
+        db.session.add(recomendacion)
+        pregunta = Pregunta(
+            pregunta="Qué formación tenía tu madre",
+            id_encuesta=encuesta.id
+        )
+        db.session.add(pregunta)
+        db.session.flush()
+        respuesta = Respuesta(
+            id_pregunta=pregunta.id,
+            respuesta="No tenía estudios",
+            valor=1
+        )
+        db.session.add(respuesta)
+        respuesta = Respuesta(
+            id_pregunta=pregunta.id,
+            respuesta="Estudios básica primaria",
+            valor=2
+        )
+        db.session.add(respuesta)
+        respuesta = Respuesta(
+            id_pregunta=pregunta.id,
+            respuesta="Estudios básica secundaria",
+            valor=3
+        )
+        db.session.add(respuesta)
+        respuesta = Respuesta(
+            id_pregunta=pregunta.id,
+            respuesta="Estudios técnicos y tecnólogos",
+            valor=4
+        )
+        db.session.add(respuesta)
+        respuesta = Respuesta(
+            id_pregunta=pregunta.id,
+            respuesta="Culminó carrera profesional",
+            valor=5
+        )
+        db.session.add(respuesta)
+        pregunta = Pregunta(
+            pregunta="Qué formación tenía tu padre:",
+            id_encuesta=encuesta.id
+        )
+        db.session.add(pregunta)
+        db.session.flush()
+        respuesta = Respuesta(
+            id_pregunta=pregunta.id,
+            respuesta="No tenía estudios",
+            valor=1
+        )
+        db.session.add(respuesta)
+        respuesta = Respuesta(
+            id_pregunta=pregunta.id,
+            respuesta="Estudios básica primaria",
+            valor=2
+        )
+        db.session.add(respuesta)
+        respuesta = Respuesta(
+            id_pregunta=pregunta.id,
+            respuesta="Estudios básica secundaria",
+            valor=3
+        )
+        db.session.add(respuesta)
+        respuesta = Respuesta(
+            id_pregunta=pregunta.id,
+            respuesta="Estudios técnicos y tecnólogos",
+            valor=4
+        )
+        db.session.add(respuesta)
+        respuesta = Respuesta(
+            id_pregunta=pregunta.id,
+            respuesta="Culminó carrera profesional",
+            valor=5
+        )
+        db.session.add(respuesta)
         db.session.commit()
 
 

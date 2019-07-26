@@ -97,7 +97,7 @@
                     </div>
                     <label class="control-label">Correo <span class="text-danger">*</span></label>
                     <div class="row m-b-15">
-                        <div class="col-md-12"><input name="correo" type="text" class="form-control" placeholder="Dirección de correo electrónico" data-parsley-length="[4, 80]" required data-parsley-trigger="focus change"/></div>
+                        <div class="col-md-12"><input name="correo" type="email" class="form-control" placeholder="Dirección de correo electrónico" data-parsley-length="[4, 80]" required data-parsley-trigger="focus change"/></div>
                     </div>
 
                     <div class="row m-b-15">
@@ -154,8 +154,8 @@
 
 <!-- ================== BEGIN PAGE LEVEL JS ================== -->
 <script src="{{url_for('static', filename='assets/js/apps.min.js')}}"></script>
-<script src="{{ url_for('static', filename='assets/plugins/parsley/dist/parsley.min.js') }}"></script>
-<script src="{{ url_for('static', filename='assets/plugins/parsley/dist/i18n/es.js') }}"></script>
+<script src="{{ url_for('static', filename='node_modules/parsleyjs/dist/parsley.min.js') }}"></script>
+<script src="{{ url_for('static', filename='node_modules/parsleyjs/dist/i18n/es.js') }}"></script>
 <!-- ================== END PAGE LEVEL JS ================== -->
 
 <script>

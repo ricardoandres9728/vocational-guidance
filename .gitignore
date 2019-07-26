@@ -105,3 +105,4 @@ ENV/
 .vscode/settings.json
 static/package-lock.json
 static/package-lock.json
+finalized_model.sav

@@ -1,8 +1,10 @@
+import pickle
+import math
 from flask import Blueprint, request, render_template, session, jsonify, redirect, url_for
 from .model import Aspirante
 from usuario.model import Usuario, Feedback
 from colegio.model import Colegio, AspiranteColegio
-from encuesta.model import Respuesta
+from encuesta.model import Respuesta, Pregunta, Recomendacion
 from application import db
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -11,16 +13,6 @@ aspirante_app = Blueprint("aspirante", __name__, url_prefix="/aspirante")
 
 @aspirante_app.route('/encuesta/responder', methods=["GET"])
 def encuesta():
-    # from sklearn.datasets import make_hastie_10_2
-    # from sklearn.ensemble import GradientBoostingClassifier
-    # import json
-    # with open('codebeautify.json', 'rb') as file:
-    #     data = json.load(file)
-    # diccionaro = data["dict"]
-    # data = data["data"]
-    # for value in data:
-    #     print(value)
-    # return "ok"
     return render_template("aspirante/encuesta_aspirante.html")
 
 
@@ -31,13 +23,33 @@ def encuesta_guardar():
     aspirante = Aspirante.query.filter_by(id_usuario=usuario.id).first()
     aspirante.respuestas = []
     db.session.commit()
+    recomendaciones = []
+    valores = []
     if len(form) > 0:
         respuestas_form = form
-        for respuesta_form in respuestas_form:
+        perfect_model = [4.967, 1.002, 4.949, 4.989, 3.795, 4.118, 4.979, 2.097, 4.897, 3.529, 3.048, 4.997]
+        for (index, respuesta_form) in enumerate(respuestas_form):
             respuesta = Respuesta.query.filter_by(id=respuesta_form).first()
+            distancia = math.sqrt(math.pow((respuesta.valor - perfect_model[index]), 2))
+            if distancia > 2:
+                recomendacion = Recomendacion.query.filter_by(id=respuesta.id_pregunta).first()
+                if recomendacion:
+                    recomendaciones.append(recomendacion.recomendacion)
+            valores.append(respuesta.valor)
             aspirante.respuestas.append(respuesta)
+
     db.session.commit()
-    return "ok", 200
+    filename = "finalized_model.sav"
+    model = pickle.load(open(filename, 'rb'))
+    respuesta = model.predict([valores])
+    if respuesta[0] == 1:
+        mensaje = True
+    else:
+        mensaje = False
+    return jsonify({
+        "respuesta": mensaje,
+        "recomendaciones": recomendaciones
+    }), 200
 
 
 @aspirante_app.route('/comentarios', methods=["GET", "POST"])
@@ -127,7 +139,8 @@ def cargar_aspirante():
 def registro_aspirante():
     error = None
     mensaje = None
-    colegios = db.session.query(Colegio, Usuario).filter(Colegio.id_usuario == Usuario.id, Usuario.live == True, Usuario.id_tipo_usuario == 2).all()
+    colegios = db.session.query(Colegio, Usuario).filter(Colegio.id_usuario == Usuario.id, Usuario.live == True,
+                                                         Usuario.id_tipo_usuario == 2).all()
     if request.method == "POST":
         form = request.form
         usuario = Usuario.query.filter_by(correo=form["correo"]).first()

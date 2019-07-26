@@ -21,7 +21,9 @@ const vm = new Vue({
             rta: '',
             pta: '',
         },
-        respuestas: []
+        respuestas: [],
+        recomendaciones: [],
+        mensaje: ""
     },
     created() {
         this.cargar_aspirante();
@@ -31,44 +33,69 @@ const vm = new Vue({
         prev() {
             this.respuestas.pop();
             this.id_pregunta--;
+            this.respuesta_id = null;
         },
         next() {
-            this.respuestas.push(this.respuesta_id);
-            this.id_pregunta++;
+            if (this.respuesta_id) {
+                this.respuestas.push(this.respuesta_id);
+                this.id_pregunta++;
+                this.respuesta_id = null;
+            } else {
+                swal({
+                    title: "Oops...",
+                    type: "error",
+                    text: "Debes seleccionar una opcion"
+                })
+            }
+
         },
         finalizar_encuesta() {
-            swal({
-                title: '¿Estás seguro?',
-                text: "Esta acción guardará tus respuestas en el sistema.",
-                type: 'question',
-                showCancelButton: true,
-                confirmButtonColor: 'rgb(19,61,57)',
-                cancelButtonColor: 'gray',
-                confirmButtonText: 'Confirmar',
-                cancelButtonText: 'Cancelar',
-                allowOutsideClick: false,
-            }).then((result) => {
-                if (result.value) {
-                    this.respuestas.push(this.respuesta_id);
-                    axios({
-                        method: "POST",
-                        url: "/aspirante/encuesta/guardar",
-                        headers: { "X-CSRFToken": this.token },
-                        data: this.respuestas
-                    }).then((respuesta) => {
-                        if (respuesta.data === "ok") {
+            if (this.respuesta_id) {
+                swal({
+                    title: '¿Estás seguro?',
+                    text: "Esta acción guardará tus respuestas en el sistema.",
+                    type: 'question',
+                    showCancelButton: true,
+                    confirmButtonColor: 'rgb(19,61,57)',
+                    cancelButtonColor: 'gray',
+                    confirmButtonText: 'Confirmar',
+                    cancelButtonText: 'Cancelar',
+                    allowOutsideClick: false,
+                }).then((result) => {
+                    if (result.value) {
+                        this.respuestas.push(this.respuesta_id);
+                        this.respuesta_id = null;
+                        axios({
+                            method: "POST",
+                            url: "/aspirante/encuesta/guardar",
+                            headers: {"X-CSRFToken": this.token},
+                            data: this.respuestas
+                        }).then((respuesta) => {
                             swal({
                                 title: 'Bien!',
-                                text: 'Has cambiado el aspirante.',
+                                text: 'Encuesta resuelta exitosamente',
                                 type: 'success'
                             }).then((result) => {
                                 this.encuesta = null
                                 localStorage.clear();
                             })
-                        }
-                    })
-                }
-            })
+                            this.recomendaciones = respuesta.data.recomendaciones;
+                            console.log(this.recomendaciones)
+                            if (respuesta.data.mensaje) {
+                                this.mensaje = "Felicitaciones, cumples con el perfil"
+                            } else {
+                                this.mensaje = 'Lo sentimos, no cumples con el perfil'
+                            }
+                        })
+                    }
+                });
+            } else {
+                swal({
+                    title: "Oops...",
+                    type: "error",
+                    text: "Debes seleccionar una opcion"
+                })
+            }
         },
         mostrar_encuesta() {
             this.encuesta = this.encuestas[this.id_encuesta];
@@ -78,7 +105,7 @@ const vm = new Vue({
             axios({
                 method: "POST",
                 url: "/administrador/encuesta/cargar/todos",
-                headers: { "X-CSRFToken": this.token }
+                headers: {"X-CSRFToken": this.token}
             }).then((respuesta) => {
                 self.encuestas = respuesta.data;
             })
@@ -88,7 +115,7 @@ const vm = new Vue({
             axios({
                 method: 'post',
                 url: '/aspirante/newsletter',
-                headers: { "X-CSRFToken": self.token }
+                headers: {"X-CSRFToken": self.token}
             })
         },
         cambiar_password() {
@@ -111,7 +138,7 @@ const vm = new Vue({
                         data: {
                             password: self.aspirante.password,
                         },
-                        headers: { "X-CSRFToken": self.token }
+                        headers: {"X-CSRFToken": self.token}
                     }).then(function (respuesta) {
                         if (respuesta.data == "ok") {
                             swal({
@@ -122,8 +149,7 @@ const vm = new Vue({
                                 localStorage.clear();
                                 location.reload();
                             })
-                        }
-                        else {
+                        } else {
                             swal(
                                 'Ups...',
                                 'No se hicieron cambios.',
@@ -155,7 +181,7 @@ const vm = new Vue({
                         data: {
                             aspirante: aux,
                         },
-                        headers: { "X-CSRFToken": self.token }
+                        headers: {"X-CSRFToken": self.token}
                     }).then(function (respuesta) {
                         if (respuesta.data == "ok") {
                             swal({
@@ -166,8 +192,7 @@ const vm = new Vue({
                                 localStorage.clear();
                                 location.reload();
                             })
-                        }
-                        else {
+                        } else {
                             swal(
                                 'Ups...',
                                 'No se hicieron cambios.',
@@ -183,10 +208,11 @@ const vm = new Vue({
             axios({
                 method: "POST",
                 url: "/aspirante/cargar",
-                headers: { "X-CSRFToken": self.token }
+                headers: {"X-CSRFToken": self.token}
             }).then((respuesta) => {
                 self.aspirante = respuesta.data;
             })
         },
     }
 })
+

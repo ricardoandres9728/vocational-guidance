@@ -181,8 +181,8 @@
 <!-- end row -->
 {% endblock %}
 {% block script %}
-<script src="{{ url_for('static', filename='assets/plugins/parsley/dist/parsley.min.js') }}"></script>
-<script src="{{ url_for('static', filename='assets/plugins/parsley/dist/i18n/es.js') }}"></script>
+<script src="{{ url_for('static', filename='node_modules/parsleyjs/dist/parsley.min.js') }}"></script>
+<script src="{{ url_for('static', filename='node_modules/parsleyjs/dist/i18n/es.js') }}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.16.2/axios.min.js"></script>
 <script src="https://unpkg.com/vue@2.4.2"></script>
 <script src="{{url_for('static', filename='archivos_vue/panel_principal.js')}}"></script>
