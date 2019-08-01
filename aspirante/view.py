@@ -10,16 +10,6 @@ aspirante_app = Blueprint("aspirante", __name__, url_prefix="/aspirante")
 
 @aspirante_app.route('/encuesta/responder', methods=["GET"])
 def encuesta():
-    from sklearn.naive_bayes import GaussianNB
-    from sklearn.model_selection import train_test_split
-    import json
-    with open('codebeautify.json', 'rb') as file:
-        data = json.load(file)
-    diccionaro = data["dict"]
-    data = data["data"]
-    for value in data:
-        print(value)
-    return "ok"
     return render_template("aspirante/encuesta_aspirante.html")
 
 

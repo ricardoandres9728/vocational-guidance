@@ -42,6 +42,7 @@ const vm = new Vue({
         next(){
             this.respuesta_pregunta.id_pregunta = this.id_pregunta;
             this.respuestas_encuesta.respuestas.push(JSON.parse(JSON.stringify(this.respuesta_pregunta)));
+            console.log( this.respuestas_encuesta);
             this.id_pregunta ++;
         },
         finalizar_encuesta(){
@@ -75,8 +76,7 @@ const vm = new Vue({
                     localStorage.clear();
                 location.reload();
                 })
-            }})}})}
-            ,
+            }})}})},
         mostrar_encuesta(){
             this.encuesta = this.encuestas[this.id_encuesta];
             this.respuestas_encuesta.id_encuesta = this.encuesta.id;
