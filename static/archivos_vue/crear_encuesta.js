@@ -1,14 +1,14 @@
 const vm = new Vue({
-    el:'main',
-    data:{
-        perfiles:[],
+    el: 'main',
+    data: {
+        perfiles: [],
         token: $("#csrf").val(),
-        pregunta:{
-            pregunta:'',
-            recomendacion:'',
+        pregunta: {
+            pregunta: '',
+            recomendacion: '',
             centroide: 0,
-            respuestas:{
-                1:'',
+            respuestas: {
+                1: '',
                 2: '',
                 3: '',
                 4: '',
@@ -16,33 +16,33 @@ const vm = new Vue({
             }
         },
         //Copiar a modificar
-        pregunta_editar:{
-            id:'',
-            pregunta:{}
+        pregunta_editar: {
+            id: '',
+            pregunta: {}
         },
-        encuesta:{
-            perfil:'',
-            preguntas:[],
+        encuesta: {
+            perfil: '',
+            preguntas: [],
         },
         //migrar a modificiar_encuesta.js
-        encuesta_editar:{},
-        encuestas:[],
+        encuesta_editar: {},
+        encuestas: [],
         //---//
     },
-    created(){
+    created() {
         this.cargar_perfiles();
         if (localStorage.getItem('encuesta')) {
             let aux = localStorage.getItem('encuesta');
             this.encuesta = JSON.parse(aux);
         }
         //migrar a modificar_encuesta.js
-        if (window.location.pathname === "/administrador/encuesta/modificar"){
+        if (window.location.pathname === "/administrador/encuesta/modificar") {
             this.cargar_encuestas();
         }
     },
-    methods:{
+    methods: {
         //migrar a modificar_encuesta.js
-        eliminar_pregunta_encuesta(id){
+        eliminar_pregunta_encuesta(id) {
             var self = this;
             numero = id + 1;
             swal({
@@ -60,16 +60,15 @@ const vm = new Vue({
                         title: 'Eliminada!',
                         text: 'La pregunta ha sido eliminada, no olvides confirmar los cambios hechos antes de salir del sistema.',
                         type: 'error'
-                    }).then((result) =>{
-                        self.encuesta_editar.preguntas.splice(id,1);
+                    }).then((result) => {
+                        self.encuesta_editar.preguntas.splice(id, 1);
                         localStorage.setItem('encuesta', JSON.stringify(self.encuesta_editar))
                     })
                 }
             })
         },
-        agregar_pregunta_nueva(){
-            var self = this;
-            if (self.pregunta.pregunta.length == 0 || self.pregunta.recomendacion.length == 0 || self.pregunta.respuestas[1].length == 0 || self.pregunta.respuestas[2].length == 0 || self.pregunta.respuestas[3].length == 0 || self.pregunta.respuestas[4].length == 0 || self.pregunta.respuestas[5].length == 0){
+        agregar_pregunta_nueva() {
+            if (this.pregunta.pregunta.length == 0 || this.pregunta.recomendacion.length == 0 || this.pregunta.respuestas[1].length == 0 || this.pregunta.respuestas[2].length == 0 || this.pregunta.respuestas[3].length == 0 || this.pregunta.respuestas[4].length == 0 || this.pregunta.respuestas[5].length == 0) {
                 swal(
                     'Ups...',
                     'Todos los campos de la nueva pregunta son obligatorios.',
@@ -77,21 +76,21 @@ const vm = new Vue({
                 )
             }
             else {
-                var aux = JSON.parse(JSON.stringify(self.pregunta));
-                self.encuesta_editar.preguntas.push(aux);
-                self. pregunta={
-                    pregunta:'',
-                    recomendacion:'',
+                var aux = JSON.parse(JSON.stringify(this.pregunta));
+                this.encuesta_editar.preguntas.push(aux);
+                this.pregunta = {
+                    pregunta: '',
+                    recomendacion: '',
                     centroide: 0,
-                    respuestas:{
-                        1:'',
+                    respuestas: {
+                        1: '',
                         2: '',
                         3: '',
                         4: '',
                         5: '',
                     }
                 };
-                localStorage.setItem('encuesta', JSON.stringify(self.encuesta_editar));
+                localStorage.setItem('encuesta', JSON.stringify(this.encuesta_editar));
                 swal(
                     'Bien!',
                     'Has agregado una nueva pregunta a la encuesta, no olvides confirmar los cambios hechos antes de salir del sistema.',
@@ -99,7 +98,7 @@ const vm = new Vue({
                 )
             }
         },
-        desactivar_encuesta(){
+        desactivar_encuesta() {
             let self = this;
             swal({
                 title: '¿Estás seguro?',
@@ -121,7 +120,7 @@ const vm = new Vue({
                         },
                         headers: { "X-CSRFToken": self.token }
                     }).then(function (respuesta) {
-                        if (respuesta.data == "ok"){
+                        if (respuesta.data == "ok") {
                             swal({
                                 title: 'Bien!',
                                 text: 'Has desactivado la encuesta.',
@@ -130,7 +129,7 @@ const vm = new Vue({
                                 location.reload();
                             })
                         }
-                        else{
+                        else {
                             swal(
                                 'Ups...',
                                 'Algo ha salido mal & la acción no se llevó a cabo.',
@@ -141,7 +140,7 @@ const vm = new Vue({
                 }
             })
         },
-        modificar_encuesta(){
+        modificar_encuesta() {
             var self = this;
             let aux = JSON.parse(JSON.stringify(self.encuesta_editar));
             if (!self.encuesta_editar.perfil) {
@@ -187,43 +186,38 @@ const vm = new Vue({
 
         },
         asignar_pregunta_e(id) {
-            var self = this;
-            aux = self.encuesta_editar.preguntas[id];
-            self.pregunta_editar.id = id;
-            self.pregunta_editar.pregunta = aux;
+            this.pregunta_editar = this.encuesta_editar.preguntas[id];
+            this.pregunta_editar.recomendacion = Array.from(this.pregunta_editar["recomendacion"])[0]["recomendacion"]
         },
         asignar_encuesta(id) {
             var self = this;
-            aux = self.encuestas[id];
-            self.encuesta_editar = aux;
+            self.encuesta_editar = JSON.parse(JSON.stringify(self.encuestas[id]));
             let div = document.getElementById("div-encuesta-modificar");
             div.setAttribute("style", "display: block");
         },
-        cargar_encuestas(){
+        cargar_encuestas() {
             var self = this;
             axios({
                 method: "POST",
                 url: "/administrador/encuesta/cargar/todos",
                 headers: { "X-CSRFToken": this.token }
             }).then((respuesta) => {
-                respuesta.data.forEach(element => {
-                    self.encuestas.push(element);
-                });
+                self.encuestas = respuesta.data
             })
         },
 
         //---//
-        guardar_encuesta(){
+        guardar_encuesta() {
             var self = this;
             let aux = JSON.parse(JSON.stringify(self.encuesta));
-            if (!self.encuesta.perfil){
+            if (!self.encuesta.perfil) {
                 swal({
                     type: 'error',
                     title: 'Ups...',
                     text: 'No has escogido el perfil vocacional de esta encuesta, selecciónalo y vuelve a intentarlo.',
                 })
             }
-            else{
+            else {
                 swal({
                     title: '¿Estás seguro?',
                     text: "Esta acción guardará la encuesta en el sistema, si estás seguro que el proceso ha terminado da click en Confirmar",
@@ -244,7 +238,7 @@ const vm = new Vue({
                             },
                             headers: { "X-CSRFToken": self.token }
                         }).then(function (respuesta) {
-                            if (respuesta.data == "ok"){
+                            if (respuesta.data == "ok") {
                                 swal({
                                     title: 'Bien!',
                                     text: 'Has guardado la encuesta.',
@@ -254,7 +248,7 @@ const vm = new Vue({
                                     location.reload();
                                 })
                             }
-                            else{
+                            else {
                                 swal(
                                     'Ups...',
                                     respuesta.data,
@@ -266,7 +260,7 @@ const vm = new Vue({
                 })
             }
         },
-        eliminar_pregunta(id){
+        eliminar_pregunta(id) {
             var self = this;
             swal({
                 title: '¿Estás seguro?',
@@ -283,8 +277,8 @@ const vm = new Vue({
                         title: 'Eliminada!',
                         text: 'La pregunta ha sido eliminada.',
                         type: 'error'
-                    }).then((result) =>{
-                        self.encuesta.preguntas.splice(id,1);
+                    }).then((result) => {
+                        self.encuesta.preguntas.splice(id, 1);
                         localStorage.setItem('encuesta', JSON.stringify(self.encuesta))
                         location.reload();
                     })
@@ -298,19 +292,19 @@ const vm = new Vue({
             localStorage.setItem('encuesta', JSON.stringify(self.encuesta));
             location.reload();
         },
-        cargar_perfiles(){
+        cargar_perfiles() {
             var self = this;
             axios({
                 method: "POST",
                 url: "/administrador/perfil/cargar/todos",
                 headers: { "X-CSRFToken": this.token }
-            }).then((respuesta)=>{
+            }).then((respuesta) => {
                 respuesta.data.forEach(element => {
                     self.perfiles.push(element);
                 });
             })
         },
-        agregar_pregunta(){
+        agregar_pregunta() {
             var self = this
             var aux = JSON.parse(JSON.stringify(self.pregunta));
             self.encuesta.preguntas.push(aux);
@@ -326,7 +320,7 @@ const vm = new Vue({
             }
             localStorage.setItem('encuesta', JSON.stringify(self.encuesta))
         },
-        limpiar_campos(){
+        limpiar_campos() {
             swal({
                 title: '¿Estás seguro?',
                 text: "Esta acción no podrá ser revertida.",
@@ -342,14 +336,14 @@ const vm = new Vue({
                         title: 'Borrado!',
                         text: 'Se han limpiado todos los campos.',
                         type: 'success'
-                    }).then((result)=>{
+                    }).then((result) => {
                         localStorage.clear();
                         location.reload();
                     })
                 }
             })
         },
-        asignar_pregunta(id){
+        asignar_pregunta(id) {
             var self = this;
             aux = self.encuesta.preguntas[id];
             self.pregunta_editar.id = id;

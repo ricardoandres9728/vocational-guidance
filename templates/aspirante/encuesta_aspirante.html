@@ -1,96 +1,131 @@
 {% extends 'aspirante/dashboard_aspirante.html' %}
 {% block title %}Encuesta | Responder{% endblock %}
 {% block header_page %}
-<h1 class="page-header">
-    <div class="row">
-        <div class="col-md-4">Encuesta
-            <small>Responder</small>
+    <h1 class="page-header">
+        <div class="row">
+            <div class="col-md-4">Encuesta
+                <small>Responder</small>
+            </div>
+            <div class="col-md-8">
+                {% raw %}
+                    <form v-show="!encuesta">
+                        <div class="form-inline" style="text-align: center">
+                            <div class="form-group">
+                                <small>Selecciona la carrera:</small>
+                            </div>
+                            <div class="form-group ">
+                                <select class="form-control" v-model="id_encuesta">
+                                    <option disabled value="" class="form-control">Escoge un perfil</option>
+                                    <option v-for="(perfil, index) in encuestas" class="form-control"
+                                            v-bind:value="index">
+                                        {{ perfil.perfil }}
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <a @click="mostrar_encuesta" class="btn text-white" style="background: rgb(19,61,57)">Responder
+                                    encuesta</a>
+                            </div>
+                        </div>
+                    </form>
+                {% endraw %}
+            </div>
         </div>
-        <div class="col-md-8">
-            {% raw %}
-            <form v-show="!encuesta">
-                <div class="form-inline" style="text-align: center">
-                    <div class="form-group">
-                        <small>Selecciona la carrera:</small>
-                    </div>
-                    <div class="form-group ">
-                        <select class="form-control" v-model="id_encuesta">
-                            <option disabled value="" class="form-control">Escoge un perfil</option>
-                            <option v-for="(perfil, index) in encuestas" class="form-control" v-bind:value="index">
-                                {{perfil.perfil}}
-                            </option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <a @click="mostrar_encuesta" class="btn text-white" style="background: rgb(19,61,57)">Responder
-                            encuesta</a>
-                    </div>
-                </div>
-            </form>
-            {% endraw %}
-        </div>
-    </div>
-</h1>
+    </h1>
 {% endblock %}
 {% block content_page %}
-{% raw %}
-<div class="row" v-if="!encuesta">
-    <div class="jumbotron" style="background-image: url('../../static/assets/img/login-bg/bg-3.jpg'); border-radius: 10px">
-        <div class="row">
-            <div class="col-md-2"></div>
-            <div class="col-md-8">
-                <div class="row" style="background:black; border-radius: 10px; filter: opacity(80%)">
-                    <div class="col-md-1"></div>
-                    <div class="col-md-10">
-                        <h2 class="text-justify text-white">
-                            No has cargado ninguna encuesta, por favor elige el perfil al que deseas aplicar la encuesta y da click en el botón "Responder encuesta" ubicado en el panel superior.
-                        </h2>
+    {% raw %}
+        <div class="row" v-if="!encuesta">
+            <div class="jumbotron"
+                 style="background-image: url('../../static/assets/img/login-bg/bg-3.jpg'); border-radius: 10px">
+                <div class="row">
+                    <div class="col-md-2"></div>
+                    <div class="col-md-8">
+                        <div class="row" style="background:black; border-radius: 10px; filter: opacity(80%)">
+                            <div class="col-md-1"></div>
+                            <div class="col-md-10">
+                                <h2 class="text-justify text-white">
+                                    No has cargado ninguna encuesta, por favor elige el perfil al que deseas aplicar la
+                                    encuesta
+                                    y da click en el botón "Responder encuesta" ubicado en el panel superior.
+                                </h2>
+                            </div>
+                            <div class="col-md-1"></div>
+                        </div>
                     </div>
-                    <div class="col-md-1"></div>
+                    <div class="col-md-2"></div>
                 </div>
             </div>
-            <div class="col-md-2"></div>
         </div>
-    </div>
-</div>
-<div class="row" v-if="encuesta">
-    <div class="panel panel-inverse">
-        <div class="panel-heading">
-            Encuesta para {{encuesta.perfil}}
-        </div>
-        <div class="panel-body">
-            <div>
-                <div class="jumbotron" style="background: rgb(19,61,57); border-radius: 10px">
-                    <h2 class="text-center text-white">{{encuesta.preguntas[id_pregunta].pregunta}}</h2>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="col-md-6" v-for="(respuesta, key) in encuesta.preguntas[id_pregunta].respuestas">
-                                <div class="input-group">
-                                    <span class="input-group-addon bg-white">{{key}}</span>
-                                    <label class="form-control bg-white">{{respuesta}}</label>
-                                    <span class="input-group-addon bg-white">
-                                        <input type="radio" name="respuestas" :value="key" v-model="respuesta_pregunta.respuesta"/>
+        <div class="row" v-if="encuesta">
+            <div class="panel panel-inverse">
+                <div class="panel-heading">
+                    Encuesta para {{ encuesta.perfil }}
+                </div>
+                <div class="panel-body">
+                    <div>
+                        <div class="jumbotron" style="background: rgb(19,61,57); border-radius: 10px">
+                            <h2 class="text-center text-white">{{ encuesta.preguntas[id_pregunta].pregunta}}</h2>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="col-md-6"
+                                         v-for="respuesta in encuesta.preguntas[id_pregunta].respuestas">
+                                        <div class="input-group">
+                                            <span class="input-group-addon bg-white">{{ respuesta.valor }}</span>
+                                            <label class="form-control bg-white">{{ respuesta.respuesta }}</label>
+                                            <span class="input-group-addon bg-white">
+                                        <input type="radio" name="respuestas" :value="respuesta.id"
+                                               v-model="respuesta_id"/>
                                     </span>
+                                        </div>
+                                        <p></p>
+                                    </div>
                                 </div>
-                                <p></p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="panel-footer">
+                    <div class="text-center">
+                        <div class="btn-group">
+                            <button class="btn text-white" style="background: rgb(19,61,57)" @click="prev"
+                                    v-if="id_pregunta>0">Anterior pregunta
+                            </button>
+                            <button class="btn text-white" style="background: rgb(19,61,57)" @click="next"
+                                    v-if="id_pregunta<encuesta.preguntas.length - 1">Siguiente pregunta
+                            </button>
+                            <button class="btn btn-warning" @click="finalizar_encuesta"
+                                    v-if="id_pregunta==encuesta.preguntas.length - 1">Finalizar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--Recomendaciones-->
+        <div class="row" v-if="recomendaciones.length > 0" id="recomendaciones-pdf">
+            <div class="panel panel-inverse">
+                <div class="panel-heading">
+                    Recomendaciones
+                </div>
+                <div class="panel-body">
+                    <div>
+                        <div class="jumbotron" style="background: rgb(19,61,57); border-radius: 10px">
+                            <h2 class="text-center text-white">{{ mensaje }}</h2>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="col-md-6"
+                                         v-for="recomendacion in recomendaciones">
+                                        <input type="text" :value="recomendacion" class="form-control" readonly v-if="recomendacion"/>
+                                        <p></p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
-        <div class="panel-footer">
-            <div class="text-center">
-                <div class="btn-group">
-                    <button class="btn text-white" style="background: rgb(19,61,57)" @click="prev" v-if="id_pregunta>0">Anterior pregunta</button>
-                    <button class="btn text-white" style="background: rgb(19,61,57)" @click="next" v-if="id_pregunta<encuesta.preguntas.length - 1">Siguiente pregunta</button>
-                    <button class="btn btn-warning"  @click="finalizar_encuesta" v-if="id_pregunta==encuesta.preguntas.length - 1">Finalizar</button>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-{% endraw %}
+    {% endraw %}
 {% endblock %}
-
