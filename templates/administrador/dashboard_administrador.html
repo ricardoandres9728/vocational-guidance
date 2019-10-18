@@ -3,6 +3,7 @@
 <!--[if !IE]><!-->
 <html lang="en">
 <!--<![endif]-->
+
 <head>
     <meta charset="utf-8" />
     <title>{% block title %}{% endblock %}</title>
@@ -25,262 +26,205 @@
     <!-- ================== BEGIN PAGE LEVEL STYLE ================== -->
     <link href="{{url_for('static', filename='assets/plugins/jquery-jvectormap/jquery-jvectormap.css')}}" rel="stylesheet" />
     <link href="{{url_for('static', filename='assets/plugins/bootstrap-datepicker/css/bootstrap-datepicker.min.css')}}" rel="stylesheet" />
-    <link href="{{url_for('static', filename='assets/plugins/gritter/css/jquery.gritter.css')}}" rel="stylesheet" />
-    {% block style %}{% endblock %}
+    <link href="{{url_for('static', filename='assets/plugins/gritter/css/jquery.gritter.css')}}" rel="stylesheet" /> {% block style %}{% endblock %}
     <!-- ================== END PAGE LEVEL STYLE ================== -->
 
     <!-- ================== BEGIN BASE JS ================== -->
     <script src="{{url_for('static', filename='assets/plugins/pace/pace.min.js')}}"></script>
     <!-- ================== END BASE JS ================== -->
 </head>
+
 <body>
-<!-- begin #page-loader -->
-<div id="page-loader">
-    <div class="material-loader">
-        <svg class="circular" viewBox="25 25 50 50">
+    <!-- begin #page-loader -->
+    <div id="page-loader">
+        <div class="material-loader">
+            <svg class="circular" viewBox="25 25 50 50">
             <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10"/>
         </svg>
-        <div class="message">Cargando...</div>
+            <div class="message">Cargando...</div>
+        </div>
     </div>
-</div>
-<!-- end #page-loader -->
+    <!-- end #page-loader -->
 
-<!-- begin #page-container -->
-<div id="page-container" class="fade page-sidebar-fixed page-header-fixed page-with-wide-sidebar">
-    <!-- begin #header -->
-    <div id="header" class="header navbar navbar-default navbar-fixed-top">
-        <!-- begin container-fluid -->
-        <div class="container-fluid">
-            <!-- begin mobile sidebar expand / collapse button -->
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed navbar-toggle-left" data-click="sidebar-minify">
+    <!-- begin #page-container -->
+    <div id="page-container" class="fade page-sidebar-fixed page-header-fixed page-with-wide-sidebar">
+        <!-- begin #header -->
+        <div id="header" class="header navbar navbar-default navbar-fixed-top">
+            <!-- begin container-fluid -->
+            <div class="container-fluid">
+                <!-- begin mobile sidebar expand / collapse button -->
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed navbar-toggle-left" data-click="sidebar-minify">
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <button type="button" class="navbar-toggle" data-click="sidebar-toggled">
+                    <button type="button" class="navbar-toggle" data-click="sidebar-toggled">
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a href="#" class="navbar-brand">
+                    <a href="#" class="navbar-brand">
                     Vocacional UDEC
                 </a>
+                </div>
+                <!-- end mobile sidebar expand / collapse button -->
+
+                <!-- begin header navigation right -->
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="dropdown navbar-user">
+                        <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
+                            <img src="/static/assets/img/logos/escudo-udec.png" alt="" />
+                            <span class="hidden-xs">Bienvenido Administrador!</span>
+                        </a>
+                        <ul class="dropdown-menu animated fadeInLeft">
+                            <li class="arrow"></li>
+                            <li><a href="{{url_for('administrador.panel_principal')}}">Panel principal</a></li>
+                            <li><a href="javascript:;">Cambiar contraseña</a></li>
+                            <li class="divider"></li>
+                            <li><a href="{{url_for('login.logout')}}">Cerrar sesión</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <!-- end header navigation right -->
+
             </div>
-            <!-- end mobile sidebar expand / collapse button -->
-
-            <!-- begin header navigation right -->
-            <ul class="nav navbar-nav navbar-right">
-                <!--<li class="dropdown">-->
-                <!--<a href="#" class="icon notification waves-effect waves-light" data-toggle="dropdown">-->
-                <!--<i class="material-icons">inbox</i> <span class="label label-notification">5</span>-->
-                <!--</a>-->
-                <!--<ul class="dropdown-menu media-list pull-right animated fadeInDown">-->
-                <!--<li class="dropdown-header bg-indigo text-white">Notifications (5)</li>-->
-                <!--<li class="media">-->
-                <!--<a href="javascript:;">-->
-                <!--<div class="media-left"><img src="assets/img/user-1.jpg" class="media-object" alt="" /></div>-->
-                <!--<div class="media-body">-->
-                <!--<h6 class="media-heading">John Smith</h6>-->
-                <!--<p>Quisque pulvinar tellus sit amet sem scelerisque tincidunt.</p>-->
-                <!--<div class="text-muted f-s-11">25 minutes ago</div>-->
-                <!--</div>-->
-                <!--</a>-->
-                <!--</li>-->
-                <!--<li class="media">-->
-                <!--<a href="javascript:;">-->
-                <!--<div class="media-left"><img src="assets/img/user-2.jpg" class="media-object" alt="" /></div>-->
-                <!--<div class="media-body">-->
-                <!--<h6 class="media-heading">Olivia</h6>-->
-                <!--<p>Quisque pulvinar tellus sit amet sem scelerisque tincidunt.</p>-->
-                <!--<div class="text-muted f-s-11">35 minutes ago</div>-->
-                <!--</div>-->
-                <!--</a>-->
-                <!--</li>-->
-                <!--<li class="media">-->
-                <!--<a href="javascript:;">-->
-                <!--<div class="media-left"><i class="material-icons media-object bg-deep-purple">people</i></div>-->
-                <!--<div class="media-body">-->
-                <!--<h6 class="media-heading"> New User Registered</h6>-->
-                <!--<div class="text-muted f-s-11">1 hour ago</div>-->
-                <!--</div>-->
-                <!--</a>-->
-                <!--</li>-->
-                <!--<li class="media">-->
-                <!--<a href="javascript:;">-->
-                <!--<div class="media-left"><i class="material-icons media-object bg-blue">email</i></div>-->
-                <!--<div class="media-body">-->
-                <!--<h6 class="media-heading"> New Email From John</h6>-->
-                <!--<div class="text-muted f-s-11">2 hours ago</div>-->
-                <!--</div>-->
-                <!--</a>-->
-                <!--</li>-->
-                <!--<li class="media">-->
-                <!--<a href="javascript:;">-->
-                <!--<div class="media-left"><i class="material-icons media-object bg-teal">shopping_basket</i></div>-->
-                <!--<div class="media-body">-->
-                <!--<h6 class="media-heading">You sold an item!</h6>-->
-                <!--<div class="text-muted f-s-11">3 hours ago</div>-->
-                <!--</div>-->
-                <!--</a>-->
-                <!--</li>-->
-                <!--<li class="dropdown-footer text-center">-->
-                <!--<a href="javascript:;">View more</a>-->
-                <!--</li>-->
-                <!--</ul>-->
-                <!--</li>-->
-                <li class="dropdown navbar-user">
-                    <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
-                        <img src="/static/assets/img/logos/escudo-udec.png" alt="" />
-                        <span class="hidden-xs">Bienvenido Administrador!</span>
-                    </a>
-                    <ul class="dropdown-menu animated fadeInLeft">
-                        <li class="arrow"></li>
-                        <li><a href="{{url_for('administrador.panel_principal')}}">Panel principal</a></li>
-                        <li><a href="javascript:;">Cambiar contraseña</a></li>
-                        <li class="divider"></li>
-                        <li><a href="{{url_for('login.logout')}}">Cerrar sesión</a></li>
-                    </ul>
-                </li>
-            </ul>
-            <!-- end header navigation right -->
-
-            <!--<div class="search-form">-->
-            <!--<button class="search-btn" type="submit"><i class="material-icons">search</i></button>-->
-            <!--<input type="text" class="form-control" placeholder="Search Something...">-->
-            <!--<a href="#" class="close" data-dismiss="navbar-search"><i class="material-icons">close</i></a>-->
-            <!--</div>-->
+            <!-- end container-fluid -->
         </div>
-        <!-- end container-fluid -->
-    </div>
-    <!-- end #header -->
+        <!-- end #header -->
 
-    <!-- begin #sidebar -->
-    <div id="sidebar" class="sidebar" style="background: rgb(19,61,57)">
-        <!-- begin sidebar scrollbar -->
-        <div data-scrollbar="true" data-height="100%">
-            <!-- begin sidebar user -->
-            <ul class="nav">
-                <li class="nav-profile">
-                    <a href="#" data-toggle="nav-profile">
-                        <div class="image">
-                            <img src="/static/assets/img/logos/escudo-udec.png" alt=""  />
-                        </div>
-                        <div class="info">
+        <!-- begin #sidebar -->
+        <div id="sidebar" class="sidebar" style="background: rgb(19,61,57)">
+            <!-- begin sidebar scrollbar -->
+            <div data-scrollbar="true" data-height="100%">
+                <!-- begin sidebar user -->
+                <ul class="nav">
+                    <li class="nav-profile">
+                        <a href="#" data-toggle="nav-profile">
+                            <div class="image">
+                                <img src="/static/assets/img/logos/escudo-udec.png" alt="" />
+                            </div>
+                            <div class="info">
+                                <b class="caret pull-right"></b> Administrador
+                                <small>Vocacional UDEC</small>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <ul class="nav nav-profile">
+                            <li><a href="{{url_for('administrador.panel_principal')}}"><i class="material-icons">settings</i>Panel principal</a></li>
+                            <li><a href="#"><i class="material-icons"><span class="fa fa-file-excel-o"></span></i>Encuestas inactivas</a></li>
+                            <li><a href="#"><i class="material-icons"><span class="fa fa-users"></span></i>Perfiles inactivos</a></li>
+                            <li><a href="#"><i class="material-icons"><span class="fa fa-institution"></span></span></i>Colegios inactivos</a></li>
+                            <li><a href="#"><i class="material-icons"><span class="fa fa-child"></span></i>Aspirantes inactivos</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <!-- end sidebar user -->
+                <!-- begin sidebar nav -->
+                <ul class="nav">
+                    <li class="nav-header">Administración de plataforma</li>
+                    <li class="has-sub">
+                        <a href="javascript:;">
                             <b class="caret pull-right"></b>
-                            Administrador
-                            <small>Vocacional UDEC</small>
-                        </div>
-                    </a>
-                </li>
-                <li>
-                    <ul class="nav nav-profile">
-                        <li><a href="{{url_for('administrador.panel_principal')}}"><i class="material-icons">settings</i>Panel principal</a></li>
-                        <li><a href="#"><i class="material-icons"><span class="fa fa-file-excel-o"></span></i>Encuestas inactivas</a></li>
-                        <li><a href="#"><i class="material-icons"><span class="fa fa-users"></span></i>Perfiles inactivos</a></li>
-                        <li><a href="#"><i class="material-icons"><span class="fa fa-institution"></span></span></i>Colegios inactivos</a></li>
-                        <li><a href="#"><i class="material-icons"><span class="fa fa-child"></span></i>Aspirantes inactivos</a></li>
-                    </ul>
-                </li>
-            </ul>
-            <!-- end sidebar user -->
-            <!-- begin sidebar nav -->
-            <ul class="nav">
-                <li class="nav-header">Administración de plataforma</li>
-                <li class="has-sub">
-                    <a href="javascript:;">
-                        <b class="caret pull-right"></b>
-                        <i class="material-icons text-white"><span class="fa fa-file-text"></span></i>
-                        <span>Encuestas</span>
-                    </a>
-                    <ul class="sub-menu">
-                        <li><a href="{{url_for('administrador.crear_encuesta')}}">Agregar encuesta</a></li>
-                        <li><a href="{{url_for('administrador.administrar_encuesta')}}">Administrar encuesta</a></li>
-                    </ul>
-                </li>
-                <li class="has-sub">
-                    <a href="{{url_for('administrador.administrar_perfiles')}}">
-                        <i class="material-icons text-white"><span class="fa fa-users"></span></i>
-                        <span>Perfiles vocacionales</span>
-                    </a>
-                </li>
-                <li class="has-sub">
-                    <a href="{{url_for('administrador.administrar_colegio')}}">
-                        <i class="material-icons text-white"><span class="fa fa-institution"></span></i>
-                        <span>Colegios</span>
-                    </a>
-                </li>
-                <li class="has-sub">
-                    <a href="{{url_for('administrador.administrar_aspirante')}}">
-                        <i class="material-icons text-white"><span class="fa fa-child"></span></i>
-                        <span>Aspirantes</span>
-                    </a>
-                </li>
-                <!-- begin sidebar minify button -->
-                <li><a href="javascript:;" class="sidebar-minify-btn" data-click="sidebar-minify"><i class="fa fa-angle-double-left"></i></a></li>
-                <!-- end sidebar minify button -->
-            </ul>
-            <!-- end sidebar nav -->
-        </div>
-        <!-- end sidebar scr1ollbar -->
-    </div>
-    <div class="sidebar-bg"></div>
-    <!-- end #sidebar -->
-
-    <!-- begin #content -->
-    <div id="content" class="content">
-        <main>
-            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" id="csrf" />
-            <!-- begin page-header -->
-            {% block header_page %}{% endblock %}
-            <!-- end page-header -->
-            <div class="row">
-                {% block content_page %}{% endblock %}
+                            <i class="material-icons text-white"><span class="fa fa-file-text"></span></i>
+                            <span>Encuestas</span>
+                        </a>
+                        <ul class="sub-menu">
+                            <li><a href="{{url_for('administrador.crear_encuesta')}}">Agregar encuesta</a></li>
+                            <li><a href="{{url_for('administrador.administrar_encuesta')}}">Administrar encuesta</a></li>
+                        </ul>
+                    </li>
+                    <li class="has-sub">
+                        <a href="{{url_for('administrador.administrar_perfiles')}}">
+                            <i class="material-icons text-white"><span class="fa fa-users"></span></i>
+                            <span>Perfiles vocacionales</span>
+                        </a>
+                    </li>
+                    <li class="has-sub">
+                        <a href="{{url_for('administrador.administrar_colegio')}}">
+                            <i class="material-icons text-white"><span class="fa fa-institution"></span></i>
+                            <span>Colegios</span>
+                        </a>
+                    </li>
+                    <li class="has-sub">
+                        <a href="{{url_for('administrador.administrar_aspirante')}}">
+                            <i class="material-icons text-white"><span class="fa fa-child"></span></i>
+                            <span>Aspirantes</span>
+                        </a>
+                    </li>
+                    <li class="has-sub">
+                        <a href="{{url_for('administrador.muestras_perfiles')}}">
+                            <i class="material-icons text-white"><span class="fa fa-child"></span></i>
+                            <span>Muestras</span>
+                        </a>
+                    </li>
+                    <!-- begin sidebar minify button -->
+                    <li><a href="javascript:;" class="sidebar-minify-btn" data-click="sidebar-minify"><i class="fa fa-angle-double-left"></i></a></li>
+                    <!-- end sidebar minify button -->
+                </ul>
+                <!-- end sidebar nav -->
             </div>
-        </main>
+            <!-- end sidebar scr1ollbar -->
+        </div>
+        <div class="sidebar-bg"></div>
+        <!-- end #sidebar -->
+
+        <!-- begin #content -->
+        <div id="content" class="content">
+            <main>
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" id="csrf" />
+                <!-- begin page-header -->
+                {% block header_page %}{% endblock %}
+                <!-- end page-header -->
+                <div class="row">
+                    {% block content_page %}{% endblock %}
+                </div>
+            </main>
+        </div>
+        <!-- end #content -->
+
+        <!-- begin scroll to top btn -->
+        <a href="javascript:;" class="btn btn-icon btn-circle btn-success btn-scroll-to-top fade" data-click="scroll-top"><i class="fa fa-angle-up"></i></a>
+        <!-- end scroll to top btn -->
     </div>
-    <!-- end #content -->
+    <!-- end page container -->
 
-    <!-- begin scroll to top btn -->
-    <a href="javascript:;" class="btn btn-icon btn-circle btn-success btn-scroll-to-top fade" data-click="scroll-top"><i class="fa fa-angle-up"></i></a>
-    <!-- end scroll to top btn -->
-</div>
-<!-- end page container -->
-
-<!-- ================== BEGIN BASE JS ================== -->
-<script src="{{url_for('static', filename='assets/plugins/jquery/jquery-1.9.1.min.js')}}"></script>
-<script src="{{url_for('static', filename='assets/plugins/jquery/jquery-migrate-1.1.0.min.js')}}"></script>
-<script src="{{url_for('static', filename='assets/plugins/jquery-ui/ui/minified/jquery-ui.min.js')}}"></script>
-<script src="{{url_for('static', filename='assets/plugins/bootstrap/js/bootstrap.min.js')}}"></script>
-<!--[if lt IE 9]>
+    <!-- ================== BEGIN BASE JS ================== -->
+    <script src="{{url_for('static', filename='assets/plugins/jquery/jquery-1.9.1.min.js')}}"></script>
+    <script src="{{url_for('static', filename='assets/plugins/jquery/jquery-migrate-1.1.0.min.js')}}"></script>
+    <script src="{{url_for('static', filename='assets/plugins/jquery-ui/ui/minified/jquery-ui.min.js')}}"></script>
+    <script src="{{url_for('static', filename='assets/plugins/bootstrap/js/bootstrap.min.js')}}"></script>
+    <!--[if lt IE 9]>
 <script src="{{url_for('static', filename='assets/crossbrowserjs/html5shiv.js')}}"></script>
 <script src="{{url_for('static', filename='assets/crossbrowserjs/respond.min.js')}}"></script>
 <script src="{{url_for('static', filename='assets/crossbrowserjs/excanvas.min.js')}}"></script>
 <![endif]-->
-<script src="{{url_for('static', filename='assets/plugins/slimscroll/jquery.slimscroll.min.js')}}"></script>
-<script src="{{url_for('static', filename='assets/plugins/jquery-cookie/jquery.cookie.js')}}"></script>
-<!-- ================== END BASE JS ================== -->
+    <script src="{{url_for('static', filename='assets/plugins/slimscroll/jquery.slimscroll.min.js')}}"></script>
+    <script src="{{url_for('static', filename='assets/plugins/jquery-cookie/jquery.cookie.js')}}"></script>
+    <!-- ================== END BASE JS ================== -->
 
-<!-- ================== BEGIN PAGE LEVEL JS ================== -->
-<script src="{{ url_for('static', filename='node_modules/sweetalert2/dist/sweetalert2.all.min.js' ) }}"></script>
-<script src="{{url_for('static', filename='assets/plugins/gritter/js/jquery.gritter.js')}}"></script>
-<script src="{{url_for('static', filename='assets/plugins/flot/jquery.flot.min.js')}}"></script>
-<script src="{{url_for('static', filename='assets/plugins/flot/jquery.flot.time.min.js')}}"></script>
-<script src="{{url_for('static', filename='assets/plugins/flot/jquery.flot.resize.min.js')}}"></script>
-<script src="{{url_for('static', filename='assets/plugins/flot/jquery.flot.pie.min.js')}}"></script>
-<script src="{{url_for('static', filename='assets/plugins/sparkline/jquery.sparkline.js')}}"></script>
-<script src="{{url_for('static', filename='assets/plugins/jquery-jvectormap/jquery-jvectormap.min.js')}}"></script>
-<script src="{{url_for('static', filename='assets/plugins/jquery-jvectormap/jquery-jvectormap-world-mill-en.js')}}"></script>
-<script src="{{url_for('static', filename='assets/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js')}}"></script>
-<script src="{{url_for('static', filename='assets/js/dashboard.min.js')}}"></script>
-<script src="{{url_for('static', filename='assets/js/apps.min.js')}}"></script>
-{% block script %}{% endblock %}
-<!-- ================== END PAGE LEVEL JS ================== -->
+    <!-- ================== BEGIN PAGE LEVEL JS ================== -->
+    <script src="{{ url_for('static', filename='node_modules/sweetalert2/dist/sweetalert2.all.min.js' ) }}"></script>
+    <script src="{{url_for('static', filename='assets/plugins/gritter/js/jquery.gritter.js')}}"></script>
+    <script src="{{url_for('static', filename='assets/plugins/flot/jquery.flot.min.js')}}"></script>
+    <script src="{{url_for('static', filename='assets/plugins/flot/jquery.flot.time.min.js')}}"></script>
+    <script src="{{url_for('static', filename='assets/plugins/flot/jquery.flot.resize.min.js')}}"></script>
+    <script src="{{url_for('static', filename='assets/plugins/flot/jquery.flot.pie.min.js')}}"></script>
+    <script src="{{url_for('static', filename='assets/plugins/sparkline/jquery.sparkline.js')}}"></script>
+    <script src="{{url_for('static', filename='assets/plugins/jquery-jvectormap/jquery-jvectormap.min.js')}}"></script>
+    <script src="{{url_for('static', filename='assets/plugins/jquery-jvectormap/jquery-jvectormap-world-mill-en.js')}}"></script>
+    <script src="{{url_for('static', filename='assets/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js')}}"></script>
+    <script src="{{url_for('static', filename='assets/js/dashboard.min.js')}}"></script>
+    <script src="{{url_for('static', filename='assets/js/apps.min.js')}}"></script>
+    {% block script %}{% endblock %}
+    <!-- ================== END PAGE LEVEL JS ================== -->
 
-<script>
-    $(document).ready(function() {
-        App.init();
-    });
-</script>
+    <script>
+        $(document).ready(function() {
+            App.init();
+        });
+    </script>
 </body>
+
 </html>

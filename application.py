@@ -21,13 +21,15 @@ def crear_perfiles():
     import json
     import pickle
     from sklearn.model_selection import train_test_split
+    from sklearn.metrics import log_loss
     with open('codebeautify.json', 'rb') as encuestas:
         data = json.load(encuestas)
     diccionaro = data["dict"]
     data = data["data"]
     features = []
     labels = []
-    model = GradientBoostingClassifier()
+    model = GradientBoostingClassifier(
+        n_estimators=100, max_depth=3, learning_rate=0.1,)
     for value in data:
         tupla = ()
         labels.append(int(value["carrera"]))
@@ -40,8 +42,8 @@ def crear_perfiles():
                 else:
                     tupla = tupla + tuple([1])
         features.append(tupla)
-    x_train, x_test, y_train, y_test = train_test_split(features, labels, test_size=0.2, shuffle=True)
-
+    x_train, x_test, y_train, y_test = train_test_split(
+        features, labels, test_size=0.2, shuffle=True)
     model.fit(x_train, y_train)
     filename = "finalized_model.sav"
     pickle.dump(model, open(filename, 'wb'))

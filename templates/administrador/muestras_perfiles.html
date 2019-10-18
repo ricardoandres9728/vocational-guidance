@@ -1,0 +1,17 @@
+{% extends 'administrador/dashboard_administrador.html' %} {% block title %}Colegio | Administrar{% endblock %} {% block header_page %}
+<h1 class="page-header">
+    <div class="row">
+        Administrar <small>Muestras</small>
+    </div>
+</h1>
+{% endblock %} {% block content_page %}
+<div class="row">
+    <select>
+        <option v-for="encuesta in encuestas"></option>
+    </select>
+</div>
+{% endblock %} {% block script %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.16.2/axios.min.js"></script>
+<script src="https://unpkg.com/vue@2.4.2"></script>
+<script src="{{url_for('static', filename='archivos_vue/amuestras_perfiles.js')}}"></script>
+{% endblock %}

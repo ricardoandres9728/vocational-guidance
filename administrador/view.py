@@ -378,3 +378,8 @@ def cargar_perfiles():
 @administrador_app.route('/encuesta/crear')
 def crear_encuesta():
     return render_template('administrador/crear_encuesta.html')
+
+
+@administrador_app.route('/encuesta/muestras')
+def muestras_perfiles():
+    return render_template('administrador/muestras_perfiles.html')
