@@ -4,7 +4,7 @@ from usuario.model import Usuario
 from usuario.model import Feedback
 from perfil.model import Perfil
 from aspirante.model import Aspirante
-from encuesta.model import Encuesta, Pregunta, Respuesta, Recomendacion
+from encuesta.model import Encuesta, Pregunta, Respuesta, Recomendacion, Muestra, MuestraRespuesta
 from colegio.model import AspiranteColegio
 from application import db
 from werkzeug.security import generate_password_hash
@@ -274,7 +274,8 @@ def modificar_encuesta():
                 db.session.add(recomendacion)
             else:
                 recomendacion = Recomendacion(
-                    recomendacion=pregunta.get("recomendacion")[0].get("recomendacion"),
+                    recomendacion=pregunta.get("recomendacion")[
+                        0].get("recomendacion"),
                     id_pregunta=new_pregunta.id
                 )
                 db.session.add(recomendacion)
@@ -383,3 +384,66 @@ def crear_encuesta():
 @administrador_app.route('/encuesta/muestras')
 def muestras_perfiles():
     return render_template('administrador/muestras_perfiles.html')
+
+
+@administrador_app.route('/encuesta/cargar/muestras',  methods=["POST"])
+def cargar_muestras():
+    data = request.json
+    encuestas = Muestra.query.filter_by(id_encuesta=data["encuesta"]).all()
+    for encuesta in encuestas:
+        encuesta.perfil = Perfil.query.filter_by(id=encuesta.id_perfil).first()
+    return jsonify(encuestas)
+
+
+@administrador_app.route('/encuesta/eliminar/muestras',  methods=["POST"])
+def eliminar_muestras():
+    data = request.json
+    encuesta = Muestra.query.filter_by(id_encuesta=data["encuesta"]).first()
+    db.session.delete(encuesta)
+    db.session.commit()
+    return jsonify(encuesta), 200
+
+
+@administrador_app.route('/encuesta/crear/muestras',  methods=["POST"])
+def crear_muestra():
+    data = request.json
+    muestra = Muestra(
+        id_encuesta=data["encuesta_id"],
+        id_perfil=data["perfil_id"],
+        live=True
+    )
+    db.session.add(muestra)
+    db.session.flush()
+    for key, respuesta in data.get("respuestas").items():
+        respuesta = MuestraRespuesta(
+            id_muestra=muestra.id,
+            id_pregunta=(int(key)),
+            valor=(int(respuesta))
+        )
+        db.session.add(respuesta)
+        db.session.flush()
+    db.session.commit()
+    return "Ok", 200
+
+
+@administrador_app.route('/encuesta/entrenar/muestras',  methods=["POST"])
+def entrenar_encuesta():
+    from sklearn.ensemble import GradientBoostingClassifier
+    import pickle
+    data = request.json
+    muestras = Muestra.query.filter_by(id_encuesta=data["encuesta"]).all()
+    features = []
+    labels= []
+    model = GradientBoostingClassifier(
+        n_estimators=100, max_depth=3, learning_rate=0.1,)
+    for muestra in muestras:
+        tupla = ()
+        labels.append(muestra.id_perfil)
+        respuestas = MuestraRespuesta.query.filter_by(id_muestra=muestra.id).all()
+        for respuesta in respuestas:
+            tupla = tupla + tuple([int(respuesta.valor)])
+        features.append(tupla)   
+    model.fit(features, labels)
+    filename = str(data["encuesta"]) + ".sav"
+    pickle.dump(model, open(filename, 'wb'))
+    return "Ok", 200

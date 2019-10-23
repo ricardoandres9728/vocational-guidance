@@ -42,18 +42,57 @@ def crear_perfiles():
                 else:
                     tupla = tupla + tuple([1])
         features.append(tupla)
-    x_train, x_test, y_train, y_test = train_test_split(
-        features, labels, test_size=0.2, shuffle=True)
-    model.fit(x_train, y_train)
-    filename = "finalized_model.sav"
+    model.fit(features, labels)
+    filename = "1.sav"
     pickle.dump(model, open(filename, 'wb'))
 
 
 def insertar_datos_iniciales():
     from usuario.model import TipoUsuario
     from usuario.model import Usuario
-    from encuesta.model import Encuesta, Pregunta, Respuesta, Recomendacion
+    from encuesta.model import Encuesta, Pregunta, Respuesta, Recomendacion, Muestra, MuestraRespuesta
     from perfil.model import Perfil
+
+    @event.listens_for(MuestraRespuesta.__table__, 'after_create')
+    def insetar_muestras(*args, **kwargs):
+        import json
+        with open('codebeautify.json', 'rb') as encuestas:
+            data = json.load(encuestas)
+        diccionaro = data["dict"]
+        data = data["data"]
+        dict_ids = {
+            "funcionamiento": 1,
+            "personas-maquinas": 2,
+            "ultima-generacion": 3,
+            "lenguaje": 4,
+            "lenguajes-conocidos": 5,
+            "matematicas": 6,
+            "cacharrero": 7,
+            "algoritmo": 8,
+            "manejar-pc": 9,
+            "trabajan": 10,
+            "formacion-madre": 11,
+            "formacion-padre": 12
+        }
+
+        for value in data:
+            muestra = Muestra(
+            id_encuesta=1,
+            live=True)
+            if int(value["carrera"]) == 1:
+                muestra.id_perfil = 2
+            else:
+                muestra.id_perfil = 1
+            db.session.add(muestra)
+            db.session.flush()
+            for dic in diccionaro:
+                respuesta = MuestraRespuesta(
+                    id_muestra=muestra.id,
+                    valor=int(value[dic]),
+                    id_pregunta=int(dict_ids.get(dic)))
+                db.session.add(respuesta)
+        db.session.commit()    
+
     @event.listens_for(TipoUsuario.__table__, 'after_create')
     def insentar_tipos_usuario(*args, **kwargs):
         db.session.add(TipoUsuario(nombre="administrador", id=0))
@@ -74,6 +113,11 @@ def insertar_datos_iniciales():
 
     @event.listens_for(Recomendacion.__table__, 'after_create')
     def intertar_encuesta(*args, **kwargs):
+        perfil = Perfil(
+            nombre="Psicologia"
+        )
+        db.session.add(perfil)
+        db.session.flush()
         perfil = Perfil(
             nombre="Ing. Sistemas"
         )
@@ -569,6 +613,7 @@ def insertar_datos_iniciales():
         )
         db.session.add(respuesta)
         db.session.commit()
+       
 
 
 def registrar_blueprints(app):

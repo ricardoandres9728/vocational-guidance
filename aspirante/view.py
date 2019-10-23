@@ -18,7 +18,8 @@ def encuesta():
 
 @aspirante_app.route('/encuesta/guardar', methods=["POST"])
 def encuesta_guardar():
-    form = request.json
+    data = request.json
+    form = data.get("respuestas")
     usuario = Usuario.query.filter_by(id=session["id"]).first()
     aspirante = Aspirante.query.filter_by(id_usuario=usuario.id).first()
     aspirante.respuestas = []
@@ -39,9 +40,12 @@ def encuesta_guardar():
             aspirante.respuestas.append(respuesta)
 
     db.session.commit()
-    filename = "finalized_model.sav"
-    model = pickle.load(open(filename, 'rb'))
-    respuesta = model.predict([valores])
+    filename = str(data["encuesta"]) + ".sav"
+    try:
+        model = pickle.load(open(filename, 'rb'))
+        respuesta = model.predict([valores])
+    except FileNotFoundError:
+        return "Error", 400
     if respuesta[0] == 1:
         mensaje = True
     else:

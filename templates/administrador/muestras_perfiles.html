@@ -4,14 +4,84 @@
         Administrar <small>Muestras</small>
     </div>
 </h1>
-{% endblock %} {% block content_page %}
-<div class="row">
-    <select>
-        <option v-for="encuesta in encuestas"></option>
+{% endblock %} {% block content_page %} {%raw%}
+<div id="main">
+    <div class="row">
+        <div class="col-md-4">
+            <select class="form-control" @change="encuestaCambiada">
+        <option :value="null" selected disabled>Seleccione Perfil</option>
+        <option v-for="(encuesta, index) in encuestas" :key="index" :value="index">{{encuesta.perfil}}</option>
     </select>
+        </div>
+    </div>
+    <div class="row m-t-10" v-if="selectedEncuesta">
+        <div class="panel panel-inverse">
+            <div class="panel-heading">
+                Encuesta para {{ selectedEncuesta.perfil}}
+            </div>
+            <div class="panel-body">
+                <div class="row m-b-10" v-for="(pregunta, index) in selectedEncuesta.preguntas">
+                    <div class="col-md-8">
+                        <p>{{(index+1) +" - "+ pregunta.pregunta}}</p>
+                    </div>
+                    <div class="col-md-4">
+                        <input class="form-control" v-model="newMuestra.respuestas[pregunta.id]" type="number" min="1" max="5" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-8">
+                        <label>Perfil de la muestra</label>
+                    </div>
+                    <div class="col-md-4">
+                        <select v-model="newMuestra.perfil_id" class="form-control">
+                            <option :value="null">Seleccione</option>
+                            <option v-for="perfil in perfiles" :key="perfil.id" :value="perfil.id">{{perfil.nombre}}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-footer">
+                <button @click="agregarMuestra" class="btn btn-default">Agregar Muestra</button>
+                <button @click="entrenarMuestra" class="btn btn-default">Entrenar</button>
+            </div>
+        </div>
+        <div class="panel panel-inverse">
+            <div class="panel-heading">
+                Muestras para {{ selectedEncuesta.perfil}}
+            </div>
+            <div class="panel-body">
+                <div class="row table-responsive">
+                    <table class="table col-md-12">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Perfil
+                                </th>
+                                <th v-for="pregunta in selectedEncuesta.preguntas">
+                                    {{pregunta.pregunta}}
+                                </th>
+
+                                <th>
+                                    Eliminar
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="muestra in muestras">
+                                <td>{{muestra.perfil.nombre}}</td>
+                                <td v-for="respuesta in muestra.respuestas">{{respuesta.valor}}</td>
+
+                                <td><button @click="eliminarMuestra(muestra.id)" class="btn btn-danger btn-xs">Eliminar</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-{% endblock %} {% block script %}
+{%endraw%} {% endblock %} {% block script %}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.16.2/axios.min.js"></script>
 <script src="https://unpkg.com/vue@2.4.2"></script>
-<script src="{{url_for('static', filename='archivos_vue/amuestras_perfiles.js')}}"></script>
+<script src="{{url_for('static', filename='archivos_vue/muestras_perfiles.js')}}"></script>
 {% endblock %}

@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: 7ee05d05a754
+Revision ID: 613de977a694
 Revises: 
-Create Date: 2019-07-17 12:09:15.700153
+Create Date: 2019-10-22 14:51:12.032687
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '7ee05d05a754'
+revision = '613de977a694'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -74,6 +74,15 @@ def upgrade():
     sa.ForeignKeyConstraint(['id_usuario'], ['usuario.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
+    op.create_table('muestra',
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('id_encuesta', sa.Integer(), nullable=True),
+    sa.Column('id_perfil', sa.Integer(), nullable=True),
+    sa.Column('live', sa.Boolean(), nullable=True),
+    sa.ForeignKeyConstraint(['id_encuesta'], ['encuesta.id'], ),
+    sa.ForeignKeyConstraint(['id_perfil'], ['perfil.id'], ),
+    sa.PrimaryKeyConstraint('id')
+    )
     op.create_table('pregunta',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('pregunta', sa.String(), nullable=True),
@@ -90,6 +99,15 @@ def upgrade():
     sa.ForeignKeyConstraint(['id_colegio'], ['colegio.id'], ),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('id_aspirante')
+    )
+    op.create_table('muestra_respuesta',
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('id_muestra', sa.Integer(), nullable=True),
+    sa.Column('id_pregunta', sa.Integer(), nullable=True),
+    sa.Column('valor', sa.Integer(), nullable=True),
+    sa.ForeignKeyConstraint(['id_muestra'], ['muestra.id'], ),
+    sa.ForeignKeyConstraint(['id_pregunta'], ['pregunta.id'], ),
+    sa.PrimaryKeyConstraint('id')
     )
     op.create_table('recomendacion',
     sa.Column('id', sa.Integer(), nullable=False),
@@ -123,8 +141,10 @@ def downgrade():
     op.drop_table('aspirante_respuesta')
     op.drop_table('respuesta')
     op.drop_table('recomendacion')
+    op.drop_table('muestra_respuesta')
     op.drop_table('aspirante_colegio')
     op.drop_table('pregunta')
+    op.drop_table('muestra')
     op.drop_table('feedback')
     op.drop_table('colegio')
     op.drop_table('aspirante')

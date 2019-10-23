@@ -68,8 +68,11 @@ const vm = new Vue({
                         axios({
                             method: "POST",
                             url: "/aspirante/encuesta/guardar",
-                            headers: {"X-CSRFToken": this.token},
-                            data: this.respuestas
+                            headers: { "X-CSRFToken": this.token },
+                            data: {
+                                respuestas: this.respuestas,
+                                encuesta: this.encuesta.id
+                            }
                         }).then((respuesta) => {
                             swal({
                                 title: 'Bien!',
@@ -105,7 +108,7 @@ const vm = new Vue({
             axios({
                 method: "POST",
                 url: "/administrador/encuesta/cargar/todos",
-                headers: {"X-CSRFToken": this.token}
+                headers: { "X-CSRFToken": this.token }
             }).then((respuesta) => {
                 self.encuestas = respuesta.data;
             })
@@ -115,7 +118,7 @@ const vm = new Vue({
             axios({
                 method: 'post',
                 url: '/aspirante/newsletter',
-                headers: {"X-CSRFToken": self.token}
+                headers: { "X-CSRFToken": self.token }
             })
         },
         cambiar_password() {
@@ -138,8 +141,8 @@ const vm = new Vue({
                         data: {
                             password: self.aspirante.password,
                         },
-                        headers: {"X-CSRFToken": self.token}
-                    }).then(function (respuesta) {
+                        headers: { "X-CSRFToken": self.token }
+                    }).then(function(respuesta) {
                         if (respuesta.data == "ok") {
                             swal({
                                 title: 'Bien!',
@@ -181,8 +184,8 @@ const vm = new Vue({
                         data: {
                             aspirante: aux,
                         },
-                        headers: {"X-CSRFToken": self.token}
-                    }).then(function (respuesta) {
+                        headers: { "X-CSRFToken": self.token }
+                    }).then(function(respuesta) {
                         if (respuesta.data == "ok") {
                             swal({
                                 title: 'Bien!',
@@ -208,11 +211,10 @@ const vm = new Vue({
             axios({
                 method: "POST",
                 url: "/aspirante/cargar",
-                headers: {"X-CSRFToken": self.token}
+                headers: { "X-CSRFToken": self.token }
             }).then((respuesta) => {
                 self.aspirante = respuesta.data;
             })
         },
     }
 })
-
