@@ -27,8 +27,13 @@ def encuesta_guardar():
     recomendaciones = []
     valores = []
     if len(form) > 0:
+        perfect_model = []
         respuestas_form = form
-        perfect_model = [4.967, 1.002, 4.949, 4.989, 3.795, 4.118, 4.979, 2.097, 4.897, 3.529, 3.048, 4.997]
+        try:
+            filename = str(data["encuesta"]) + "-regression.sav"
+            perfect_model = pickle.load(open(filename, 'rb'))
+        except FileNotFoundError:
+            return "Error", 400
         for (index, respuesta_form) in enumerate(respuestas_form):
             respuesta = Respuesta.query.filter_by(id=respuesta_form).first()
             distancia = math.sqrt(math.pow((respuesta.valor - perfect_model[index]), 2))

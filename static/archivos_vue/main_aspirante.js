@@ -101,7 +101,19 @@ const vm = new Vue({
             }
         },
         mostrar_encuesta() {
+            function compare(a, b) {
+                const idA = a.id;
+                const idB = b.id;
+                let comparison = 0;
+                if (idA > idB) {
+                    comparison = 1;
+                } else if (idA < idB) {
+                    comparison = -1;
+                }
+                return comparison;
+            }
             this.encuesta = this.encuestas[this.id_encuesta];
+            this.encuesta.preguntas = this.encuesta.preguntas.sort(compare);
         },
         cargar_encuestas() {
             var self = this;
@@ -142,7 +154,7 @@ const vm = new Vue({
                             password: self.aspirante.password,
                         },
                         headers: { "X-CSRFToken": self.token }
-                    }).then(function(respuesta) {
+                    }).then(function (respuesta) {
                         if (respuesta.data == "ok") {
                             swal({
                                 title: 'Bien!',
@@ -185,7 +197,7 @@ const vm = new Vue({
                             aspirante: aux,
                         },
                         headers: { "X-CSRFToken": self.token }
-                    }).then(function(respuesta) {
+                    }).then(function (respuesta) {
                         if (respuesta.data == "ok") {
                             swal({
                                 title: 'Bien!',
@@ -216,5 +228,29 @@ const vm = new Vue({
                 self.aspirante = respuesta.data;
             })
         },
+        pdf() {
+            const doc = new jsPDF("l", "mm", "a4");
+      /** WITH CSS */
+      var canvasElement = document.createElement("canvas");
+      html2canvas(this.$refs.recomendaciones, { canvas: canvasElement })
+        .then(canvas => {
+          const img = canvas.toDataURL("image/jpeg", 0.8);
+          doc.addImage(
+            img,
+            "JPEG",
+            0,
+            0,
+            doc.internal.pageSize.getWidth(),
+            doc.internal.pageSize.getHeight()
+          );
+          doc.save("sample.pdf");
+        })
+        .catch(error => {
+          this.$swal({
+            title: "Error downloading pdf",
+            type: "error"
+          });
+        });
+        }
     }
 })

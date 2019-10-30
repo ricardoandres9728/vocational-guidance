@@ -434,6 +434,7 @@ def entrenar_encuesta():
     muestras = Muestra.query.filter_by(id_encuesta=data["encuesta"]).all()
     features = []
     labels= []
+    avg = {}
     model = GradientBoostingClassifier(
         n_estimators=100, max_depth=3, learning_rate=0.1,)
     for muestra in muestras:
@@ -442,8 +443,20 @@ def entrenar_encuesta():
         respuestas = MuestraRespuesta.query.filter_by(id_muestra=muestra.id).all()
         for respuesta in respuestas:
             tupla = tupla + tuple([int(respuesta.valor)])
-        features.append(tupla)   
+        features.append(tupla) 
+    for feature in zip(features, labels):
+        if feature[1] == 2: 
+            for (index, value) in enumerate(feature[0]):
+                if(index in avg):
+                    avg[index].append(value)
+                else:
+                    avg[index] = [value]
+    promedio = []
+    for value in avg:
+        promedio.append(round(sum(avg[value])/len(avg[value]), 3))
     model.fit(features, labels)
+    filename = str(data["encuesta"]) + "-regression.sav"
+    pickle.dump(promedio, open(filename, 'wb'))
     filename = str(data["encuesta"]) + ".sav"
     pickle.dump(model, open(filename, 'wb'))
     return "Ok", 200
