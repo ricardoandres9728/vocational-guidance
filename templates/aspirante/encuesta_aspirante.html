@@ -1,5 +1,4 @@
-{% extends 'aspirante/dashboard_aspirante.html' %} {% block title %}Encuesta | Responder{% endblock %}
-{% block header_page %}
+{% extends 'aspirante/dashboard_aspirante.html' %} {% block title %}Encuesta | Responder{% endblock %} {% block header_page %}
 <h1 class="page-header">
     <div class="row">
         <div class="col-md-4">Encuesta
@@ -32,8 +31,7 @@
 </h1>
 {% endblock %} {% block content_page %} {% raw %}
 <div class="row" v-if="!encuesta">
-    <div class="jumbotron"
-        style="background-image: url('../../static/assets/img/login-bg/bg-3.jpg'); border-radius: 10px">
+    <div class="jumbotron" style="background-image: url('../../static/assets/img/login-bg/bg-3.jpg'); border-radius: 10px">
         <div class="row">
             <div class="col-md-2"></div>
             <div class="col-md-8">
@@ -41,8 +39,7 @@
                     <div class="col-md-1"></div>
                     <div class="col-md-10">
                         <h2 class="text-justify text-white">
-                            No has cargado ninguna encuesta, por favor elige el perfil al que deseas aplicar la encuesta
-                            y da click en el botón "Responder encuesta" ubicado en el panel superior.
+                            No has cargado ninguna encuesta, por favor elige el perfil al que deseas aplicar la encuesta y da click en el botón "Responder encuesta" ubicado en el panel superior.
                         </h2>
                     </div>
                     <div class="col-md-1"></div>
@@ -83,14 +80,11 @@
         <div class="panel-footer">
             <div class="text-center">
                 <div class="btn-group">
-                    <button class="btn text-white" style="background: rgb(19,61,57)" @click="prev"
-                        v-if="id_pregunta>0">Anterior pregunta
+                    <button class="btn text-white" style="background: rgb(19,61,57)" @click="prev" v-if="id_pregunta>0">Anterior pregunta
                     </button>
-                    <button class="btn text-white" style="background: rgb(19,61,57)" @click="next"
-                        v-if="id_pregunta<encuesta.preguntas.length - 1">Siguiente pregunta
+                    <button class="btn text-white" style="background: rgb(19,61,57)" @click="next" v-if="id_pregunta<encuesta.preguntas.length - 1">Siguiente pregunta
                     </button>
-                    <button class="btn btn-warning" @click="finalizar_encuesta"
-                        v-if="id_pregunta==encuesta.preguntas.length - 1">Finalizar
+                    <button class="btn btn-warning" @click="finalizar_encuesta" v-if="id_pregunta==encuesta.preguntas.length - 1">Finalizar
                     </button>
                 </div>
             </div>
@@ -98,7 +92,7 @@
     </div>
 </div>
 <!--Recomendaciones-->
-<div class="row" v-if="recomendaciones.length > 0 || mensaje" >
+<div class="row" v-if="recomendaciones.length > 0 || mensaje">
     <div class="panel panel-inverse">
         <div class="panel-heading">
             Recomendaciones
@@ -117,7 +111,5 @@
         </div>
     </div>
 </div>
-<button v-if="recomendaciones['recomendaciones'] &&  recomendaciones['recomendaciones'].length > 0 || mensaje"
-    class="btn btn-lg btn-primary" @click="pdf">Descargar PDF
-</button>
-{% endraw %} {% endblock %}
+<button v-if="recomendaciones['recomendaciones'] &&  recomendaciones['recomendaciones'].length > 0 || mensaje" class="btn btn-lg btn-primary" @click="pdf">Descargar PDF
+</button> {% endraw %} {% endblock %}

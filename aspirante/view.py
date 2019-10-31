@@ -1,6 +1,6 @@
 import pickle
 import math
-from flask import Blueprint, request, render_template, session, jsonify, redirect, url_for
+from flask import Blueprint, request, render_template, session, jsonify, redirect, url_for, make_response
 from .model import Aspirante
 from usuario.model import Usuario, Feedback
 from colegio.model import Colegio, AspiranteColegio
@@ -9,6 +9,28 @@ from application import db
 from werkzeug.security import generate_password_hash, check_password_hash
 
 aspirante_app = Blueprint("aspirante", __name__, url_prefix="/aspirante")
+
+
+@aspirante_app.route("/generate/pdf")
+def pdf():
+    import pdfkit
+    usuario = Aspirante.query.filter_by(id_usuario=session["id"]).first()
+    correo = Usuario.query.filter_by(id=session["id"]).first().correo
+    template = render_template("aspirante/pdf.html", usuario=usuario, correo=correo)
+    options = {
+        'page-size': 'Letter',
+        'margin-top': '0.75in',
+        'margin-right': '0.75in',
+        'margin-bottom': '0.75in',
+        'margin-left': '0.75in',
+        'encoding': "UTF-8",
+        'no-outline': None
+    }
+    config = pdfkit.configuration(wkhtmltopdf='C:\\Program Files\\wkhtmltopdf\\bin\\wkhtmltopdf.exe')
+    pdf = pdfkit.from_string(template, False, options=options, configuration=config)
+    response = make_response(pdf)
+    response.headers['Content-Type'] = 'application/pdf'
+    return response
 
 
 @aspirante_app.route('/encuesta/responder', methods=["GET"])
@@ -36,9 +58,11 @@ def encuesta_guardar():
             return "Error", 400
         for (index, respuesta_form) in enumerate(respuestas_form):
             respuesta = Respuesta.query.filter_by(id=respuesta_form).first()
-            distancia = math.sqrt(math.pow((respuesta.valor - perfect_model[index]), 2))
+            distancia = math.sqrt(
+                math.pow((respuesta.valor - perfect_model[index]), 2))
             if distancia > 2:
-                recomendacion = Recomendacion.query.filter_by(id=respuesta.id_pregunta).first()
+                recomendacion = Recomendacion.query.filter_by(
+                    id=respuesta.id_pregunta).first()
                 if recomendacion:
                     recomendaciones.append(recomendacion.recomendacion)
             valores.append(respuesta.valor)
@@ -90,7 +114,8 @@ def cambiar_pass():
         data = request.json
         usuario = Usuario.query.filter_by(id=session["id"]).first()
         if check_password_hash(usuario.password, data.get("password").get("anterior")):
-            hashed_pass = generate_password_hash(data.get("password").get("nueva"))
+            hashed_pass = generate_password_hash(
+                data.get("password").get("nueva"))
             usuario.password = hashed_pass
             db.session.commit()
             return "ok"
@@ -122,9 +147,11 @@ def cargar_aspirante():
     if request.method == "POST":
         usuario = Usuario.query.filter_by(id=session["id"]).first()
         aspirante = Aspirante.query.filter_by(id_usuario=usuario.id).first()
-        aspirante_colegio = AspiranteColegio.query.filter_by(id_aspirante=aspirante.id).first()
+        aspirante_colegio = AspiranteColegio.query.filter_by(
+            id_aspirante=aspirante.id).first()
         if aspirante_colegio:
-            colegio = Colegio.query.filter_by(id=aspirante_colegio.id_colegio).first()
+            colegio = Colegio.query.filter_by(
+                id=aspirante_colegio.id_colegio).first()
             colegio = colegio.nombre
         else:
             colegio = None
