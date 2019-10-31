@@ -227,9 +227,7 @@ const vm = new Vue({
             }).then((respuesta) => {
                 self.aspirante = respuesta.data;
             })
-        },
-        pdf() {
-
         }
+
     }
 })

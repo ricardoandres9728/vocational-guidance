@@ -16,7 +16,21 @@ def pdf():
     import pdfkit
     usuario = Aspirante.query.filter_by(id_usuario=session["id"]).first()
     correo = Usuario.query.filter_by(id=session["id"]).first().correo
-    template = render_template("aspirante/pdf.html", usuario=usuario, correo=correo)
+    respuestas_form = session["pdf"].get("respuestas")
+    recomendaciones = session["pdf"].get("recomendaciones")
+    respuesta = session["pdf"].get("respuesta")
+    respuestas = []
+    preguntas = []
+    for respuesta in respuestas_form:
+        respuesta = Respuesta.query.filter_by(id=respuesta).first()
+        respuestas.append(respuesta.respuesta)
+        preguntas.append(Pregunta.query.filter_by(
+            id=respuesta.id_pregunta).first().pregunta)
+    template = render_template(
+        "aspirante/pdf.html", usuario=usuario, correo=correo,
+        recomendaciones=recomendaciones,
+        respuesta=respuesta,
+        respuestas=zip(preguntas, respuestas))
     options = {
         'page-size': 'Letter',
         'margin-top': '0.75in',
@@ -26,8 +40,10 @@ def pdf():
         'encoding': "UTF-8",
         'no-outline': None
     }
-    config = pdfkit.configuration(wkhtmltopdf='C:\\Program Files\\wkhtmltopdf\\bin\\wkhtmltopdf.exe')
-    pdf = pdfkit.from_string(template, False, options=options, configuration=config)
+    config = pdfkit.configuration(
+        wkhtmltopdf='C:\\Program Files\\wkhtmltopdf\\bin\\wkhtmltopdf.exe')
+    pdf = pdfkit.from_string(
+        template, False, options=options, configuration=config)
     response = make_response(pdf)
     response.headers['Content-Type'] = 'application/pdf'
     return response
@@ -79,9 +95,14 @@ def encuesta_guardar():
         mensaje = True
     else:
         mensaje = False
+    session["pdf"] = {
+        "respuesta": mensaje,
+        "recomendaciones": recomendaciones,
+        "respuestas": respuestas_form
+    }
     return jsonify({
         "respuesta": mensaje,
-        "recomendaciones": recomendaciones
+        "recomendaciones": recomendaciones,
     }), 200
 
 

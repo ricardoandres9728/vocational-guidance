@@ -26,22 +26,40 @@
     </table>
 
     <h2>Respuestas</h2>
-    <table>
+    <table border="1">
+        <thead>
+            <tr>
+                <td>
+                    Pregunta
+                </td>
+                <td>
+                    Respuesta
+                </td>
+
+            </tr>
+        </thead>
         <tbody>
+            {%for (pregunta ,respuesta) in respuestas %}
             <tr>
-                <td>Nombre</td>
-                <td style="color: red;">{{usuario.nombres + " " + usuario.apellidos}}</td>
+                <td>{{pregunta}}</td>
+                <td style="color: red;">{{respuesta}}</td>
             </tr>
-            <tr>
-                <td>Correo</td>
-                <td style="color: red;">{{correo}}</td>
-            </tr>
-            <tr>
-                <td>Colegio</td>
-                <td style="color: red;">No disponible</td>
-            </tr>
+
+            {%endfor%}
         </tbody>
     </table>
+
+    <h2>Sugerencias</h2>
+    <h3>{% if respuesta == True %} Eres apto para el perfil seleccionado {% else %} Lo sentimos, no estas acorde al perfil {% endif %}</h3>
+    <br>
+    <ul>
+        {%for recomendacion in recomendaciones %}
+        <li>
+            {{recomendacion}}
+        </li>
+
+        {%endfor%}
+    </ul>
 </body>
 
 </html>

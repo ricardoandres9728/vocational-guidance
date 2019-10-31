@@ -111,5 +111,5 @@
         </div>
     </div>
 </div>
-<button v-if="recomendaciones['recomendaciones'] &&  recomendaciones['recomendaciones'].length > 0 || mensaje" class="btn btn-lg btn-primary" @click="pdf">Descargar PDF
-</button> {% endraw %} {% endblock %}
+<a href="/aspirante/generate/pdf" v-if="recomendaciones['recomendaciones'] &&  recomendaciones['recomendaciones'].length > 0 || mensaje" class="btn btn-lg btn-primary" target="_blank">Descargar PDF
+</a> {% endraw %} {% endblock %}
