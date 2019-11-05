@@ -84,7 +84,7 @@ const vm = new Vue({
                             })
                             this.recomendaciones = respuesta.data.recomendaciones;
                             console.log(this.recomendaciones)
-                            if (respuesta.data.mensaje) {
+                            if (respuesta.data.respuesta) {
                                 this.mensaje = "Felicitaciones, cumples con el perfil"
                             } else {
                                 this.mensaje = 'Lo sentimos, no cumples con el perfil'

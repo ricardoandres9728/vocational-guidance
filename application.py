@@ -166,7 +166,7 @@ def insertar_datos_iniciales():
         )
         db.session.add(respuesta)
         recomendacion = Recomendacion(
-            recomendacion="Interesate más",
+            recomendacion="Para entender lo que hacemos como ingenieros de sistemas es importante saber cómo funcionan los computadores, es por esta razón que te recomendamos interesarte más por el funcionamiento interno de los computadores.",
             id_pregunta=pregunta.id
         )
         db.session.add(recomendacion)
@@ -207,11 +207,6 @@ def insertar_datos_iniciales():
             valor=5
         )
         db.session.add(respuesta)
-        recomendacion = Recomendacion(
-            recomendacion="",
-            id_pregunta=pregunta.id
-        )
-        db.session.add(recomendacion)
         pregunta = Pregunta(
             pregunta="¿Qué tanto te interesa trabajar con tecnología de última generación?",
             id_encuesta=encuesta.id
@@ -249,7 +244,7 @@ def insertar_datos_iniciales():
         )
         db.session.add(respuesta)
         recomendacion = Recomendacion(
-            recomendacion="Compra PC nuevo",
+            recomendacion="Para el desarrollo de la carrera, es importante que te mantengas al actualizado respecto a las nuevas tecnologías y metodologías en el mundo de la computación.",
             id_pregunta=pregunta.id
         )
         db.session.add(recomendacion)
@@ -290,7 +285,7 @@ def insertar_datos_iniciales():
         )
         db.session.add(respuesta)
         recomendacion = Recomendacion(
-            recomendacion="",
+            recomendacion="Te recomendamos doocumentarte sobre lo que es un lenguaje de programación, te servirá para desenvolverte en el programa de ingeniería de sistemas.",
             id_pregunta=pregunta.id
         )
         db.session.add(recomendacion)
@@ -331,7 +326,7 @@ def insertar_datos_iniciales():
         )
         db.session.add(respuesta)
         recomendacion = Recomendacion(
-            recomendacion="Aprende más",
+            recomendacion="Desenvolverte en uno o más lenguajes de programación representa una ventaja a la hora de emprender los estudios de ingeniería de sistemas, investiga sobre los distintos lenguajes de programación.",
             id_pregunta=pregunta.id
         )
         db.session.add(recomendacion)
@@ -372,7 +367,7 @@ def insertar_datos_iniciales():
         )
         db.session.add(respuesta)
         recomendacion = Recomendacion(
-            recomendacion="Echale ganas a la matematica",
+            recomendacion="Te recomendamos mejorar tus habilidades de matemáticas.",
             id_pregunta=pregunta.id
         )
         db.session.add(recomendacion)
@@ -413,7 +408,7 @@ def insertar_datos_iniciales():
         )
         db.session.add(respuesta)
         recomendacion = Recomendacion(
-            recomendacion="Desbarata cosas",
+            recomendacion="Interesate por el funcionamiento de los implementos tecnológicos.",
             id_pregunta=pregunta.id
         )
         db.session.add(recomendacion)
@@ -454,7 +449,7 @@ def insertar_datos_iniciales():
         )
         db.session.add(respuesta)
         recomendacion = Recomendacion(
-            recomendacion="Aprende que es",
+            recomendacion="Las habilidades de lógica y algoritma son un ítem fuerte para un ingeniero de sistemas, representan habilidades que te ayudarán a resolver problemas y situaciones de la vida real, aprende más sobre este tema.",
             id_pregunta=pregunta.id
         )
         db.session.add(recomendacion)
@@ -495,7 +490,7 @@ def insertar_datos_iniciales():
         )
         db.session.add(respuesta)
         recomendacion = Recomendacion(
-            recomendacion="Practica",
+            recomendacion="Practica tus habilidades informáticas.",
             id_pregunta=pregunta.id
         )
         db.session.add(recomendacion)
@@ -639,7 +634,13 @@ def create_app(**config_overrides):
     app.json_encoder = AlchemyEncoder
     app.config.update(config_overrides)
     app.config.update(dict(
-
+        MAIL_SERVER='smtp.gmail.com',
+        MAIL_PORT=587,
+        MAIL_USE_TLS=True,
+        EMAIL_TIMEOUT=30,
+        MAIL_USE_SSL=False,
+        MAIL_USERNAME='ovocacional35@gmail.com',
+        MAIL_PASSWORD='Michi2006.',
     ))
     db.init_app(app)
     migrate.init_app(app=app, db=db)

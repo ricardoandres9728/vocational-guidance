@@ -460,3 +460,22 @@ def entrenar_encuesta():
     filename = str(data["encuesta"]) + ".sav"
     pickle.dump(model, open(filename, 'wb'))
     return "Ok", 200
+
+@administrador_app.route('/news/enviar',  methods=["GET"])
+def enviar_news():
+    from application import mail
+    from flask_mail import Message
+    from flask import current_app
+    from aspirante.model import Aspirante
+    aspirantes = Aspirante.query.filter_by(live=True, newsletter=True)
+    correos = []
+    for aspirante in aspirantes:
+        usuario = Usuario.query.filter_by(id=aspirante.id_usuario).first()
+        correos.append(usuario.correo)
+    msg = Message("Newsletter",
+                  sender="ovocacional35@gmail.com",
+                  recipients=correos)
+    with current_app.open_resource("calendario-academico.pdf") as fp:
+        msg.attach("calendario-academico.pdf", "application/octect-stream", fp.read())
+    mail.send(msg)
+    return "ok"

@@ -7,10 +7,10 @@ const vm = new Vue({
         aspirantes: 0,
         encuestas: 0,
         perfiles: 0,
-        feedback:[],
-        password:{
-            anterior:'',
-            nueva:''
+        feedback: [],
+        password: {
+            anterior: '',
+            nueva: ''
         }
     },
     created() {
@@ -18,7 +18,7 @@ const vm = new Vue({
     },
     methods: {
 
-        cargar_principal(){
+        cargar_principal() {
             var self = this;
             axios({
                 method: "POST",
@@ -31,7 +31,27 @@ const vm = new Vue({
                 self.perfiles = respuesta.data.perfiles;
                 self.feedback = respuesta.data.feedback;
                 self.correo = respuesta.data.correo;
-        })
+            })
         },
+        enviarNewsletter() {
+            axios({
+                method: "GET",
+                url: "/administrador/news/enviar",
+                headers: { "X-CSRFToken": self.token }
+            }).then((respuesta) => {
+                swal({
+                    title: 'Enviado',
+                    text: "Calendario academico enviado a los aspirantes del sistema.",
+                    type: 'success',
+                })
+            }).catch((error) => {
+                console.log(error)
+                swal({
+                    title: 'Error',
+                    text: "Error enviando newsletter.",
+                    type: 'error',
+                })
+            })
+        }
     }
 })

@@ -27,7 +27,8 @@ def cargar_aspirantes():
                 data.append({
                     "nombres":asp.nombres,
                     "apellidos":asp.apellidos,
-                    "correo":usuario.correo
+                    "correo":usuario.correo,
+                    "perfil":asp.perfil
                 })
         return jsonify(data)
 

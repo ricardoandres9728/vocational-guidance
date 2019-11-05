@@ -91,9 +91,14 @@ def encuesta_guardar():
         respuesta = model.predict([valores])
     except FileNotFoundError:
         return "Error", 400
-    if respuesta[0] == 1:
+    print(respuesta)
+    if respuesta[0] == 2:
+        aspirante.perfil = "Sistemas"
+        db.session.commit()
         mensaje = True
     else:
+        aspirante.perfil = None
+        db.session.commit()
         mensaje = False
     session["pdf"] = {
         "respuesta": mensaje,

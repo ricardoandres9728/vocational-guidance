@@ -9,5 +9,6 @@ class Aspirante(db.Model):
         db.Integer, db.ForeignKey("usuario.id"), unique=True)
     newsletter = db.Column(db.Boolean, default=True)
     live = db.Column(db.Boolean, default=True)
+    perfil = db.Column(db.String(80))
     respuestas = db.relationship('Respuesta', secondary=aspirante_respuesta,
         backref=db.backref('respuestas', lazy='dynamic'))

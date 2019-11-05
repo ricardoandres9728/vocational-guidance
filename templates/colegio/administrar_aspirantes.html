@@ -21,6 +21,7 @@
                             <th>Nombres</th>
                             <th>Apellidos</th>
                             <th>Correo</th>
+                            <th>Perfil</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -30,6 +31,8 @@
                             <td>{{aspirante.nombres}}</td>
                             <td>{{aspirante.apellidos}}</td>
                             <td>{{aspirante.correo}}</td>
+                            <td v-if="aspirante.perfil != null">{{aspirante.perfil}}</td>
+                            <td v-else>{{"Sin perfil"}}</td>
                         </tr>
                         {% endraw %}
                         </tbody>
