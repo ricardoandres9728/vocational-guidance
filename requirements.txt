@@ -15,7 +15,7 @@ Jinja2==2.10
 joblib==0.13.2
 Mako==1.0.7
 MarkupSafe==1.1.0
-numpy==1.16.4
+numpy==1.22.0
 psycopg2==2.7.7
 pyexcel==0.5.13
 pyexcel-io==0.5.14
