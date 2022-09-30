@@ -12,7 +12,7 @@ Flask-Uploads==0.2.1
 Flask-WTF==0.14.2
 itsdangerous==1.1.0
 Jinja2==2.10
-joblib==0.13.2
+joblib==1.2.0
 Mako==1.0.7
 MarkupSafe==1.1.0
 numpy==1.16.4
